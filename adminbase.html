@@ -1,0 +1,33 @@
+<head>
+  <title>CMi Administration</title>
+</head>
+
+<body>
+  <h1>CMi Administration</h1>
+
+  {{> searchBox }}
+  {{> searchResult}}
+</body>
+
+<template name="searchBox">
+    <input type="text" id="search-box" placeholder="search packages here" />
+</template>
+
+
+<template name="searchResult">
+    <div id='search-result'>
+        <div id="search-meta">
+            {{#if isLoading}}
+                searching ...
+            {{/if}}
+        </div>
+
+        {{#each getUsers}}
+            <div class="user">
+                <h4 class="name">
+                    <a href="{{link}}" target="_blank">{{{fullName}}}</a>
+                </h4>
+            </div>
+        {{/each}}
+    </div>
+</template>

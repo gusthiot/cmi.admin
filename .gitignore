@@ -1,0 +1,6 @@
+.idea
+packages/
+# http://stackoverflow.com/a/10729053/435004
+.meteor/local
+.meteor/settings.json
+
