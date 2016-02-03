@@ -23,3 +23,6 @@ meteorhacks:npm
 
 
 npm-container
+check
+ejson
+kadira:debug
