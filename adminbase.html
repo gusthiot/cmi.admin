@@ -23,11 +23,25 @@
         </div>
 
         {{#each getUsers}}
-            <div class="user">
-                <h4 class="name">
-                    <a href="{{link}}" target="_blank">{{{fullName}}}</a>
-                </h4>
-            </div>
+            {{>userLink}}
         {{/each}}
+    </div>
+</template>
+
+<template name="userLink">
+    <div class="user" id="{{_id}}">
+        <h4 class="name">
+            <a href="{{link}}" target="_blank">{{fullName}}</a>
+        </h4>
+        {{>userDetails}}
+    </div>
+</template>
+
+<template name="userDetails">
+    <div class="userDetails" id="userdetails-{{_id}}" style="display: none;">
+        {{fullName}}
+        <form class="set-password" id="changPwd-{{_id}}">
+        <input type="password" name="changPwd-{{_id}}" />
+        </form>
     </div>
 </template>
