@@ -5,16 +5,16 @@
 <body>
   <h1>CMi Administration</h1>
 
-  {{> searchBox }}
-  {{> searchResult}}
+  {{> userSearchBox }}
+  {{> userSearchResult}}
 </body>
 
-<template name="searchBox">
+<template name="userSearchBox">
     <input type="text" id="search-box" placeholder="search users here" />
 </template>
 
 
-<template name="searchResult">
+<template name="userSearchResult">
     <div id='search-result'>
         <div id="search-meta">
             {{#if isLoading}}
