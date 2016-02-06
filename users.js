@@ -18,7 +18,7 @@ if (Meteor.isServer) {
   UserSearch.publish(function (query) {
     var self = this;
 
-    if(query.length < 3) {
+    if (query.length < 3) {
       self.stop();
       return;
     }
