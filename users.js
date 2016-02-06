@@ -46,9 +46,9 @@ if (Meteor.isClient) {
   });
 
   Template.userSearchBox.events({
-    "keyup #search-box": _.throttle(function(e) {
+    "keyup #search-box": function(e) {
       UserSearch.search($(e.target).val().trim());
-    }, 200)
+    }
   });
 
   Template.userLink.events({
