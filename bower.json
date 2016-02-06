@@ -1,0 +1,8 @@
+{
+  "name": "CMi-AdminBase",
+  "version": "0.0.1",
+  "dependencies": {
+    "skeleton": "> 0"
+  },
+  "private": true
+}
