@@ -25,11 +25,11 @@ if (Meteor.isServer) {
 
     if (Devsupport.isOnline()) {
       getSyncUserByName(query).forEach(function (result) {
-        self.added("user.search.results", result.sciper, {link: "http://foo/bar", fullName: result.displayName});
+        self.added(result.sciper, {link: "http://foo/bar", fullName: result.displayName});
       });
     }
     Meteor.setTimeout(function () {
-      self.added("user.search.results", 3, {link: "http://foo/quux", fullName: "Last Guy"});
+      self.added(3, {link: "http://foo/quux", fullName: "Last Guy"});
       self.stop();
     }, 1000);
   });
