@@ -2,7 +2,8 @@
   "name": "CMi-AdminBase",
   "version": "0.0.1",
   "dependencies": {
-    "skeleton": "> 0"
+    "skeleton": "> 2.0.0",
+    "select2": "3.4.5"
   },
   "private": true
 }
