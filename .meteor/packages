@@ -25,4 +25,6 @@ check
 ejson
 reactive-var
 mquandalle:bower
+aldeed:autoform
+aldeed:collection2
 iron:router
