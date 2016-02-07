@@ -25,3 +25,4 @@ check
 ejson
 reactive-var
 mquandalle:bower
+iron:router

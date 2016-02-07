@@ -1,0 +1,39 @@
+<template name="userSearch">
+  {{> userSearchBox}}
+  {{> userSearchResult}}
+</template>
+
+<template name="userSearchBox">
+    <input type="text" id="search-box" placeholder="search users here" />
+</template>
+
+<template name="userSearchResult">
+    <div id='search-result'>
+        <div id="search-meta">
+            {{#if isLoading}}
+                searching ...
+            {{/if}}
+        </div>
+
+        {{#each getUsers}}
+            {{>userLink}}
+        {{/each}}
+    </div>
+</template>
+
+<template name="userLink">
+    <div class="user" id="user-searchresult-{{_id}}">
+        <h4 class="name">
+            <a href="/user/{{_id}}/edit">{{fullName}}</a>
+        </h4>
+    </div>
+</template>
+
+<template name="userEdit">
+    <div class="userEdit" id="userdetails">
+        {{fullName}}
+        <form class="set-password">
+            <input type="password"/>
+        </form>
+    </div>
+</template>
