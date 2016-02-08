@@ -15,17 +15,13 @@
             {{/if}}
         </div>
 
-        {{#each getUsers}}
-            {{>userLink}}
-        {{/each}}
-    </div>
-</template>
-
-<template name="userLink">
-    <div class="user" id="user-searchresult-{{_id}}">
-        <h4 class="name">
-            <a href="/user/{{_id}}/edit">{{fullName}}</a>
-        </h4>
+        {{#if getUsers}}
+          <select>
+            {{#each getUsers}}
+                <option value="{{_id}}">{{fullName}}</option>
+            {{/each}}
+          </select>
+        {{/if}}
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 /**
- * Model for users
+ * Model and controller for users
  */
 
 /**
@@ -44,23 +44,16 @@ if (Meteor.isServer) {
       return;
     }
 
-    if (Devsupport.isOnline()) {
-      getSyncUserByName(query).forEach(function (result) {
-        self.added(result.sciper, {link: "http://foo/bar", fullName: result.displayName});
-      });
+    if (! Devsupport.isOnline()) {
+      return Devsupport.fakeData.searchUsers(self);
     }
-    Meteor.setTimeout(function () {
-      self.added(3, {link: "http://foo/quux", fullName: "Last Guy"});
-      self.stop();
-    }, 1000);
+    getSyncUserByName(query).forEach(function (result) {
+      self.added(result.sciper, {fullName: result.displayName});
+    });
   });
 }
 
 if (Meteor.isClient) {
-  function boldifyMatchText(matchText, regExp) {
-      return matchText.replace(regExp, "<b>$&</b>");
-  }
-
   Template.userSearchResult.helpers({
     getUsers: _.bind(User.Search.results.find, User.Search.results, {}),
     isLoading: _.bind(User.Search.isLoading, User.Search)
