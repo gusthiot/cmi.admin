@@ -1,4 +1,5 @@
 .idea
+.emacs.desktop*
 packages/
 semantic/client/
 # http://stackoverflow.com/a/10729053/435004
