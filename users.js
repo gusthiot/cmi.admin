@@ -45,7 +45,7 @@ if (Meteor.isServer) {
     }
 
     if (! Devsupport.isOnline()) {
-      return Devsupport.fakeData.searchUsers(self);
+      return Devsupport.fakeData.searchUsers(query, self);
     }
     getSyncUserByName(query).forEach(function (result) {
       self.added(result.sciper, {fullName: result.displayName});
