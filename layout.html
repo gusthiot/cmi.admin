@@ -8,6 +8,20 @@
 </body>
 
 <template name="defaultLayout">
-    {{> i18nSelectLanguage}}
-    {{> yield}}
+    {{> burgerMenu}}
+    <div class="pusher">
+        {{> burgerMenuButton}}
+        {{> yield}}
+    </div>
+</template>
+
+<template name="burgerMenuButton">
+    <i class="sidebar icon" style="float: right;"></i>
+</template>
+
+<template name="burgerMenu">
+    <div class="ui sidebar">
+        Peek a boo.
+        {{> i18nSelectLanguage}}
+    </div>
 </template>
