@@ -7,7 +7,7 @@
  */
 User = function User(doc) { _.extend(this, doc); };
 
-User.collection = new Mongo.Collection("users");
+User.collection = Meteor.users;
 User.collection.attachSchema(new SimpleSchema({
   _id: {
     label: "SCIPER",
@@ -50,18 +50,23 @@ if (Meteor.isServer) {
     getSyncUserByName(query).forEach(function (result) {
       self.added(result.sciper, {fullName: result.displayName});
     });
+    self.stop();
   });
 }
 
 if (Meteor.isClient) {
-  Template.userSearchResult.helpers({
-    getUsers: _.bind(User.Search.results.find, User.Search.results, {}),
-    isLoading: _.bind(User.Search.isLoading, User.Search)
-  });
-
-  Template.userSearchBox.events({
-    "keyup #search-box": function(e) {
-      User.Search.search($(e.target).val().trim());
+  Template.userSearchBox.helpers({
+    users: _.bind(User.Search.results.find, User.Search.results, {}),
+    isLoading: _.bind(User.Search.isLoading, User.Search),
+    messageCode:   function() {
+      var status = User.Search.status.get();
+      if (! status || status.status === "nosearchyet") {
+        return;
+      } else if (status.status === "OK") {
+        return status.resultCount ? undefined: "search#nosearchresults";
+      } else {
+        return "search#" + (status.message || status.error || status.status);
+      }
     }
   });
 
@@ -70,5 +75,25 @@ if (Meteor.isClient) {
       console.log(this);
       return false;
     }
+  });
+
+  Template.userSearchBox.onRendered(function () {
+    var userSearchBox = $(this.find(".selection.dropdown"));
+    userSearchBox.dropdown();
+
+    // Reach into the innards of the dropdown module to wire it with Meteor
+    var module = userSearchBox.data().moduleDropdown;
+    module.filter = function(query) {
+      if (query) User.Search.search(query);
+    };
+    Tracker.autorun(function() {
+      var status = User.Search.status.get();
+      if (! status) {
+        module.set.loading();
+      } else {
+        module.remove.loading();
+        if (status.status !== "nosearchyet") module.show();
+      }
+   });
   });
 }

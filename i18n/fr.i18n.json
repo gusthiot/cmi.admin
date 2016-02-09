@@ -1,1 +1,5 @@
-{ "hello": "Bonjour" }
+{
+    "hello": "Bonjour",
+    "search#search-here": "Rechercher un utilisateur...",
+    "search#nosearchresults": "Pas de résultat"
+ }

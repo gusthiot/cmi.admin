@@ -12,7 +12,7 @@ if (Meteor.isClient) {
   // TODO: Initialize from browser prefs; set from prefs of logged-in users
   Session.setDefault("i18nCurrentLanguage", "fr");
   Template.i18nSelectLanguage.helpers({
-    languages: function() { return Session.get("i18nLanguages") },
+    languages: function() { return Session.get("i18nLanguages") }
   });
   var i18nClientSetupDone = false;
   Template.i18nSelectLanguage.onRendered(function () {

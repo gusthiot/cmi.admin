@@ -1,27 +1,19 @@
 <template name="userSearch">
   {{> userSearchBox}}
-  {{> userSearchResult}}
 </template>
 
 <template name="userSearchBox">
-    <input type="text" id="search-box" placeholder="search users here" />
-</template>
-
-<template name="userSearchResult">
-    <div id='search-result'>
-        <div id="search-meta">
-            {{#if isLoading}}
-                searching ...
+    <div class="ui selection search dropdown">
+        <div class="text">{{_ "search#search-here"}}</div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+            {{#each users}}
+                <div class="item" data-value="{{_id}}">{{fullName}}</div>
+            {{/each}}
+            {{#if messageCode}}
+                <div class="message">{{_ messageCode}}</div>
             {{/if}}
         </div>
-
-        {{#if getUsers}}
-          <select>
-            {{#each getUsers}}
-                <option value="{{_id}}">{{fullName}}</option>
-            {{/each}}
-          </select>
-        {{/if}}
     </div>
 </template>
 
