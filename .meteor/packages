@@ -31,3 +31,4 @@ iron:router
 semantic:ui
 flemay:less-autoprefixer
 tap:i18n
+epfl:accounts-tequila
