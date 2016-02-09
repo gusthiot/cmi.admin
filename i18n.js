@@ -14,28 +14,19 @@ if (Meteor.isClient) {
   Template.i18nSelectLanguage.helpers({
     languages: function() { return Session.get("i18nLanguages") },
   });
+  var i18nClientSetupDone = false;
   Template.i18nSelectLanguage.onRendered(function () {
+    if (i18nClientSetupDone) { return; } else { i18nClientSetupDone=true; }
     var langMenu = $(this.find(".selection.dropdown"));
-    // TODO: If no value yet, select one from Session.get("i18nCurrentLanguage")
     langMenu.dropdown({
       onChange: function (newValue) {
         Session.set("i18nCurrentLanguage", newValue);
       }
     });
     Tracker.autorun(function() {
-      langMenu.dropdown('set selected', Session.get("i18nCurrentLanguage"));
+      var lang = Session.get("i18nCurrentLanguage")
+      langMenu.dropdown('set selected', lang);
+      TAPi18n.setLanguage(lang);
     });
   });
-  Template.i18nPoorMansTest.helpers({
-    greeting: function() {
-      var lang = Session.get("i18nCurrentLanguage");
-      var greetings = {
-        fr: "Bonjour",
-        it: "Buon giorno",
-        en: "Hello",
-        de: "Guten Tag",
-      };
-      return greetings[lang];
-    }
-  })
 }
