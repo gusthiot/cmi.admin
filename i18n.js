@@ -24,7 +24,7 @@ if (Meteor.isClient) {
       }
     });
     Tracker.autorun(function() {
-      var lang = Session.get("i18nCurrentLanguage")
+      var lang = Session.get("i18nCurrentLanguage");
       langMenu.dropdown('set selected', lang);
       TAPi18n.setLanguage(lang);
     });
