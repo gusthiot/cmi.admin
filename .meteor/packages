@@ -20,7 +20,7 @@ insecure                # Allow all DB writes from clients (for prototyping)
 meteorhacks:npm
 
 
-npm-container
+# npm-container
 check
 ejson
 reactive-var
@@ -30,3 +30,6 @@ aldeed:collection2
 iron:router
 semantic:ui
 flemay:less-autoprefixer
+
+
+npm-container
