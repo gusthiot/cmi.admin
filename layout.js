@@ -24,7 +24,6 @@ Router.route('/user/:sciper/edit', function () {
 });
 
 /************** Layout controllers ******************/
-
 if (Meteor.isClient) {
   Template.burgerMenuButton.events({
     "click": function(e) {

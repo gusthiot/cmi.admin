@@ -1,3 +1,7 @@
 .sidebar.icon.burger {
     float: left;
 }
+
+.sidebar.ui {
+    color: white;
+}
