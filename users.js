@@ -27,16 +27,19 @@ _.extend(User.prototype, {
   canEdit: function(whom) { return true; }
 });
 
-/* User search.
+/**
+ * User searches
  *
- * TODO: LDAP searches should be on-demand only; the default intent when typing
- * in the user search box is to see only users already known in the database.
+ * User can search for already known CMi users (which is presumably fast),
+ * as well as across the entire EPFL LDAP directory (could be slower).
  */
 if (Meteor.isServer) {
-  var ldapContext = Meteor.npmRequire('epfl-ldap')();
-  var getSyncUserByName = Meteor.wrapAsync(ldapContext.users.searchUserByName);
+  var ldapContext = Meteor.npmRequire('epfl-ldap')(),
+    escapeStringRegexp = Meteor.npmRequire('escape-string-regexp'),
+    Future = Meteor.npmRequire('fibers/future'),
+    getSyncUserByName = Meteor.wrapAsync(ldapContext.users.searchUserByName);
 
-  User.Search.publish(function (query) {
+  User.Search.publish(function (query, wantLDAP) {
     var self = this;
 
     if (query.length < 3) {
@@ -45,18 +48,54 @@ if (Meteor.isServer) {
     }
 
     if (! Devsupport.isOnline()) {
-      return Devsupport.fakeData.searchUsers(query, self);
+      return Devsupport.fakeData.searchUsers(self, query, wantLDAP);
     }
-    getSyncUserByName(query).forEach(function (result) {
-      self.added(result.sciper, {fullName: result.displayName});
-    });
-    self.stop();
+
+    var found = {};
+    function addOrChange(id, data) {
+      if (id in found) {
+        self.changed(id, data);
+      } else {
+        self.added(id, data);
+        found[id] = 1;
+      }
+    }
+
+    var futures = [];
+    futures.push(Future.task(function findInMongo() {
+      User.collection.find({fullName: new RegExp(escapeStringRegexp(query))})
+        .fetch().forEach(function (result) {
+          addOrChange(result._id, result);
+        });
+    }));
+    if (wantLDAP) {
+      futures.push(Future.task(function findInLDAP() {
+        getSyncUserByName(query).forEach(function (result) {
+          addOrChange(result.sciper, {ldapFullName: result.displayName});
+        });
+      }));
+    }
+    try {
+      Future.wait(futures);
+      futures.map(function(f) {f.get();});
+      self.stop();
+    } catch (e) {
+      self.stop(e);
+    }
   });
 }
 
 if (Meteor.isClient) {
-  Template.userSearchBox.helpers({
-    users: _.bind(User.Search.results.find, User.Search.results, {}),
+  Template.userSearch.helpers({
+    wantLDAP: function() { 
+      return Template.instance().wantLDAP.get();
+    },
+    cmiUsers: function() {
+      return User.Search.results.find({ldapFullName: {$exists: false}});
+    },
+    ldapUsers: function() {
+      return User.Search.results.find({ldapFullName: {$exists: true}});
+    },
     isLoading: _.bind(User.Search.isLoading, User.Search),
     messageCode:   function() {
       var status = User.Search.status.get();
@@ -77,23 +116,44 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.userSearchBox.onRendered(function () {
+  Template.userSearch.onCreated(function () {
+    this.wantLDAP = new ReactiveVar(false);
+    this.currentQuery = new ReactiveVar();
+  });
+
+  Template.userSearch.onRendered(function () {
+    var self = this;
     var userSearchBox = $(this.find(".selection.dropdown"));
     userSearchBox.dropdown();
 
     // Reach into the innards of the dropdown module to wire it with Meteor
-    var module = userSearchBox.data().moduleDropdown;
-    module.filter = function(query) {
-      if (query) User.Search.search(query);
+    var dropdownObj = userSearchBox.data().moduleDropdown;
+    dropdownObj.filter = function(query) {
+      console.log("Query is now " + query);
+      self.currentQuery.set(query);
     };
+    Tracker.autorun(function updateSearchQuery() {
+      var wantLDAP = self.wantLDAP.get(),
+        query = self.currentQuery.get();
+      console.log("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
+      if (query) User.Search.search(query, wantLDAP);
+    });
     Tracker.autorun(function() {
       var status = User.Search.status.get();
+      console.log("Status is ", status);
       if (! status) {
-        module.set.loading();
+        dropdownObj.set.loading();
       } else {
-        module.remove.loading();
-        if (status.status !== "nosearchyet") module.show();
+        dropdownObj.remove.loading();
+        if (status.status !== "nosearchyet") dropdownObj.show();
       }
-   });
+    });
+
+    var button = $(this.find(".ldapbutton"));
+    button.click(function (event) {
+      console.log("I want LDAP");
+      self.wantLDAP.set(true);
+      event.stopPropagation();
+    });
   });
 }

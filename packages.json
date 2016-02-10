@@ -1,4 +1,5 @@
 {
   "ldapjs": "1.0.0",
-  "epfl-ldap": "0.3.2"
+  "epfl-ldap": "0.3.2",
+  "escape-string-regexp": "1.0.4"
 }

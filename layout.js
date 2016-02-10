@@ -11,7 +11,7 @@ Router.configure({
 });
 
 Router.route('/', function () {
-  this.render("userSearch");
+  this.render("userEditAdmin");
 });
 
 Router.route('/user/:sciper/edit', function () {
