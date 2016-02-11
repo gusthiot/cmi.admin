@@ -68,7 +68,6 @@ momentjs:moment@2.10.6
 mongo@1.1.3
 mongo-id@1.0.1
 mquandalle:bower@1.5.2_1
-npm-container@1.2.0
 npm-mongo@1.4.39_1
 observe-sequence@1.0.7
 ordered-dict@1.0.4
