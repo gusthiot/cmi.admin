@@ -93,7 +93,7 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.userSearch.onCreated(function () {
+  Template.User$Pick.onCreated(function () {
     User.template = this; console.log("For debug");
     this.search = User.Search.open();
     this.wantLDAP = new ReactiveVar(false);
@@ -101,7 +101,7 @@ if (Meteor.isClient) {
   });
 
   function search() { return Template.instance().search; }
-  Template.userSearch.helpers({
+  Template.User$Pick.helpers({
     wantLDAP: function() {
       return Template.instance().wantLDAP.get();
     },
@@ -124,13 +124,13 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.userSearch.onRendered(function () {
+  Template.User$Pick.onRendered(function () {
     var self = this;
-    var userSearchBox = $(this.find(".selection.dropdown"));
-    userSearchBox.dropdown();
+    var dropdown = $(this.find(".selection.dropdown"));
+    dropdown.dropdown();
 
     // Reach into the innards of the dropdown module to wire it with Meteor
-    var dropdownObj = userSearchBox.data().moduleDropdown;
+    var dropdownObj = dropdown.data().moduleDropdown;
     dropdownObj.filter = function(query) {
       console.log("Query is now " + query);
       self.currentQuery.set(query);
