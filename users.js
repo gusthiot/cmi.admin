@@ -86,29 +86,6 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Template.userSearch.helpers({
-    wantLDAP: function() { 
-      return Template.instance().wantLDAP.get();
-    },
-    cmiUsers: function() {
-      return User.Search.results.find({ldapFullName: {$exists: false}});
-    },
-    ldapUsers: function() {
-      return User.Search.results.find({ldapFullName: {$exists: true}});
-    },
-    isLoading: _.bind(User.Search.isLoading, User.Search),
-    messageCode:   function() {
-      var status = User.Search.status.get();
-      if (! status || status.status === "nosearchyet") {
-        return;
-      } else if (status.status === "OK") {
-        return status.resultCount ? undefined: "search#nosearchresults";
-      } else {
-        return "search#" + (status.message || status.error || status.status);
-      }
-    }
-  });
-
   Template.userEdit.events({
     "submit form": function(e) {
       console.log(this);
@@ -117,8 +94,34 @@ if (Meteor.isClient) {
   });
 
   Template.userSearch.onCreated(function () {
+    User.template = this; console.log("For debug");
+    this.search = User.Search.open();
     this.wantLDAP = new ReactiveVar(false);
     this.currentQuery = new ReactiveVar();
+  });
+
+  function search() { return Template.instance().search; }
+  Template.userSearch.helpers({
+    wantLDAP: function() {
+      return Template.instance().wantLDAP.get();
+    },
+    cmiUsers: function() {
+      return search().find({ldapFullName: {$exists: false}});
+    },
+    ldapUsers: function() {
+      return search().find({ldapFullName: {$exists: true}});
+    },
+    isLoading: function() { return search().isLoading() },
+    messageCode:   function() {
+      var status = search().status.get();
+      if (! status || status.status === "nosearchyet") {
+        return;
+      } else if (status.status === "OK") {
+        return status.resultCount ? undefined: "search#nosearchresults";
+      } else {
+        return "search#" + (status.message || status.error || status.status);
+      }
+    }
   });
 
   Template.userSearch.onRendered(function () {
@@ -136,10 +139,10 @@ if (Meteor.isClient) {
       var wantLDAP = self.wantLDAP.get(),
         query = self.currentQuery.get();
       console.log("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
-      if (query) User.Search.search(query, wantLDAP);
+      if (query) self.search.search(query, wantLDAP);
     });
     Tracker.autorun(function() {
-      var status = User.Search.status.get();
+      var status = self.search.status.get();
       console.log("Status is ", status);
       if (! status) {
         dropdownObj.set.loading();
