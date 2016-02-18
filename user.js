@@ -21,6 +21,11 @@ User.collection.attachSchema(new SimpleSchema({
 
 User.Search = new Search("userSearch");
 
+Tequila.options.request = ["displayname", "uniqueid"];
+Tequila.options.getUserId = function getUserId(tequilaResponse) {
+  return Meteor.users.findOne({_id: tequilaResponse.uniqueid});
+};
+
 // TODO: This is just a placeholder for now.
 User.bySciper = function(sciper) { return new User() };
 _.extend(User.prototype, {
