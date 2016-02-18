@@ -31,6 +31,7 @@ ecmascript@0.1.6
 ecmascript-runtime@0.2.6
 ejson@1.0.7
 epfl:accounts-tequila@0.0.1
+epfl:loginfirst@0.0.1
 es5-shim@4.1.14
 fastclick@1.0.7
 flemay:less-autoprefixer@1.2.0
@@ -58,6 +59,7 @@ mdg:validation-error@0.2.0
 meteor@1.1.10
 meteor-base@1.0.1
 meteorhacks:async@1.0.0
+meteorhacks:meteorx@1.0.2
 meteorhacks:npm@1.5.0
 meteorspark:util@0.2.0
 minifiers@1.1.7
@@ -67,6 +69,7 @@ mobile-status-bar@1.0.6
 momentjs:moment@2.10.6
 mongo@1.1.3
 mongo-id@1.0.1
+mongo-livedata@1.0.9
 npm-container@1.2.0
 npm-mongo@1.4.39_1
 observe-sequence@1.0.7

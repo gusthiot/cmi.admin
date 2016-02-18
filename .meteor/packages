@@ -28,3 +28,4 @@ semantic:ui
 flemay:less-autoprefixer   # Required by semantic:ui, https://github.com/Semantic-Org/Semantic-UI-Meteor/issues/62
 tap:i18n
 epfl:accounts-tequila
+epfl:loginfirst
