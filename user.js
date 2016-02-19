@@ -9,14 +9,21 @@ User = function User(doc) { _.extend(this, doc); };
 
 User.collection = Meteor.users;
 User.collection.attachSchema(new SimpleSchema({
-  _id: {
-    label: "SCIPER",
-    type: String,
-    regEx: /G?[1-9][0-9]{3,6}/  // SCIPER for guests and employees
-  },
-  password: {
-    type: String
-  }
+    _id: {
+      label: "SCIPER",
+      type: String,
+      regEx: /G?[1-9][0-9]{3,6}/  // SCIPER for guests and employees
+    },
+    password: {
+      type: String
+    },
+    fullname: {
+      type: String
+    },
+    services: {
+      type: Object,
+      blackbox: true
+    }
 }));
 
 User.Search = new Search("userSearch");
