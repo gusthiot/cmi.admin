@@ -3,5 +3,9 @@
  */
 Meteor.startup(function() {
   Tequila.options.bypass.push("/images/");
-  LoginFirst.allowedMethodNames = ["tequila.authenticate"];
 });
+
+Tequila.options.request = ["displayname", "uniqueid"];
+Tequila.options.getUserId = function getUserId(tequilaResponse) {
+  return Meteor.users.findOne({_id: tequilaResponse.uniqueid});
+};
