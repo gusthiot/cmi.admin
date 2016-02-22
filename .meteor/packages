@@ -29,3 +29,4 @@ flemay:less-autoprefixer   # Required by semantic:ui, https://github.com/Semanti
 tap:i18n
 epfl:accounts-tequila
 epfl:loginfirst
+mrt:bootstrap-3

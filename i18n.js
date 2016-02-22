@@ -2,13 +2,17 @@
  * Multi-lingual support.
  */
 
-if (Meteor.isClient) {
-  Session.set("i18nLanguages", [
+I18N = {
+  Languages: [
     {code: 'en', language: "English"},
     {code: 'fr', language: "Français"},
     {code: 'de', language: "Deutsch"},
     {code: 'it', language: "Italiano"}
-  ]);
+  ]
+};
+
+if (Meteor.isClient) {
+  Session.set("i18nLanguages", I18N.Languages);
   // TODO: Initialize from browser prefs; set from prefs of logged-in users
   Session.setDefault("i18nCurrentLanguage", "fr");
   Template.i18nSelectLanguage.helpers({

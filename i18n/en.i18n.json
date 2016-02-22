@@ -1,5 +1,5 @@
 {
-    "hello": "Hello",
+    "hello": "Hello %s",
     "search#search-here": "Search users...",
     "search#nosearchresults": "No search results"
 }

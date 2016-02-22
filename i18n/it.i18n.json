@@ -1,1 +1,1 @@
-{ "hello": "Buon giorno" }
+{ "hello": "Buon giorno, %s" }

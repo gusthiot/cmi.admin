@@ -23,11 +23,3 @@ Router.route('/user/:sciper/edit', function () {
   this.render('userEdit', {data: user});
 });
 
-/************** Layout controllers ******************/
-if (Meteor.isClient) {
-  Template.burgerMenuButton.events({
-    "click": function(e) {
-      $(".ui.sidebar").sidebar('toggle');
-    }
-  });
-}
