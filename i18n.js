@@ -34,11 +34,9 @@ if (Meteor.isClient) {
     currentLanguage: currentLanguage
   });
   Template.I18N$SelectLanguage.onRendered(function () {
-    var button = $(this.find(".selection.dropdown"));
-    $(this.findAll(".dropdown-menu i.flag")).click(function() {
+    $(this.findAll(".dropdown-menu a.flag")).click(function() {
       var newLang = $(this).data('value');
       User.current().lang(newLang);
-      button.dropdown("toggle");
     });
   });
 }

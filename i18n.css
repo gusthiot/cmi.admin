@@ -1,11 +1,11 @@
-.flag {
+.flag i {
 	display: block;
 	width: 32px;
 	height: 32px;
 	background:url(/images/flags.png) no-repeat
 }
 
-.flag.flag-de {background-position: -32px 0}
-.flag.flag-fr {background-position: -64px 0}
-.flag.flag-it {background-position: 0 -32px}
-.flag.flag-en {background-position: -32px -32px}
+.flag.flag-de i {background-position: -32px 0}
+.flag.flag-fr i {background-position: -64px 0}
+.flag.flag-it i {background-position: 0 -32px}
+.flag.flag-en i {background-position: -32px -32px}

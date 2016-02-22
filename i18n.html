@@ -13,5 +13,7 @@
 </template>
 
 <template name="I18N$flag">
-  <i class="flag flag-{{code}}" data-value="{{code}}"></i>
+  {{! TODO: the empty <i></i> sucks. Better to override a.flag margins or whatever, 
+      and as a bonus we would get a narrower drop-down flag menu. }}
+  <a href="#" class="flag flag-{{code}}" data-value="{{code}}"><i></i></a>
 </template>
