@@ -1,15 +1,17 @@
-<template name="i18nSelectLanguage">
-    <div class="ui selection dropdown">
-        <input name="language" type="hidden">
-        <div class="default text">Language</div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
+<template name="I18N$SelectLanguage">
+    <div class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{> I18N$flag code=currentLanguage}}<span class="caret"></span></a>
+        <ul class="dropdown-menu">
             {{#each languages}}
-                <div class="item" data-value="{{code}}"><i class="flag flag-{{code}}"></i></div>
+            <li>{{> I18N$flag}}</li>
             {{/each}}
-        </div>
+        </ul>
     </div>
 </template>
 <template name="i18nTest">
   {{_ "hello" currentUser.fullName }}<br/>
+</template>
+
+<template name="I18N$flag">
+  <i class="flag flag-{{code}}" data-value="{{code}}"></i>
 </template>

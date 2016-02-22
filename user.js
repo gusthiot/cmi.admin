@@ -6,6 +6,33 @@
  * @constructor
  */
 User = function User(doc) { _.extend(this, doc); };
+if (Meteor.isClient) {
+  User.current = function() {
+    return new User(Meteor.user());
+  }
+}
+
+function updateUser(that, change) {
+  User.collection.update({_id: that._id},
+                         {$set: change});
+}
+
+User.prototype.lang = function(opt_set) {
+  var currentValue = this.profile ? this.profile.lang : undefined;
+  if (opt_set) {
+    if (currentValue !== opt_set) {
+      updateUser(this, {"profile.lang": opt_set});
+    }
+  } else if (currentValue) {
+    return currentValue;
+  } else if (Meteor.isClient) {
+    return I18N.browserLanguage();
+  }
+};
+
+User.prototype.setPassword = function(password) {
+    updateUser(this, {"password": password});
+};
 
 User.collection = Meteor.users;
 User.collection.attachSchema(new SimpleSchema({
@@ -33,16 +60,16 @@ User.collection.attachSchema(new SimpleSchema({
   }
 }));
 
-User.Search = new Search("userSearch");
-
 // As per http://stackoverflow.com/a/21853298/435004:
 // this merges gently with the default publish in accounts_server.js !
-Meteor.publish(null, function() {
-  if (! this.userId) return;
-  return Meteor.users.find({
-    _id: this.userId,
-  }, { fields: {fullName: 1}});
-});
+if (Meteor.isServer) {
+  Meteor.publish(null, function() {
+    if (! this.userId) return;
+    return Meteor.users.find({
+      _id: this.userId
+    }, { fields: {fullName: 1}});
+  });
+}
 
 /**
  * User searches
@@ -50,6 +77,8 @@ Meteor.publish(null, function() {
  * User can search for already known CMi users (which is presumably fast),
  * as well as across the entire EPFL LDAP directory (could be slower).
  */
+User.Search = new Search("userSearch");
+
 if (Meteor.isServer) {
   var ldapContext = Meteor.npmRequire('epfl-ldap')(),
     escapeStringRegexp = Meteor.npmRequire('escape-string-regexp'),
@@ -145,7 +174,7 @@ if (Meteor.isClient) {
     var self = this;
     var dropdown = $(this.find(".selection.dropdown"));
     dropdown.dropdown();
-
+    return;  // XXX
     // Reach into the innards of the dropdown module to wire it with Meteor
     var dropdownObj = dropdown.data().moduleDropdown;
     dropdownObj.filter = function(query) {

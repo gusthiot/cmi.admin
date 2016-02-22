@@ -11,26 +11,34 @@ I18N = {
   ]
 };
 
+var currentLanguage = function() {
+  var user = User.current();
+  return user ? user.lang() : undef;
+};
+
 if (Meteor.isClient) {
-  Session.set("i18nLanguages", I18N.Languages);
-  // TODO: Initialize from browser prefs; set from prefs of logged-in users
-  Session.setDefault("i18nCurrentLanguage", "fr");
-  Template.i18nSelectLanguage.helpers({
-    languages: function() { return Session.get("i18nLanguages") }
-  });
-  var i18nClientSetupDone = false;
-  Template.i18nSelectLanguage.onRendered(function () {
-    if (i18nClientSetupDone) { return; } else { i18nClientSetupDone=true; }
-    var langMenu = $(this.find(".selection.dropdown"));
-    langMenu.dropdown({
-      onChange: function (newValue) {
-        Session.set("i18nCurrentLanguage", newValue);
-      }
-    });
+  Meteor.startup(function() {
     Tracker.autorun(function() {
-      var lang = Session.get("i18nCurrentLanguage");
-      langMenu.dropdown('set selected', lang);
-      TAPi18n.setLanguage(lang);
+      TAPi18n.setLanguage(currentLanguage());
+    });
+  });
+
+  I18N.browserLanguage = function() {
+    // TODO: unstub
+    return "fr";
+  };
+  Session.set("i18nLanguages", I18N.Languages);
+
+  Template.I18N$SelectLanguage.helpers({
+    languages: function() { return Session.get("i18nLanguages") },
+    currentLanguage: currentLanguage
+  });
+  Template.I18N$SelectLanguage.onRendered(function () {
+    var button = $(this.find(".selection.dropdown"));
+    $(this.findAll(".dropdown-menu i.flag")).click(function() {
+      var newLang = $(this).data('value');
+      User.current().lang(newLang);
+      button.dropdown("toggle");
     });
   });
 }
