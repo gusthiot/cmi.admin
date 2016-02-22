@@ -35,10 +35,13 @@ User.collection.attachSchema(new SimpleSchema({
 
 User.Search = new Search("userSearch");
 
-// TODO: This is just a placeholder for now.
-User.bySciper = function(sciper) { return new User() };
-_.extend(User.prototype, {
-  canEdit: function(whom) { return true; }
+// As per http://stackoverflow.com/a/21853298/435004:
+// this merges gently with the default publish in accounts_server.js !
+Meteor.publish(null, function() {
+  if (! this.userId) return;
+  return Meteor.users.find({
+    _id: this.userId,
+  }, { fields: {fullName: 1}});
 });
 
 /**
