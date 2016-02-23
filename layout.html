@@ -9,7 +9,7 @@
 
 <template name="defaultLayout">
     {{> nav}}
-    {{> yield}}
+    {{> yield}} {{! See Iron Router layout in layout.js }}
 </template>
 
 <template name="nav">
@@ -54,3 +54,8 @@
   </div>{{! end of .container-fluid }}
 </nav>
 </template>
+
+<template name="Homepage">
+{{> i18nTest }}
+</template>
+
