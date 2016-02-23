@@ -1,0 +1,7 @@
+li.message {
+/* Looks like a Bootstrap <a>, except for the :hover : */
+    display: block;
+    padding: 3px 20px;
+/* Oh, and some italics to spice things up: */
+    font-style: italic;
+}

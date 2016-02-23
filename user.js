@@ -131,6 +131,8 @@ if (Meteor.isServer) {
   });
 }
 
+var debug = console.log.bind(console);
+
 if (Meteor.isClient) {
   Template.userEdit.events({
     "submit form": function(e) {
@@ -140,69 +142,59 @@ if (Meteor.isClient) {
   });
 
   Template.User$Pick.onCreated(function () {
-    User.template = this; console.log("For debug");
-    this.search = User.Search.open();
-    this.wantLDAP = new ReactiveVar(false);
-    this.currentQuery = new ReactiveVar();
+    var self = this;
+    User.template = this; // To access from the browser console
+    self.search = User.Search.open();
+
+    self.wantLDAP = new ReactiveVar(false);
+    self.query = new ReactiveVar(undefined);
+    Tracker.autorun(function() {
+      var query = self.query.get(),
+        wantLDAP = self.wantLDAP.get();
+      debug("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
+      if (query) self.search.search(query, wantLDAP);
+    });
   });
 
-  function search() { return Template.instance().search; }
+  var that = function that() { return Template.instance(); }
   Template.User$Pick.helpers({
     wantLDAP: function() {
-      return Template.instance().wantLDAP.get();
+      return that().wantLDAP.get();
     },
     cmiUsers: function() {
-      return search().find({ldapFullName: {$exists: false}});
+      return that().search.find({ldapFullName: {$exists: false}});
     },
     ldapUsers: function() {
-      return search().find({ldapFullName: {$exists: true}});
+      return that().search.find({ldapFullName: {$exists: true}});
     },
-    isLoading: function() { return search().isLoading() },
+    isLoading: function() {
+      return that().search.isLoading()
+    },
     messageCode:   function() {
-      var status = search().status.get();
+      var status = that().search.status();
       if (! status || status.status === "nosearchyet") {
         return;
       } else if (status.status === "OK") {
         return status.resultCount ? undefined: "search#nosearchresults";
       } else {
-        return "search#" + (status.message || status.error || status.status);
+        var i18nKey = (status.message || status.error || status.status);
+        return "search#" + i18nKey;
       }
     }
-  });
+  });  // Template.User$Pick.helpers
 
-  Template.User$Pick.onRendered(function () {
-    var self = this;
-    var dropdown = $(this.find(".selection.dropdown"));
-    dropdown.dropdown();
-    return;  // XXX
-    // Reach into the innards of the dropdown module to wire it with Meteor
-    var dropdownObj = dropdown.data().moduleDropdown;
-    dropdownObj.filter = function(query) {
-      console.log("Query is now " + query);
-      self.currentQuery.set(query);
-    };
-    Tracker.autorun(function updateSearchQuery() {
-      var wantLDAP = self.wantLDAP.get(),
-        query = self.currentQuery.get();
-      console.log("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
-      if (query) self.search.search(query, wantLDAP);
-    });
-    Tracker.autorun(function() {
-      var status = self.search.status.get();
-      console.log("Status is ", status);
-      if (! status) {
-        dropdownObj.set.loading();
-      } else {
-        dropdownObj.remove.loading();
-        if (status.status !== "nosearchyet") dropdownObj.show();
-      }
-    });
-
-    var button = $(this.find(".ldapbutton"));
-    button.click(function (event) {
-      console.log("I want LDAP");
-      self.wantLDAP.set(true);
+  Template.User$Pick.events({
+    "keyup input.usersearch": function(event) {
+      that().query.set(event.currentTarget.value);
+      var dropdown = $(that().find(".dropdown-menu"));
+      if (! dropdown.is(":visible")) dropdown.dropdown("toggle");
+    },
+    "click a.user": function() {
+      alert(this._id);
+    },
+    "click a.ldapbutton": function(event) {
+      that().wantLDAP.set(true);
       event.stopPropagation();
-    });
+    }
   });
 }

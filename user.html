@@ -3,37 +3,36 @@
 </template>
 
 <template name="User$Pick">
-    <div class="ui selection search dropdown">
-        <div class="text">{{_ "search#search-here"}}</div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
+    <div class="dropdown">
+        <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "search#search-here"}}">
+        {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
+        <ul class="usersearch dropdown-menu">
             {{#if cmiUsers}}
               {{#each cmiUsers}}
-                  <div class="item" data-value="{{_id}}">{{fullName}}</div>
+                  <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
               {{/each}}
-              <div class="divider"></div>
+            <li role="separator" class="divider"></li>
             {{/if}}
             {{#if messageCode}}
-                <div class="message">{{_ messageCode}}</div>
-                <div class="divider"></div>
+                <li class="message">{{_ messageCode}}</li>
+                <li role="separator" class="divider"></li>
             {{/if}}
             {{#if wantLDAP}}
               {{#if ldapUsers}}
                 {{#each ldapUsers}}
-                    <div class="item" data-value="{{_id}}">{{ldapFullName}}</div>
+                <li><a href="#" class="user" data-value="{{_id}}">{{ldapFullName}}</a></li>
                 {{/each}}
               {{else}}
-                  <div class="message">
+                  <li class="message">
                       {{_ "search#noldapsearchresults"}}
-                  </div>
+                  </li>
               {{/if}}
             {{else}}
-            <div class="item ldapbutton">
-                <i class="folder icon"></i>
-                {{_ "search#ldap"}}
-            </div>
+            <li>
+                <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "search#ldap"}}</a>
+            </li>
             {{/if}}
-        </div>
+        </ul>
     </div>
 </template>
 
