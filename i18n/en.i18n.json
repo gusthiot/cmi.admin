@@ -1,5 +1,6 @@
 {
     "hello": "Hello %s",
     "search#search-here": "Search users...",
-    "search#nosearchresults": "No search results"
+    "search#nosearchresults": "No search results",
+    "search#ldap": "Search non-CMi users..."
 }
