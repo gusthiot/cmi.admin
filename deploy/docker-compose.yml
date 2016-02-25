@@ -21,3 +21,5 @@ adminbase:
     - mongo:mongo
   volumes:
     - ..:/adminbase
+  ports:
+    - "3000:3000"
