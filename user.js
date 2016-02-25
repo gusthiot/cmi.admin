@@ -134,7 +134,7 @@ if (Meteor.isServer) {
 var debug = console.log.bind(console);
 
 if (Meteor.isClient) {
-  Template.userEdit.events({
+  Template.User$Edit.events({
     "submit form": function(e) {
       console.log(this);
       return false;
