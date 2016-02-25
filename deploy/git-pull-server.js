@@ -1,3 +1,5 @@
+if (this.Meteor) return;
+
 var http = require('http'),
     port = process.env['GIT_PULL_SERVER_PORT'] || 3030,
     spawn = require('child_process').spawn;
