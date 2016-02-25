@@ -3,4 +3,7 @@
 set -e -x
 
 cd "$1"
-git pull
+git fetch --all
+git reset --hard
+git checkout "$2"
+

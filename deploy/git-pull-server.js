@@ -3,7 +3,9 @@ var http = require('http'),
     spawn = require('child_process').spawn;
 
 const pathToSources = process.env['GIT_PULL_SERVER_PATH'] || "/adminbase",
-      gitCommand = '/git-pull-server/do-pull.sh';
+      gitCommand = '/git-pull-server/do-pull.sh',
+      tag = process.env['GIT_PULL_TAG'] || 'devtest';
+
 
 var commandCount = 0;
 var server = http.createServer(function (_unused_request, response) {
@@ -13,7 +15,7 @@ var server = http.createServer(function (_unused_request, response) {
   } else {
       commandCount += 1;
   }
-  var subprocess = spawn(gitCommand, [pathToSources], {
+  var subprocess = spawn(gitCommand, [pathToSources, tag], {
       stdio: "inherit",
   });
   subprocess.on("exit", function() {
