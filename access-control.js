@@ -5,9 +5,7 @@ Meteor.startup(function() {
   Tequila.options.bypass.push("/images/");
 });
 
-Tequila.options.request = ["displayname", "uniqueid"];
-
-// Tie together Meteor.users and Tequila
+// SCIPER is the _id of documents in Meteor.users:
 Tequila.options.getUserId = function getUserId(tequilaResponse) {
   return Meteor.users.findOne({_id: tequilaResponse.uniqueid});
 };
