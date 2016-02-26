@@ -16,11 +16,11 @@ Router.route('/', function () {
 
 Router.route('/user/:sciper/edit', function () {
   var user = User.bySciper(this.params.sciper);
-  if (!user.canEdit(Meteor.userId)) {
-    // TODO: Signal permission issue somehow
-    return;
+  if (! Security.can("XXX")) {
+      // TODO: Signal permission issue somehow
+      return;
   }
-  this.render('userEdit', {data: user});
+  this.render('User$Edit', {data: user});
 });
 
 Router.route('/billable', function () {
