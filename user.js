@@ -93,10 +93,6 @@ if (Meteor.isServer) {
       return;
     }
 
-    if (! Devsupport.isOnline()) {
-      return Devsupport.fakeData.searchUsers(self, query, wantLDAP);
-    }
-
     var found = {};
     function addOrChange(id, data) {
       if (id in found) {
@@ -116,6 +112,9 @@ if (Meteor.isServer) {
     }));
     if (wantLDAP) {
       futures.push(Future.task(function findInLDAP() {
+        if (! Devsupport.isOnline()) {
+          return Devsupport.fakeData.ldapUsers(self, query);
+        }
         getSyncUserByName(query).forEach(function (result) {
           addOrChange(result.sciper, {ldapFullName: result.displayName});
         });
