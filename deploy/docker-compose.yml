@@ -23,3 +23,5 @@ adminbase:
     - ..:/adminbase
   ports:
     - "3000:3000"
+  environment:
+    MONGO_URL: mongodb://mongo_1:27017/meteor
