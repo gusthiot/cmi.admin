@@ -1,6 +1,16 @@
 {
-    "hello": "Hello %s",
-    "search#search-here": "Search users...",
-    "search#nosearchresults": "No search results",
-    "search#ldap": "Search non-CMi users..."
+  "hello": "Hello %s",
+  "search#search-here": "Search users...",
+  "search#nosearchresults": "No search results",
+  "search#ldap": "Search non-CMi users...",
+
+  "Billables#title": "Billables",
+  "Billables#column#type"             : "Category",
+  "Billables#column#operatedByUser"   : "Operated By",
+  "Billables#column#billableToAccount": "Billable To",
+  "Billables#column#billableToProject": "Project",
+  "Billables#column#startTime"        : "Start Time",
+  "Billables#column#billingDetails"   : "Billing Details",
+  "Billables#column#discount"         : "Discount",
+  "Billables#column#validationState"  : "Validation"
 }
