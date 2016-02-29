@@ -15,10 +15,12 @@ Router.route('/', function () {
 });
 
 Router.route('/user/:sciper/edit', function () {
+  console.log("/user/:sciper/edit");
   var user = User.bySciper(this.params.sciper);
   if (! Security.can("XXX")) {
       // TODO: Signal permission issue somehow
-      return;
+    console.log("Cannot!");
+    return;
   }
   this.render('User$Edit', {data: user});
 });

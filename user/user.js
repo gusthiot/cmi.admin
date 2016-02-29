@@ -30,10 +30,6 @@ User.prototype.lang = function(opt_set) {
   }
 };
 
-User.prototype.setPassword = function(password) {
-    updateUser(this, {"password": password});
-};
-
 User.collection = Meteor.users;
 User.collection.attachSchema(new SimpleSchema({
   _id: {
