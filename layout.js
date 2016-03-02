@@ -14,8 +14,8 @@ Router.route('/', function () {
   this.render("Homepage");
 });
 
-var renderUserSearchBox = function(that) {
-  that.render('User$Pick', {
+renderUserSearchBoxInNavBar = function(thatRoute) {
+  thatRoute.render('User$Pick', {
     to: "searchbox", 
     data: function() {
       return {id: "LayoutUserSearch"};
@@ -25,25 +25,20 @@ var renderUserSearchBox = function(that) {
 
 if (Meteor.isClient) {
   Template.User$Pick.events({
-    'User$Pick:selected #LayoutUserSearch': function(event, id) {
-      alert(id);
+    'User$Pick:selected #LayoutUserSearch': function(event, that, id) {
+      var url = '/user/' + id + '/edit';
+      Router.go(url);
     }
   });
 }
 
 Router.route('/user', function () {
-  renderUserSearchBox(this);
+  renderUserSearchBoxInNavBar(this);
 });
 
 Router.route('/user/:sciper/edit', function () {
-  renderUserSearchBox(this);
-  console.log("/user/:sciper/edit");
+  renderUserSearchBoxInNavBar(this);
   var user = User.bySciper(this.params.sciper);
-  if (! Security.can("XXX")) {
-      // TODO: Signal permission issue somehow
-    console.log("Cannot!");
-    return;
-  }
   this.render('User$Edit', {data: user});
 });
 

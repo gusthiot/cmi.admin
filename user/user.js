@@ -10,6 +10,12 @@ if (Meteor.isClient) {
   User.current = function() {
     return new User(Meteor.user());
   }
+  // Since this method doesn't exist in the server, it is secure by
+  // construction; it cannot possibly return information that the user doesn't
+  // already have access to.
+  User.bySciper = function(sciper) {
+    return User.collection.findOne({_id: sciper});
+  }
 }
 
 function updateUser(that, change) {
