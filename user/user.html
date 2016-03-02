@@ -1,5 +1,5 @@
 <template name="User$Pick">
-    <div class="dropdown">
+    <div class="dropdown" {{addID}}>
         <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "search#search-here"}}">
         {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
         <ul class="usersearch dropdown-menu">
@@ -33,7 +33,7 @@
 </template>
 
 <template name="User$Edit">
-    <div id="User$Edit">
+    <div>
         {{fullName}}
         <form class="set-password">
             <input type="password"/>

@@ -179,17 +179,18 @@ if (Meteor.isClient) {
   });  // Template.User$Pick.helpers
 
   Template.User$Pick.events({
-    "keyup input.usersearch": function(event) {
-      that().query.set(event.currentTarget.value);
-      var dropdown = $(that().find(".dropdown-menu"));
+    "keyup input.usersearch": function(event, that) {
+      that.query.set(event.currentTarget.value);
+      var dropdown = that.$(".dropdown-menu");
       if (! dropdown.is(":visible")) dropdown.dropdown("toggle");
     },
-    "click a.user": function() {
-      alert(this._id);
+    "click a.user": function(event, that) {
+      that.$("div").trigger("User$Pick:selected",
+                            [$(event.target).attr("data-value")]);
     },
-    "click a.ldapbutton": function(event) {
-      that().wantLDAP.set(true);
+    "click a.ldapbutton": function(event, that) {
+      that.wantLDAP.set(true);
       event.stopPropagation();
     }
-  });
+  });  // Template.User$Pick.events
 }
