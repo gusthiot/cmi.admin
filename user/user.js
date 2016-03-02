@@ -174,7 +174,7 @@ if (Meteor.isClient) {
     messageCode:   function() {
       var status = that().search.status();
       if (! status || status.status === "nosearchyet") {
-        return;
+        return undefined;
       } else if (status.status === "OK") {
         return status.resultCount ? undefined: "search#nosearchresults";
       } else {
