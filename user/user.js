@@ -193,6 +193,10 @@ if (Meteor.isClient) {
     "click a.user": function(event, that) {
       that.$("div").trigger("User$Pick:selected",
                             [$(event.target).attr("data-value")]);
+      var dropdown = that.$(".dropdown-menu");
+      if (dropdown.is(":visible")) dropdown.dropdown("toggle");
+      that.$("input.usersearch").val($(event.target).text());
+      event.stopPropagation();
     },
     "click a.ldapbutton": function(event, that) {
       that.wantLDAP.set(true);
