@@ -42,8 +42,8 @@ Router.route('/user/:sciper/edit', function () {
   this.render('User$Edit', {data: user});
 });
 
-Router.route('/billable', function () {
-  this.render("Billable$Edit");
+Router.route('/billables', function () {
+  this.render("Billables$Edit");
 });
 
 Router.route('/test', function () {
