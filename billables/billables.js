@@ -1,11 +1,3 @@
-function __(key) {
-  if (Meteor.isServer) {
-    return key;
-  } else {
-    return TAPi18n.__(key);
-  }
-}
-
 Billables = new Meteor.Collection("billables");
 
 Billables.columns = function() {
@@ -15,20 +7,16 @@ Billables.columns = function() {
         function(columnType) {
           columns.push({
             data: columnType,
-            title: __("Billables#column#" + columnType),
-            defaultContent: "-"
+            title: "Billables#column#" + columnType,
+            defaultContent: "-",
+            tmpl: Meteor.isClient && Template["Billable$cell$" + columnType]
           });
         });
   return columns;
 };
 
-Billables.Table = Tabular.newReactiveTable({
+Billables.Table = new Tabular.Table({
   name: "Billables",
   collection: Billables,
-  columns: Billables.columns,
-  _unused: [
-    {
-      tmpl: Meteor.isClient && Template.Billable$LineActions
-    }
-  ]
+  columns: Billables.columns()
 });
