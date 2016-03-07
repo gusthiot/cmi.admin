@@ -50,3 +50,13 @@ Router.route('/test', function () {
   this.render("Test");
 });
 
+/* Work around some kind of URL mapping bug in bootstrap-3 */
+Router.route( "/packages/bootstrap-3/(.*)",
+  function () {
+    this.response.writeHead(302, {
+      'Location': "/packages/mrt_bootstrap-3/" + this.params[0]
+    });
+    this.response.end();
+  },
+  { where: "server" });
+
