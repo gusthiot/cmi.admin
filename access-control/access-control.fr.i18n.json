@@ -1,0 +1,7 @@
+{
+  "AccessControl": {
+    "logout"              : "Déconnexion",
+    "BecomeUser,,,"       : "Devenir un autre utilisateur...",
+    "BecomeUserTitle"     : "Devenir un autre utilisateur"
+  }
+}

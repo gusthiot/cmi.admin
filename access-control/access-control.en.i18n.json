@@ -1,0 +1,7 @@
+{
+  "AccessControl": {
+    "logout"              : "Log out",
+    "BecomeUser,,,"       : "Become User...",
+    "BecomeUserTitle"     : "Become another user"
+  }
+}

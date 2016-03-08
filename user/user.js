@@ -5,13 +5,15 @@
 /**
  * @constructor
  */
-User = function User(doc) { _.extend(this, doc); };
+User = function User(doc) {
+  _.extend(this, doc);
+};
+
+Meteor.users._transform = function(doc) { return new User(doc); }
+
 if (Meteor.isClient) {
-  User.current = function() {
-    return new User(Meteor.user());
-  }
   // Since this method doesn't exist in the server, it is secure by
-  // construction; it cannot possibly return information that the user doesn't
+  // construction; it cannot possibly return information that the client doesn't
   // already have access to.
   User.bySciper = function(sciper) {
     return User.collection.findOne({_id: sciper});
@@ -62,16 +64,15 @@ User.collection.attachSchema(new SimpleSchema({
   }
 }));
 
-// As per http://stackoverflow.com/a/21853298/435004:
-// this merges gently with the default publish in accounts_server.js !
-if (Meteor.isServer) {
-  Meteor.publish(null, function() {
-    if (! this.userId) return;
+Meteor.startup(function() {
+  // As per http://stackoverflow.com/a/21853298/435004:
+  // this merges gently with the default publish in accounts_server.js !
+  Policy.publishConditional(Policy.canReadOwnFullName, function(user) {
     return Meteor.users.find({
-      _id: this.userId
-    }, { fields: {fullName: 1}});
+      _id: user._id,
+    }, { fields: {fullName: true}});
   });
-}
+});
 
 /**
  * User searches
