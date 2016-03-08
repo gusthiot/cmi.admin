@@ -133,7 +133,9 @@ if (Meteor.isServer) {
   });
 }
 
-var debug = console.log.bind(console);
+function debug(/* args */) {
+  // console.log.apply(console, arguments);
+}
 
 if (Meteor.isClient) {
   Template.User$Edit.events({
