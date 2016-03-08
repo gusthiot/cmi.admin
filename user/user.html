@@ -11,7 +11,9 @@
             {{/if}}
             {{#if messageCode}}
                 <li class="message">{{_ messageCode}}</li>
+                {{#if withLDAP}}
                 <li role="separator" class="divider"></li>
+                {{/if}}
             {{/if}}
             {{#if wantLDAP}}
               {{#if ldapUsers}}
@@ -24,9 +26,11 @@
                   </li>
               {{/if}}
             {{else}}
+            {{#if withLDAP}}
             <li>
                 <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
             </li>
+            {{/if}}
             {{/if}}
         </ul>
     </div>

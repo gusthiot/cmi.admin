@@ -16,16 +16,19 @@ Router.route('/', function () {
 
 renderUserSearchBoxInNavBar = function(thatRoute) {
   thatRoute.render('User$Pick', {
-    to: "searchbox", 
+    to: "searchbox",
     data: function() {
-      return {id: "LayoutUserSearch"};
+      return {
+        withLDAP: true,
+        id: "LayoutUserSearch"
+      };
     }
   });
 }
 
 if (Meteor.isClient) {
   Template.User$Pick.events({
-    'User$Pick:selected #LayoutUserSearch': function(event, that, id) {
+    'change #LayoutUserSearch': function(event, that, id) {
       var url = '/user/' + id + '/edit';
       Router.go(url);
     }
