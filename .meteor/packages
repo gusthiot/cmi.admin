@@ -20,6 +20,7 @@ insecure                # Allow all DB writes from clients (for prototyping)
 meteorhacks:npm
 npm-container
 
+check
 reactive-var            # in search/ and widgets
 aldeed:autoform
 aldeed:collection2
@@ -27,6 +28,7 @@ iron:router
 tap:i18n
 epfl:accounts-tequila
 epfl:loginfirst
+epfl:become
 mrt:bootstrap-3
 fortawesome:fontawesome
 aldeed:tabular

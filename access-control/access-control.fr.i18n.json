@@ -2,6 +2,14 @@
   "AccessControl": {
     "logout"              : "Déconnexion",
     "BecomeUser,,,"       : "Devenir un autre utilisateur...",
-    "BecomeUserTitle"     : "Devenir un autre utilisateur"
+    "BecomeUserTitle"     : "Devenir un autre utilisateur",
+    "restoreIdentity"     : "Redevenir %s",
+
+    "TequilaError": {
+    },
+    "BecomeError": {
+      "500": "Devenir un autre utilisateur : erreur interne du serveur",
+      "BECOME_PERMISSION_DENIED": "Devenir un autre utilisateur : opération non permise"
+    }
   }
 }

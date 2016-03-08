@@ -32,6 +32,7 @@ ecmascript@0.1.6
 ecmascript-runtime@0.2.6
 ejson@1.0.7
 epfl:accounts-tequila@0.0.1
+epfl:become@0.0.1
 epfl:loginfirst@0.0.1
 es5-shim@4.1.14
 fastclick@1.0.7

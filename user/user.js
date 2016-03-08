@@ -70,7 +70,10 @@ Meteor.startup(function() {
   Policy.publishConditional(Policy.canReadOwnFullName, function(user) {
     return Meteor.users.find({
       _id: user._id,
-    }, { fields: {fullName: true}});
+    }, { fields: {_id: true, fullName: true}});
+  });
+  Policy.publishConditional(Policy.canReadUserBasicDetails, function(user) {
+    return Meteor.users.find({}, {fields: {_id: true, fullName: true}});
   });
 });
 
@@ -89,6 +92,7 @@ if (Meteor.isServer) {
     getSyncUserByName = Meteor.wrapAsync(ldapContext.users.searchUserByName);
 
   User.Search.publish(function (query, wantLDAP) {
+    Policy.ensure(this.userId, Policy.canSearchUsers);
     var self = this;
 
     if (query.length < 3) {

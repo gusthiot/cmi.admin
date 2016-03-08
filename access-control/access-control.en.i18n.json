@@ -2,6 +2,14 @@
   "AccessControl": {
     "logout"              : "Log out",
     "BecomeUser,,,"       : "Become User...",
-    "BecomeUserTitle"     : "Become another user"
+    "BecomeUserTitle"     : "Become another user",
+    "restoreIdentity"     : "Resume acting as %s",
+
+    "TequilaError": {
+    },
+    "BecomeError": {
+      "500": "Become user: internal server error",
+      "BECOME_PERMISSION_DENIED": "Become user: operation not permitted"
+    }
   }
 }

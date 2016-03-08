@@ -5,17 +5,18 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.fullName}}<span class="caret"></span></a>
           <ul class="dropdown-menu">
            <li><a href="/logout">{{_ "AccessControl.logout"}}</a></li>
-            {{#if canBecome}}
-            <li id="AccessControl-WhoAmI-become"><a href="#" data-toggle="modal" data-target="#myModal">{{_ "AccessControl.BecomeUser,,,"}}</a></li>
-            {{/if}}
             {{#if hasBecome}}
-            <li><a href="#">Unbecome</a></li>
+            <li><a id="unbecome" href="#">{{_ "AccessControl.restoreIdentity" realUser.fullName}}</a></li>
+            {{else}}
+            {{#if canBecome}}
+            <li id="AccessControl-WhoAmI-become"><a href="#" data-toggle="modal" data-target="#becomeUserModal">{{_ "AccessControl.BecomeUser,,,"}}</a></li>
+            {{/if}}
             {{/if}}
           </ul>
         </li>
       </ul>
   </div>
-  <div id="myModal" class="modal fade" role="dialog">
+  <div id="becomeUserModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -23,11 +24,8 @@
           <h4 class="modal-title">{{_ "AccessControl.BecomeUserTitle"}}</h4>
         </div>
         <div class="modal-body">
-          {{> User$Pick}}
+          {{> User$Pick id="AccessControlBecomeThisUser"}}
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>    
       </div>
     </div>
   </div>
