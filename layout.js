@@ -28,7 +28,8 @@ renderUserSearchBoxInNavBar = function(thatRoute) {
 
 if (Meteor.isClient) {
   Template.User$Pick.events({
-    'change #LayoutUserSearch': function(event, that, id) {
+    'user:selected #LayoutUserSearch': function(event, that, id) {
+      if (id === undefined) return;
       var url = '/user/' + id + '/edit';
       Router.go(url);
     }
