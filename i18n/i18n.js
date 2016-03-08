@@ -13,7 +13,7 @@ I18N = {
 
 var currentLanguage = function() {
   var user = User.current();
-  return user ? user.lang() : undef;
+  return user ? user.lang() : undefined;
 };
 
 if (Meteor.isClient) {

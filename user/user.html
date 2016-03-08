@@ -1,6 +1,6 @@
 <template name="User$Pick">
     <div class="dropdown" {{addID}}>
-        <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "search#search-here"}}">
+        <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "User.search.search-here"}}">
         {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
         <ul class="usersearch dropdown-menu">
             {{#if cmiUsers}}
@@ -20,12 +20,12 @@
                 {{/each}}
               {{else}}
                   <li class="message">
-                      {{_ "search#noldapsearchresults"}}
+                      {{_ "User.search.noldapsearchresults"}}
                   </li>
               {{/if}}
             {{else}}
             <li>
-                <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "search#ldap"}}</a>
+                <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
             </li>
             {{/if}}
         </ul>

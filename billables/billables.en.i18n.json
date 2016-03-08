@@ -1,0 +1,15 @@
+{
+  "Billables": {
+    "title": "Billables",
+    "column": {
+      "type"             : "Category",
+      "operatedByUser"   : "Operated By",
+      "billableToAccount": "Billable To",
+      "billableToProject": "Project",
+      "startTime"        : "Start Time",
+      "billingDetails"   : "Billing Details",
+      "discount"         : "Discount",
+      "validationState"  : "Validation"
+    }
+  }
+}

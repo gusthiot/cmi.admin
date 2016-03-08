@@ -1,0 +1,15 @@
+{
+  "Billables": {
+    "title": "Éléments facturables",
+    "column": {
+      "type"             : "Catégorie",
+      "operatedByUser"   : "Opérateur",
+      "billableToAccount": "À facturer",
+      "billableToProject": "Projet",
+      "startTime"        : "Date/heure",
+      "billingDetails"   : "Détails",
+      "discount"         : "Rabais",
+      "validationState"  : "Validation"
+    }
+  }
+}

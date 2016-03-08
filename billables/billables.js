@@ -7,7 +7,7 @@ Billables.columns = function() {
         function(columnType) {
           columns.push({
             data: columnType,
-            title: "Billables#column#" + columnType,
+            title: "Billables.column." + columnType,
             defaultContent: "-",
             tmpl: Meteor.isClient && Template["Billable$cell$" + columnType]
           });

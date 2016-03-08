@@ -1,0 +1,9 @@
+{
+  "User": {
+    "search": {
+      "search-here": "Rechercher un utilisateur...",
+      "nosearchresults": "Pas de résultat",
+      "ldap": "Rechercher des utilisateurs hors CMi..."
+    }
+  }
+}

@@ -176,10 +176,10 @@ if (Meteor.isClient) {
       if (! status || status.status === "nosearchyet") {
         return undefined;
       } else if (status.status === "OK") {
-        return status.resultCount ? undefined: "search#nosearchresults";
+        return status.resultCount ? undefined: "User.search.nosearchresults";
       } else {
         var i18nKey = (status.message || status.error || status.status);
-        return "search#" + i18nKey;
+        return "User.search." + i18nKey;
       }
     }
   });  // Template.User$Pick.helpers
