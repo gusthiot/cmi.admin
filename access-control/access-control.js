@@ -136,15 +136,16 @@ Template.User$Pick.events({
   'user:selected #AccessControlBecomeThisUser': function(event, that, id) {
     Become.become(id, signalServerError("Become"));
     event.preventDefault();
-  },
+  }
+});
+
+Template.AccessControl$WhoAmI.events({
   'click #unbecome': Become.restore
 });
 
 Template.AccessControl$WhoAmI.helpers({
   hasBecome: function() {
-    return !! Become.realUserID();
+    return !! Become.realUser();
   },
-  realUser: function() {
-    return Meteor.users.findOne({_id: Become.realUserID()});
-  }
+  realUser: function() { return Become.realUser(); }
 });
