@@ -1,6 +1,7 @@
 {
   "AccessControl": {
     "logout"              : "Déconnexion",
+    "gotoUserPrefs"       : "Préférences...",
     "BecomeUser,,,"       : "Devenir un autre utilisateur...",
     "BecomeUserTitle"     : "Devenir un autre utilisateur",
     "restoreIdentity"     : "Redevenir %s",

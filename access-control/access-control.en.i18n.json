@@ -1,6 +1,7 @@
 {
   "AccessControl": {
     "logout"              : "Log out",
+    "gotoUserPrefs"       : "User Preferences...",
     "BecomeUser,,,"       : "Become User...",
     "BecomeUserTitle"     : "Become another user",
     "restoreIdentity"     : "Resume acting as %s",
