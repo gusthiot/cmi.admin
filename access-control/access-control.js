@@ -1,73 +1,12 @@
 /**
- * Access control concerns
+ * Access control mechanisms
+ *
+ * This file is for mechanism only – See policy.js  ifor the policy
  */
 
-/**** Policy edicted *********/
+var debug = Debug("access-control.js");
 
-
-Role = function() {};
-
-Role.SuperAdministrator = new Role();
-Role.SuperAdministrator.belongsToUser = function(user) {
-  return (user._id === "243371"       // Dominique Quatravaux
-          || user._id === "133333");  // Philippe Langlet
-};
-
-Role.Customer = new Role();   // TODO: Should be one such role per customer account
-Role.Customer.belongsToUser = function(user) {
-  return true;
-};
-
-Policy = {
-  canReadOwnFullName: isLoggedIn,
-  canSearchUsers: isLoggedIn,
-  canBecomeAnotherUser: function(user) {
-    return userHasRole(user, Role.SuperAdministrator);
-  },
-  canReadUserBasicDetails: function(user) {
-    return userHasRole(user, Role.SuperAdministrator);  // TODO: overkill
-  }
-};
-
-/**** Policy mechanisms *********/
-
-function isLoggedIn(user) {
-  return !! user
-}
-
-Meteor.startup(function () {
-  User.prototype.hasRole = function(role) {
-    var user = this;
-    var result = role.belongsToUser(user);
-    if (result) {
-      user.__access_controlled = true;   // No WeakSet's in Meteor's ancient node
-    }
-    return result;
-  };
-
-  /**
-   * Return the *effective* user.
-   */
-  User.current = function() {
-    return Meteor.user();
-  }
-});
-
-function getUser(user_or_uid) {
-  if (! user_or_uid) { return; }
-  if (user_or_uid instanceof User) {
-    return user_or_uid;
-  } else {
-    return User.collection.findOne({_id: user_or_uid});
-  }
-}
-
-function userHasRole(user_or_uid, role) {
-  var user = getUser(user_or_uid);
-  return user ? user.hasRole(role) : false;
-}
-
-/**** Enforcing Tequila policy *********/
+/******** Tequila *********/
 
 Meteor.startup(function() {
   Tequila.options.bypass.push("/images/");
@@ -89,48 +28,59 @@ function signalServerError(module) {
 
 Tequila.options.onServerError = signalServerError("Tequila");
 
-/**** Enforcing policy to become another user *********/
-
-if (Meteor.isClient) {
-  Template.AccessControl$WhoAmI.helpers({
-    user: function() { return Meteor.user() },
-    canBecome: function() {
-      return Policy.canBecomeAnotherUser(Meteor.user());
-    },
-    hasBecome: function() { return false }
-  });
-}
+/**** Becoming another user *********/
 
 Become.policy(function(uid_from, uid_to) {
-  return Policy.canBecomeAnotherUser(getUser(uid_from));
+  Policy.canBecomeAnotherUser.check(uid_from);
+  return true;
 });
 
-/**** Enforcing policy on publishes *********/
 
-Policy.ensure = function(user_id, policy /*, *args */) {
-  check(policy, Function);
-  var user = getUser(user_id);
-  if (! user) {
-    throw new Meteor.Error("DeniedByPolicy");
-  }
-  var policyArgs = Array.prototype.slice.call(arguments, 2);
-  policyArgs.unshift(user);
-  if (! policy.apply({}, policyArgs)) {
-    throw new Meteor.Error("DeniedByPolicy");
-  }
-};
+/**** Other mechanisms for applying the policy *****/
 
-Policy.publishConditional = function(policy, resultsFunc) {
+Meteor.startup(function () {
+  /**
+   * Return the currently logged-in user.
+   *
+   * When Become is in play, this is the user that the client switched *to*
+   * ("effective user" in UNIX parlance).
+   */
+  User.current = function() {
+    return Meteor.user();
+  }
+});
+
+Policy.prototype.publish = function(resultsFunc) {
   if (! Meteor.isServer) return;
 
+  var policy = this;
+
   Meteor.publish(null, function() {
-    if (! policy(this.userId)) return;
+    if (! this.userId) return;  // No policy yet that allows non-logged-in users
     var user = Meteor.users.findOne({_id: this.userId});
+    if (! policy.isAllowed(user)) {
+      debug("Policy " + policy.name + " denies publish to " + this.userId);
+      return;
+    }
     return resultsFunc(user);
   });
 };
 
-if (! Meteor.isClient) return; /******************************************/
+/********** Access control UI ****************/
+if (! Meteor.isClient) return;
+
+Template.AccessControl$WhoAmI.helpers({
+  user: function() { return Meteor.user() },
+  canBecome: function() {
+    try {
+      Policy.canBecomeAnotherUser.check(Meteor.user());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+  hasBecome: function() { return false }
+});
 
 Template.User$Pick.events({
   'user:selected #AccessControlBecomeThisUser': function(event, that, id) {
