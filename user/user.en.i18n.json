@@ -4,6 +4,8 @@
       "search-here": "Search users...",
       "nosearchresults": "No search results",
       "ldap": "Search non-CMi users..."
-    }
+    },
+    "EditFormSelf": "Your Account",
+    "EditForm": "Edit User %s"
   }
 }

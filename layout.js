@@ -43,7 +43,16 @@ Router.route('/user', function () {
 Router.route('/user/:sciper/edit', function () {
   renderUserSearchBoxInNavBar(this);
   var user = User.bySciper(this.params.sciper);
-  this.render('User$Edit', {data: user});
+  if (!user) {
+    this.render('AccessControl$PermissionDenied');
+  } else {
+    this.render('User$Edit', {data: {
+      user: user,
+      editingSelf: function() {
+        return user._id === Meteor.userId();
+      }
+    }});
+  }
 });
 
 Router.route('/billables', function () {

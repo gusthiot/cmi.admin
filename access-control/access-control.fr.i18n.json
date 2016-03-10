@@ -11,6 +11,10 @@
     "BecomeError": {
       "500": "Devenir un autre utilisateur : erreur interne du serveur",
       "BECOME_PERMISSION_DENIED": "Devenir un autre utilisateur : opération non permise"
+    },
+    "PermissionDenied": {
+      "title": "Accès refusé",
+      "blurb": "Vous n'avez pas accès à cette ressource ou cette page."
     }
   }
 }

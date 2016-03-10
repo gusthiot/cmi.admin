@@ -37,8 +37,12 @@
 </template>
 
 <template name="User$Edit">
-    <div>
-      <h1>Edit user {{fullName}}</h1>
+  <div>
+    {{#if editingSelf}}
+      <h1>{{_ "User.EditFormSelf"}}</h1>
+    {{else}}
+      <h1>{{_ "User.EditForm" user.fullName}}</h1>
+    {{/if}}
         <form class="set-password">
             <input type="password"/>
         </form>

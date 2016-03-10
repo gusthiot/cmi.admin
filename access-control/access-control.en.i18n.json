@@ -11,6 +11,10 @@
     "BecomeError": {
       "500": "Become user: internal server error",
       "BECOME_PERMISSION_DENIED": "Become user: operation not permitted"
+    },
+    "PermissionDenied": {
+      "title": "Permission Denied",
+      "blurb": "You have no access to this resource or page."
     }
   }
 }
