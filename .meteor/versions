@@ -33,7 +33,7 @@ ecmascript-runtime@0.2.6
 ejson@1.0.7
 epfl:accounts-tequila@0.0.1
 epfl:become@0.0.1
-epfl:loginfirst@0.0.1
+epfl:loginfirst@0.0.2
 es5-shim@4.1.14
 fastclick@1.0.7
 fortawesome:fontawesome@4.5.0
@@ -53,6 +53,8 @@ iron:middleware-stack@1.0.11
 iron:router@1.0.12
 iron:url@1.0.11
 jquery@1.11.4
+jquery-history@1.0.2
+json@1.0.3
 launch-screen@1.0.4
 livedata@1.0.15
 localstorage@1.0.5
@@ -94,7 +96,6 @@ standard-minifiers@1.0.2
 tap:i18n@1.7.0
 templating@1.1.5
 templating-tools@1.0.0
-tomwasd:history-polyfill@0.0.1
 tracker@1.0.9
 ui@1.0.8
 underscore@1.0.4
