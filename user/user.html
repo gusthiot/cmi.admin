@@ -41,10 +41,8 @@
     {{#if editingSelf}}
       <h1>{{_ "User.EditFormSelf"}}</h1>
     {{else}}
-      <h1>{{_ "User.EditForm" user.fullName}}</h1>
+      <h1>{{_ "User.EditForm" object.fullName}}</h1>
     {{/if}}
-        <form class="set-password">
-            <input type="password"/>
-        </form>
+      {{> quickForm schema=schema id="User$EditForm" type="update" template="bootstrap3" label-class="col-sm-3" input-col-class="col-sm-9" id-prefix="my-prefix"}}
     </div>
 </template>

@@ -47,10 +47,7 @@ Router.route('/user/:sciper/edit', function () {
     this.render('AccessControl$PermissionDenied');
   } else {
     this.render('User$Edit', {data: {
-      user: user,
-      editingSelf: function() {
-        return user._id === Meteor.userId();
-      }
+      object: user
     }});
   }
 });

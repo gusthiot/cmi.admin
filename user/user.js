@@ -69,12 +69,12 @@ User.collection.attachSchema(new SimpleSchema({
 Meteor.startup(function() {
   // As per http://stackoverflow.com/a/21853298/435004:
   // this merges gently with the default publish in accounts_server.js !
-  Policy.canReadOwnFullName.publish(function(user) {
+  Policy.canReadOwnFullName.publish(null, function() {
     return Meteor.users.find({
-      _id: user._id
+      _id: this.userId
     }, { fields: {_id: true, fullName: true}});
   });
-  Policy.canReadUserBasicDetails.publish(function(user) {
+  Policy.canReadUserBasicDetails.publish(null, function() {
     return Meteor.users.find({}, {fields: {_id: true, fullName: true}});
   });
 });
@@ -94,7 +94,7 @@ if (Meteor.isServer) {
     getSyncUserByName = Meteor.wrapAsync(ldapContext.users.searchUserByName);
 
   User.Search.publish(function (query, wantLDAP) {
-    Policy.canSearchUsers.check(this.userId);
+    Policy.canSearchUsers.check(this);
     var self = this;
 
     if (query.length < 3) {
@@ -140,6 +140,15 @@ if (Meteor.isServer) {
 }
 
 if (! Meteor.isClient) return; /******************************************/
+
+Template.User$Edit.helpers({
+  editingSelf: function() {
+    return Template.currentData().object._id === Meteor.userId();
+  },
+  schema: function() { 
+    return Policy.editUser.call(Template.currentData().object);
+  }
+});
 
 Template.User$Edit.events({
   "submit form": function(e) {

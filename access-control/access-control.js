@@ -50,22 +50,6 @@ Meteor.startup(function () {
   }
 });
 
-Policy.prototype.publish = function(resultsFunc) {
-  if (! Meteor.isServer) return;
-
-  var policy = this;
-
-  Meteor.publish(null, function() {
-    if (! this.userId) return;  // No policy yet that allows non-logged-in users
-    var user = Meteor.users.findOne({_id: this.userId});
-    if (! policy.isAllowed(user)) {
-      debug("Policy " + policy.name + " denies publish to " + this.userId);
-      return;
-    }
-    return resultsFunc(user);
-  });
-};
-
 /********** Access control UI ****************/
 if (! Meteor.isClient) return;
 
