@@ -70,7 +70,7 @@ if (Devsupport.isActive()) {
 }
 
 /* Work around some kind of URL mapping bug in bootstrap-3 */
-Router.route( "/packages/bootstrap-3/(.*)",
+Router.route("/packages/bootstrap-3/(.*)",
   function () {
     this.response.writeHead(302, {
       'Location': "/packages/mrt_bootstrap-3/" + this.params[0]

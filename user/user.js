@@ -11,7 +11,7 @@ User = function User(doc) {
   _.extend(this, doc);
 };
 
-Meteor.users._transform = function(doc) { return new User(doc); }
+Meteor.users._transform = function(doc) { return new User(doc); };
 
 if (Meteor.isClient) {
   // Since this method doesn't exist in the server, it is secure by
