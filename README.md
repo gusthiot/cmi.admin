@@ -1,5 +1,14 @@
 # Business databases of CMi
 
+## Deployment
+
+Copy and modify `meteor-settings.json.sample` to indicate point to the
+Kafka service (through the ZooKeeper IP and port), then run
+
+```
+meteor run --settings meteor-settings.json
+```
+
 ## Code Convention
 
 [Meteor](https://www.meteor.com/) is a really free-form framework. We

@@ -56,9 +56,18 @@ Router.route('/billables', function () {
   this.render("Billables$Edit");
 });
 
-Router.route('/test', function () {
-  this.render("Test");
-});
+if (Devsupport.isActive()) {
+  Router.route('/test', function () {
+    this.render("Test");
+  });
+  Router.route('/devsupport/kafka/(.*)', function () {
+    var topic = this.params[0];
+    Kafka.subscribe(topic);
+    this.render("Kafka", {data: {
+      topic: topic
+    }});
+  });
+}
 
 /* Work around some kind of URL mapping bug in bootstrap-3 */
 Router.route( "/packages/bootstrap-3/(.*)",

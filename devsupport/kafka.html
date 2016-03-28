@@ -1,0 +1,8 @@
+<template name="Kafka">
+    <h1>Messages on Kafka topic {{topic}}</h1>
+    <ul>
+        {{#each messages}}
+            <li><pre>{{value}}</pre></li>
+        {{/each}}
+    </ul>
+</template>
