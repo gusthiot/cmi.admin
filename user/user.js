@@ -182,7 +182,8 @@ Template.User$Pick.onCreated(function () {
   });
 });
 
-var that = function that() { return Template.instance(); }
+function that() { return Template.instance(); }
+
 Template.User$Pick.helpers({
   wantLDAP: function() {
     return that().wantLDAP.get();
