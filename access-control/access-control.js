@@ -31,7 +31,7 @@ Tequila.options.onServerError = signalServerError("Tequila");
 /**** Becoming another user *********/
 
 Become.policy(function(uid_from, uid_to) {
-  Policy.canBecomeAnotherUser.check(uid_from);
+  Policy.canBecomeAnotherUser.check({userId: uid_from});
   return true;
 });
 
