@@ -6,4 +6,5 @@ packages/
 .meteor/settings.json
 .dir-locals.el
 NOTES.org
+/node_modules/
 
