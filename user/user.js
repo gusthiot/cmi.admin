@@ -151,9 +151,9 @@ Template.User$Edit.helpers({
 });
 
 Template.User$Edit.events({
-  "submit form": function(e) {
+  "submit form": function(event) {
     console.log(this);
-    return false;
+    event.preventDefault();
   }
 });
 

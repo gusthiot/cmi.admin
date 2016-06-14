@@ -23,16 +23,16 @@ Billables.Table = new Tabular.Table({
   }
 });
 
-if (! Meteor.isClient) return; /******************************************/
+if (Meteor.isClient) {
+  Template.Billables$Edit.onRendered(function() {
+    this.$("table").on('select.dt', function (e, dt, type, indexes) {
+        var rowNum = indexes[0].row, colNum = indexes[0].column,
+          data = dt.row(rowNum).data(),
+          columnDescr = Billables.columns[colNum];
+        console.log("Selected " + type + ": " + columnDescr.data + " of _id " + data._id);
+      })
+      .on('deselect.dt', function (e, dt, type, indexes) {
 
-Template.Billables$Edit.onRendered(function() {
-  this.$("table").on('select.dt', function (e, dt, type, indexes) {
-    var rowNum = indexes[0].row, colNum = indexes[0].column,
-        data = dt.row(rowNum).data(),
-        columnDescr = Billables.columns[colNum];
-    console.log("Selected " + type + ": " + columnDescr.data + " of _id " + data._id);
-  })
-  .on('deselect.dt', function (e, dt, type, indexes) {
-    
+      });
   });
-});
+}  // Meteor.isClient
