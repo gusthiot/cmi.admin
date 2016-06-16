@@ -35,21 +35,6 @@ Become.policy(function(uid_from, uid_to) {
   return true;
 });
 
-
-/**** Other mechanisms for applying the policy *****/
-
-Meteor.startup(function () {
-  /**
-   * Return the currently logged-in user.
-   *
-   * When Become is in play, this is the user that the client switched *to*
-   * ("effective user" in UNIX parlance).
-   */
-  User.current = function() {
-    return Meteor.user();
-  }
-});
-
 /********** Access control UI ****************/
 if (! Meteor.isClient) return;
 

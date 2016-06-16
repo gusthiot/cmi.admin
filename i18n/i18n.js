@@ -16,7 +16,7 @@ I18N = {
 };
 
 var currentLanguage = function() {
-  var user = User.current();
+  var user = Meteor.user();
   return user ? user.lang() : undefined;
 };
 
@@ -36,7 +36,7 @@ if (Meteor.isClient) {
   Template.I18N$SelectLanguage.onRendered(function () {
     $(this.findAll(".dropdown-menu a.flag")).click(function() {
       var newLang = $(this).data('value');
-      User.current().lang(newLang);
+      Meteor.user().lang(newLang);
     });
   });
 }
