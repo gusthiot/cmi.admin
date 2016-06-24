@@ -1,27 +1,36 @@
 Billables = new Meteor.Collection("billables");
 
-Billables.columns = _.map(
+Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
-   "startTime", "billingDetails", "discount", "validationState"],
-  function(columnType) {
-    return {
-      data: columnType,
-      title: "Billables.column." + columnType,  // i18n'd in lib/tabular.js
-      defaultContent: "-",
-      tmpl: Meteor.isClient && Template["Billable$cell$" + columnType]
-    };
-  });
+   "startTime", "billingDetails", "discount", "validationState"];
 
-Billables.Table = new Tabular.Table({
-  name: "Billables",
-  collection: Billables,
-  columns: Billables.columns,
-  // http://datatables.net/extensions/select/examples/initialisation/cells.html
-  select: {
-    style: "os",
-    items: "cell"
-  }
-});
+function makeTable() {
+  return new Tabular.Table({
+    name: "Billables",
+    collection: Billables,
+    columns: _.map(Billables.columns, function(colSymbol) {
+      return {
+        data: colSymbol,
+        title: TAPi18n.__("Billables.column." + colSymbol),
+        defaultContent: "-",
+        tmpl: Meteor.isClient && Template["Billable$cell$" + colSymbol]
+      };
+    }),
+    // http://datatables.net/extensions/select/examples/initialisation/cells.html
+    select: {
+      style: "os",
+      items: "cell"
+    }
+  });
+}
+
+if (Meteor.isServer) {
+  // Called only once
+  makeTable();
+} else if (Meteor.isClient) {
+  // Reactively called multiple times e.g. when switching languages
+  Template.Billables$Edit.helpers({makeTable: makeTable});
+}
 
 if (Meteor.isClient) {
   Template.Billables$Edit.onRendered(function() {

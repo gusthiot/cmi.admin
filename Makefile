@@ -4,5 +4,8 @@
 
 .PHONY: clean
 
+init:
+	git submodule update --init
+
 clean:
 	rm .meteor/local/{build,bundler-cache,plugin-cache,isopacks}
