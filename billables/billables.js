@@ -33,6 +33,14 @@ if (Meteor.isServer) {
   Template.Billables$Edit.helpers({makeTable: makeTable});
 }
 
+/* Table cell I18N */
+if (Meteor.isClient) {
+  Template.Billable$cell$type.helpers({translateCategory: function(category) {
+    return TAPi18n.__("Billables.category." + category);
+  }});
+}
+
+/* Table edition */
 if (Meteor.isClient) {
   Template.Billables$Edit.onRendered(function() {
     this.$("table").on('select.dt', function (e, dt, type, indexes) {
@@ -45,4 +53,4 @@ if (Meteor.isClient) {
 
       });
   });
-}  // Meteor.isClient
+}

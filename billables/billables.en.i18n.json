@@ -10,6 +10,11 @@
       "billingDetails"   : "Billing Details",
       "discount"         : "Discount",
       "validationState"  : "Validation"
+    },
+    "category": {
+      "USAGE_FEE"        : "Usage fee",
+      "RESERVATION_FEE"  : "Reservation fee",
+      "ACCESS_FEE"       : "Access fee"
     }
   }
 }
