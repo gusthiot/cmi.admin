@@ -2,3 +2,6 @@
 	path = packages/meteor-tabular
 	url = git@github.com:domq/meteor-tabular.git
 	branch = devel
+[submodule "packages/accounts-tequila"]
+	path = packages/accounts-tequila
+	url = git@github.com:epfl-sti/accounts-tequila.git
