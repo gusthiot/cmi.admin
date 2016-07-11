@@ -6,6 +6,7 @@
 
 init:
 	git submodule update --init
+	meteor npm install
 
 clean:
 	rm .meteor/local/{build,bundler-cache,plugin-cache,isopacks}
