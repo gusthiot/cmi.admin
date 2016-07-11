@@ -88,9 +88,9 @@ Meteor.startup(function() {
 User.Search = new Search("userSearch");
 
 if (Meteor.isServer) {
-  var ldapContext = Meteor.npmRequire('epfl-ldap')(),
-    escapeStringRegexp = Meteor.npmRequire('escape-string-regexp'),
-    Future = Meteor.npmRequire('fibers/future'),
+  var ldapContext = require("epfl-ldap")(),
+    escapeStringRegexp = require('escape-string-regexp'),
+    Future = require('fibers/future'),
     getSyncUserByName = Meteor.wrapAsync(ldapContext.users.searchUserByName);
 
   User.Search.publish(function (query, wantLDAP) {

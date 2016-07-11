@@ -9,9 +9,8 @@ var uniqueId = (function(that) {
   }
 })(this);
 
-
 if (Meteor.isServer) {
-  var kafka = Meteor.npmRequire('kafka-node');
+  var kafka = require('kafka-node');
 
   var topics = ["passwords"];
 
