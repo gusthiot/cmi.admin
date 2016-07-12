@@ -2,6 +2,12 @@
   <title>CMi Administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        $(document).ready(function(){
+            $(".dropdown-button").dropdown();
+        })
+    </script>
 </head>
 
 <body>
@@ -13,36 +19,29 @@
 </template>
 
 <template name="nav">
-<nav class="navbar navbar-default">
+    <!-- Dropdown Structure -->
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="/user">Users</a></li>
+        <li><a href="/billables">{{_ "Billables.title"}}</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Separated link</a></li>
+        <li class="divider"></li>
+        <li><a href="#">One more separated link</a></li>
+    </ul>
+<nav>
   {{! Straight from the Bootstrap example gallery. }}
-  <div class="container-fluid">
+  <div class="container-fluid grey darken-1">
     {{! Brand and toggle get grouped for better mobile display }}
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+    <div class="nav-wrapper">
       <a class="navbar-brand" href="#"><img src="/images/CMi-logo.png"></a>
+        <ul class="left hide-on-med-and-down">
+            <!-- Dropdown Trigger -->
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
     </div>
 
     {{! Collect the nav links, forms, and other content for toggling }}
-    <div class="collapse navbar-collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Things to do <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/user">Users</a></li>
-            <li><a href="/billables">{{_ "Billables.title"}}</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-      </ul>
       <form class="navbar-form navbar-left" role="search">
         {{> yield "searchbox"}}
       </form>
@@ -50,7 +49,6 @@
         <li>{{> I18N$SelectLanguage}}</li>
         <li class="active">{{> AccessControl$WhoAmI}}</li>
       </ul>
-    </div>{{! end of .navbar-collapse }}
   </div>{{! end of .container-fluid }}
 </nav>
 </template>
