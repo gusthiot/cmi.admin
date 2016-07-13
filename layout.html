@@ -1,13 +1,8 @@
 <head>
-  <title>CMi Administration</title>
+    <title>CMi Administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script>
-        $(document).ready(function(){
-            $(".dropdown-button").dropdown();
-        })
-    </script>
 </head>
 
 <body>
@@ -24,36 +19,42 @@
         <li><a href="/user">Users</a></li>
         <li><a href="/billables">{{_ "Billables.title"}}</a></li>
         <li><a href="#">Something else here</a></li>
-        <li class="divider"></li>
+        <li role="separator" class="divider"></li>
         <li><a href="#">Separated link</a></li>
-        <li class="divider"></li>
+        <li role="separator" class="divider"></li>
         <li><a href="#">One more separated link</a></li>
     </ul>
-<nav>
-  {{! Straight from the Bootstrap example gallery. }}
-  <div class="container-fluid grey darken-1">
-    {{! Brand and toggle get grouped for better mobile display }}
-    <div class="nav-wrapper">
-      <a class="navbar-brand" href="#"><img src="/images/CMi-logo.png"></a>
-        <ul class="left hide-on-med-and-down">
-            <!-- Dropdown Trigger -->
-            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
-        </ul>
-    </div>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
+            {{> nav$burger}}
+        </div>
+    </nav>
+</template>
 
-    {{! Collect the nav links, forms, and other content for toggling }}
-      <form class="navbar-form navbar-left" role="search">
-        {{> yield "searchbox"}}
-      </form>
-      <ul class="nav navbar-nav navbar-right">
+<template name="nav$burger">
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="hide-on-med-and-down">
+        <!-- Dropdown Trigger -->
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
+    </ul>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li>{{> I18N$SelectLanguage}}</li>
-        <li class="active">{{> AccessControl$WhoAmI}}</li>
-      </ul>
-  </div>{{! end of .container-fluid }}
-</nav>
+        <li>{{> AccessControl$WhoAmI}}</li>
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+        <!-- Dropdown Trigger -->
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
+        <form class="nav navbar-form" role="search">
+            {{> yield "searchbox"}}
+        </form>
+        <ul class="nav navbar-nav">
+            <li>{{> I18N$SelectLanguage}}</li>
+            <li class="active">{{> AccessControl$WhoAmI}}</li>
+        </ul>
+    </ul>
 </template>
 
 <template name="Homepage">
-  <h1>CMi AdminBase</h1>
+    <h2>CMi AdminBase</h2>
 </template>
-

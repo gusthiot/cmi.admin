@@ -24,9 +24,9 @@ tap:i18n
 epfl:accounts-tequila
 epfl:loginfirst
 epfl:become
-mrt:bootstrap-3
 fortawesome:fontawesome
 aldeed:tabular
 standard-minifier-css
 standard-minifier-js
+mrt:bootstrap-3
 materialize:materialize
