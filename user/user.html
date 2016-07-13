@@ -1,48 +1,54 @@
 <template name="User$Pick">
-    <div class="dropdown" {{addID}}>
-        <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "User.search.search-here"}}">
-        {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
-        <ul class="usersearch dropdown-menu">
-            {{#if cmiUsers}}
-              {{#each cmiUsers}}
-                  <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
-              {{/each}}
-            <li role="separator" class="divider"></li>
-            {{/if}}
-            {{#if messageCode}}
-                <li class="message">{{_ messageCode}}</li>
-                {{#if withLDAP}}
-                <li role="separator" class="divider"></li>
+    <div class="container">
+        <div class="dropdown" {{addID}}>
+            <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "User.search.search-here"}}">
+            {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
+            <ul class="usersearch dropdown-menu">
+                {{#if cmiUsers}}
+                    {{#each cmiUsers}}
+                        <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
+                    {{/each}}
+                    <li role="separator" class="divider"></li>
                 {{/if}}
-            {{/if}}
-            {{#if wantLDAP}}
-              {{#if ldapUsers}}
-                {{#each ldapUsers}}
-                <li><a href="#" class="user" data-value="{{_id}}">{{ldapFullName}}</a></li>
-                {{/each}}
-              {{else}}
-                  <li class="message">
-                      {{_ "User.search.noldapsearchresults"}}
-                  </li>
-              {{/if}}
-            {{else}}
-            {{#if withLDAP}}
-            <li>
-                <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
-            </li>
-            {{/if}}
-            {{/if}}
-        </ul>
+                {{#if messageCode}}
+                    <li class="message">{{_ messageCode}}</li>
+                    {{#if withLDAP}}
+                        <li role="separator" class="divider"></li>
+                    {{/if}}
+                {{/if}}
+                {{#if wantLDAP}}
+                    {{#if ldapUsers}}
+                        {{#each ldapUsers}}
+                            <li><a href="#" class="user" data-value="{{_id}}">{{ldapFullName}}</a></li>
+                        {{/each}}
+                    {{else}}
+                        <li class="message">
+                            {{_ "User.search.noldapsearchresults"}}
+                        </li>
+                    {{/if}}
+                {{else}}
+                    {{#if withLDAP}}
+                        <li>
+                            <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
+                        </li>
+                    {{/if}}
+                {{/if}}
+            </ul>
+        </div>
     </div>
 </template>
 
 <template name="User$Edit">
-  <div>
-    {{#if editingSelf}}
-      <h1>{{_ "User.EditFormSelf"}}</h1>
-    {{else}}
-      <h1>{{_ "User.EditForm" object.fullName}}</h1>
-    {{/if}}
-      {{> quickForm schema=schema id="User$EditForm" type="update" template="bootstrap3" label-class="col-sm-3" input-col-class="col-sm-9" id-prefix="my-prefix"}}
+  <div class="container">
+      <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+              {{#if editingSelf}}
+                  <h1>{{_ "User.EditFormSelf"}}</h1>
+              {{else}}
+                  <h1>{{_ "User.EditForm" object.fullName}}</h1>
+              {{/if}}
+              {{> quickForm schema=schema id="User$EditForm" type="update"}}
+          </div>
+      </div>
     </div>
 </template>

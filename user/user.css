@@ -5,3 +5,6 @@ li.message {
 /* Oh, and some italics to spice things up: */
     font-style: italic;
 }
+.modal-title {
+    color: black !important;
+}

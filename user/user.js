@@ -20,7 +20,10 @@ if (Meteor.isClient) {
   User.bySciper = function(sciper) {
     return User.collection.findOne({_id: sciper});
   }
+
+  AutoForm.setDefaultTemplate('materialize');
 }
+
 
 function updateUser(that, change) {
   User.collection.update({_id: that._id},
@@ -236,3 +239,4 @@ Template.User$Pick.events({
     event.preventDefault();
   }
 });  // Template.User$Pick.events
+
