@@ -1,5 +1,4 @@
 <template name="User$Pick">
-    <div class="container">
         <div class="dropdown" {{addID}}>
             <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "User.search.search-here"}}">
             {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
@@ -35,19 +34,18 @@
                 {{/if}}
             </ul>
         </div>
-    </div>
 </template>
 
 <template name="User$Edit">
   <div class="container">
       <div class="row">
-          <div class="col-md-8 col-md-offset-2">
+          <div class="col s8 offset-s2">
               {{#if editingSelf}}
                   <h1>{{_ "User.EditFormSelf"}}</h1>
               {{else}}
                   <h1>{{_ "User.EditForm" object.fullName}}</h1>
               {{/if}}
-              {{> quickForm schema=schema id="User$EditForm" type="update"}}
+              {{> quickForm schema=schema id="User$EditForm" type="update" template="bootstrap3" label-class="col s3" input-col-class="col s9" id-prefix="my-prefix"}}
           </div>
       </div>
     </div>

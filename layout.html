@@ -14,37 +14,34 @@
 </template>
 
 <template name="nav">
-    <!-- Dropdown Structure -->
-    <ul id="dropdown1" class="dropdown-content">
-        <li><a href="/user">Users</a></li>
-        <li><a href="/billables">{{_ "Billables.title"}}</a></li>
-        <li><a href="#">Something else here</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">Separated link</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">One more separated link</a></li>
-    </ul>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
-            {{> nav$burger}}
+    <header>
+        <div class="navbar-fixed">
+            <nav class="navTop">
+                <div class="nav-wrapper">
+                    <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                    {{> nav$burger}}
+                </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 </template>
 
 <template name="nav$burger">
-    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="hide-on-med-and-down">
         <!-- Dropdown Trigger -->
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
+        {{> myDropdown}}
     </ul>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <form class="nav navbar-form" role="search">
+        {{> yield "searchbox"}}
+    </form>
+    <ul class="nav navbar-nav">
         <li>{{> I18N$SelectLanguage}}</li>
-        <li>{{> AccessControl$WhoAmI}}</li>
+        <li class="active">{{> AccessControl$WhoAmI}}</li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
         <!-- Dropdown Trigger -->
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Things to do<i class="material-icons right">arrow_drop_down</i></a></li>
+        {{! myDropdown}}
         <form class="nav navbar-form" role="search">
             {{> yield "searchbox"}}
         </form>
@@ -52,6 +49,21 @@
             <li>{{> I18N$SelectLanguage}}</li>
             <li class="active">{{> AccessControl$WhoAmI}}</li>
         </ul>
+    </ul>
+</template>
+
+<template name="myDropdown">
+    <a class="dropdown-button" data-activates="my-dropdown">
+        Things to do <i class="material-icons right">arrow_drop_down</i>
+    </a>
+    <ul id="my-dropdown" class="dropdown-content">
+        <li><a href="/user">Users</a></li>
+        <li><a href="/billables">{{_ "Billables.title"}}</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">Separated link</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">One more separated link</a></li>
     </ul>
 </template>
 
