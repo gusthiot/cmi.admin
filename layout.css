@@ -27,3 +27,11 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .navTop {
     /*background-color: #67C9FF !important;*/
 }
+
+.tailFlag {
+
+}
+
+.side-nav {
+    width: 310px !important;
+}

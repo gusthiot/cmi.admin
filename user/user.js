@@ -20,8 +20,12 @@ if (Meteor.isClient) {
   User.bySciper = function(sciper) {
     return User.collection.findOne({_id: sciper});
   }
-
+  // init materialize
   AutoForm.setDefaultTemplate('materialize');
+  // select option in template
+  Template.User$Edit.onRendered(function(){
+    $('select').material_select();
+  });
 }
 
 
@@ -172,6 +176,7 @@ Template.User$Edit.events({
  */
 Template.User$Pick.onCreated(function () {
   var self = this;
+  console.log("User$Pick onCreated: starting");
   User.template = this; // To access from the browser console
   self.search = User.Search.open();
 
@@ -180,9 +185,10 @@ Template.User$Pick.onCreated(function () {
   Tracker.autorun(function() {
     var query = self.query.get(),
       wantLDAP = self.wantLDAP.get();
-    debug("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
+    console.log("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
     if (query) self.search.search(query, wantLDAP);
   });
+  console.log("User$Pick onCreated: done");
 });
 
 function that() { return Template.instance(); }
@@ -225,8 +231,12 @@ function openDropdown(that) {
 
 Template.User$Pick.events({
   "keyup input.usersearch": function(event, that) {
+    console.log("Search term is now " + event.currentTarget.value);
     that.query.set(event.currentTarget.value);
     openDropdown(that);  // If we arrived via keyboard
+  },
+  "click": function(event, that) {
+    console.log("CLICK");
   },
   "click a.user": function(event, that) {
     that.$("div").trigger("user:selected",

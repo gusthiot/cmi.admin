@@ -80,16 +80,9 @@ Router.route("/packages/bootstrap-3/(.*)",
     { where: "server" });
 
 if (Meteor.isClient) {
-    Template.nav$burger.onRendered(function(){
+    Template.nav.onRendered(function(){
         var buttons = $(".button-collapse");
         buttons.sideNav();
-    });
-
-    Template.myDropdown.onRendered(function(){
-        this.$(".dropdown-button").dropdown({
-            hover:false,
-            belowOrigin: true
-        });
     });
 
 }

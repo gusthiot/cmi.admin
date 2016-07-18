@@ -17,55 +17,57 @@
     <header>
         <div class="navbar-fixed">
             <nav class="navTop">
-                <div class="nav-wrapper">
-                    <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
-                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-                    {{> nav$burger}}
+                <div class="container">
+                    <div class="nav-wrapper">
+                        <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
+                        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                        <ul class="hide-on-med-and-down">
+                            <li>
+                                <a class="dropdown-button" data-activates="my-dropdown">
+                                    Things to do <i class="material-icons right">add</i>
+                                </a>
+                            </li>
+                            <li>
+                                <form class="nav navbar-form" role="search">
+                                    {{> yield "searchbox"}}
+                                </form>
+                            </li>
+                            <ul class="hide-on-med-and-down right">
+                                <li>{{> I18N$SelectLanguage}}</li>
+                                <li>{{> AccessControl$WhoAmI}}</li>
+                            </ul>
+                        </ul>
+                        <!-- <ul class="side-nav" id="mobile-demo">
+                            <li><a class="dropdown-button" data-activates="my-dropdown">
+                                Things to do <i class="material-icons right">add</i>
+                            </a>
+                            </li>
+                            <li class="divider"></li>
+                            <form class="nav navbar-form" role="search">
+                                {{> yield "searchbox"}}
+                            </form>
+                            <li class="divider"></li>
+                            <li class="active">{{> AccessControl$WhoAmI}}</li>
+                            <li class="divider"></li>
+                            <li class="tailFlag">{{> I18N$SelectLanguage}}</li>
+                        </ul> -->
+                        <ul id="my-dropdown" class="dropdown-content">
+                            <li><a href="/user">Users</a></li>
+                            <li><a href="/billables">{{_ "Billables.title"}}</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 </template>
 
-<template name="nav$burger">
-    <ul class="hide-on-med-and-down">
-        <!-- Dropdown Trigger -->
-        {{> myDropdown}}
-    </ul>
-    <form class="nav navbar-form" role="search">
-        {{> yield "searchbox"}}
-    </form>
-    <ul class="nav navbar-nav">
-        <li>{{> I18N$SelectLanguage}}</li>
-        <li class="active">{{> AccessControl$WhoAmI}}</li>
-    </ul>
-    <ul class="side-nav" id="mobile-demo">
-        <!-- Dropdown Trigger -->
-        {{! myDropdown}}
-        <form class="nav navbar-form" role="search">
-            {{> yield "searchbox"}}
-        </form>
-        <ul class="nav navbar-nav">
-            <li>{{> I18N$SelectLanguage}}</li>
-            <li class="active">{{> AccessControl$WhoAmI}}</li>
-        </ul>
-    </ul>
-</template>
 
-<template name="myDropdown">
-    <a class="dropdown-button" data-activates="my-dropdown">
-        Things to do <i class="material-icons right">arrow_drop_down</i>
-    </a>
-    <ul id="my-dropdown" class="dropdown-content">
-        <li><a href="/user">Users</a></li>
-        <li><a href="/billables">{{_ "Billables.title"}}</a></li>
-        <li><a href="#">Something else here</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">Separated link</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">One more separated link</a></li>
-    </ul>
-</template>
 
 <template name="Homepage">
     <h2>CMi AdminBase</h2>
