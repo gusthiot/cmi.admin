@@ -20,8 +20,10 @@ if (Meteor.isClient) {
   User.bySciper = function(sciper) {
     return User.collection.findOne({_id: sciper});
   }
+
   // init materialize
   AutoForm.setDefaultTemplate('materialize');
+
   // select option in template
   Template.User$Edit.onRendered(function(){
     $('select').material_select();
