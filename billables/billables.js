@@ -17,7 +17,7 @@ function makeTable() {
       };
     }),
     language: Tabular.Translations.getCurrent(),
-    // http://datatables.net/extensions/select/examples/initialisation/cells.html
+    //http://datatables.net/extensions/select/examples/initialisation/cells.html
     select: {
       style: "os",
       items: "cell"
