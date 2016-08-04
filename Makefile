@@ -32,6 +32,7 @@ dbrestore: dbdump.zip
 COLLECTIONS=$(notdir $(patsubst %.metadata.json, %, $(wildcard dump/meteor/*.metadata.json)))
 __dbrestore:
 	@for table in $(COLLECTIONS); do $(MAKE) __dbpurge_table __dbrestore_table COLLECTION=$${table}; done
+	@rm -rf dump/
 
 __dbpurge_table:
 	@echo "Purging $(COLLECTION)"
