@@ -18,11 +18,74 @@ function makeTable() {
     }),
     language: Tabular.Translations.getCurrent(),
     //http://datatables.net/extensions/select/examples/initialisation/cells.html
+/*
+    columnDefs: [ {
+      orderable: false,
+      className: 'select-checkbox',
+      targets:   9
+    } ],
+*/
     select: {
       style: "os",
-      items: "cell"
+      items: "cell",
+      //selector: 'td:last-child'
     },
+/*
+    order: [[ 1, 'asc' ]],
+*/
+    initComplete: function() {
+      setupColumnFilters(this);
+    }
   });
+}
+
+function setupColumnFilters(dataTableElement) {
+  // From https://datatables.net/examples/api/multi_filter_select.html
+  dataTableElement.api().columns().every( function () {
+    var column = this;
+    $(column.header()).empty();
+
+    var translate = function(str) {
+      return String(str).toUpperCase(); // XXX Just an example
+    };
+
+    var context = {
+      dataTableColumn: column,
+      index: column.index(),
+      type: Billables.columns[column.index()],
+      translateType: function(type) {
+        return TAPi18n.__("Billables.column." + type)
+      },
+      sortedValues: [{
+        value: "usage_fee", translate: translate
+      },
+        {value: "B", translate: translate
+        },
+        {value: "C", translate: translate
+  }
+      ]
+    };
+    Blaze.renderWithData(Template.Billable$columnHead, context,
+        column.header());
+  } );
+}
+
+if (Meteor.isClient) {
+  // When selects in column headers change, filter values accordingly
+  Template.Billable$columnHead.events({
+    'change select': function(event, template) {
+      var val = $.fn.dataTable.util.escapeRegex(
+          $(event.target).val()
+      );
+      this.dataTableColumn
+          .search( val ? '^'+val+'$' : '', true, false )
+          .draw();
+    }
+  });
+}
+
+function allValuesInColumn(collection, columnName) {
+  return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function(t) {return t})
 }
 
 if (Meteor.isServer) {
