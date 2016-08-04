@@ -34,23 +34,22 @@ function makeTable() {
     order: [[ 1, 'asc' ]],
 */
     initComplete: function() {
-      setupColumnFilters(this);
+      setupColumnFilterUI(this);
     }
   });
 }
 
-function setupColumnFilters(dataTableElement) {
+function setupColumnFilterUI(dataTableElement) {
+  var columns = dataTableElement.api().columns();
   // From https://datatables.net/examples/api/multi_filter_select.html
-  dataTableElement.api().columns().every( function () {
+  columns.every( function () {
     var column = this;
-    $(column.header()).empty();
 
     var translate = function(str) {
       return String(str).toUpperCase(); // XXX Just an example
     };
 
     var context = {
-      dataTableColumn: column,
       index: column.index(),
       type: Billables.columns[column.index()],
       translateType: function(type) {
@@ -65,9 +64,19 @@ function setupColumnFilters(dataTableElement) {
   }
       ]
     };
-    Blaze.renderWithData(Template.Billable$columnHead, context,
+
+    $(column.header()).empty();
+    var view = Blaze.renderWithData(Template.Billable$columnHead, context,
         column.header());
+    // The "change" handler will need to get back at the column object:
+    view.dataTable = {
+        column: column
+      };
   } );
+
+  Template.Billable$columnHead.onCreated(function() {
+    this.dataTable = this.view.parentView.dataTable;
+  })
 }
 
 if (Meteor.isClient) {
@@ -77,7 +86,7 @@ if (Meteor.isClient) {
       var val = $.fn.dataTable.util.escapeRegex(
           $(event.target).val()
       );
-      this.dataTableColumn
+      template.view.parentView.dataTable.column
           .search( val ? '^'+val+'$' : '', true, false )
           .draw();
     }
