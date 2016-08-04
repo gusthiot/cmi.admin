@@ -1,7 +1,7 @@
 /**
  * Access control mechanisms
  *
- * This file is for mechanism only – See policy.js  ifor the policy
+ * This file is for mechanism only – See policy.js for the policy
  */
 
 var debug = Debug("access-control.js");
@@ -12,7 +12,7 @@ Meteor.startup(function() {
   Tequila.options.bypass.push("/images/");
 });
 
-// SCIPER is the _id of documents in Meteor.users:
+// In Meteor.users documents, the _id is the user's SCIPER:
 Tequila.options.getUserId = function getUserId(tequilaResponse) {
   return Meteor.users.findOne({_id: tequilaResponse.uniqueid});
 };
