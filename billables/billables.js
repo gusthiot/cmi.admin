@@ -88,12 +88,9 @@ function allValuesInColumn(collection, columnName) {
   return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function(t) {return t})
 }
 
-if (Meteor.isServer) {
-  // Called only once
-  makeTable();
-} else if (Meteor.isClient) {
-  // Reactively called multiple times e.g. when switching languages
-  Template.Billables$Edit.helpers({makeTable: makeTable});
+var theTable = makeTable();
+if (Meteor.isClient) {
+  Template.Billables$Edit.helpers({makeTable: theTable});
 }
 
 /* Table cell I18N */
