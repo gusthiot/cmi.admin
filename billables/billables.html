@@ -7,7 +7,11 @@
 </template>
 
 <template name="Billable$cell$type">
+    {{#if isEditing}}
+        <input type="text">
+        {{else}}
   {{translateCategory type}} ({{type}})
+  {{/if}}
 </template>
 
 <template name="Billable$columnHead">
