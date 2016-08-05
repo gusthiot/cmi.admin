@@ -66,17 +66,14 @@ function setupColumnFilterUI(dataTableElement) {
     };
 
     $(column.header()).empty();
-    var view = Blaze.renderWithData(Template.Billable$columnHead, context,
-        column.header());
-    // The "change" handler will need to get back at the column object:
-    view.dataTable = {
-        column: column
-      };
-  } );
 
-  Template.Billable$columnHead.onCreated(function() {
-    this.dataTable = this.view.parentView.dataTable;
-  })
+    var view = Template.Billable$columnHead.constructView();
+    // Event handlers need access to the column object:
+    view.templateInstance().dataTable = {
+      column: column
+    };
+    Blaze.renderWithData(view, context, column.header());
+  });
 }
 
 if (Meteor.isClient) {
@@ -86,7 +83,7 @@ if (Meteor.isClient) {
       var val = $.fn.dataTable.util.escapeRegex(
           $(event.target).val()
       );
-      template.view.parentView.dataTable.column
+      template.dataTable.column
           .search( val ? '^'+val+'$' : '', true, false )
           .draw();
     }
