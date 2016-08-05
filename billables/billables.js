@@ -58,9 +58,9 @@ function setupColumnFilterUI(dataTableElement) {
       sortedValues: [{
         value: "usage_fee", translate: translate
       },
-        {value: "B", translate: translate
+        {value: "reservation_fee", translate: translate
         },
-        {value: "C", translate: translate
+        {value: "access_fee", translate: translate
   }
       ]
     };
@@ -109,6 +109,7 @@ if (Meteor.isClient) {
 /* Table edition */
 if (Meteor.isClient) {
   Template.Billables$Edit.onRendered(function() {
+
     this.$("table").on('select.dt', function (e, dt, type, indexes) {
         var rowNum = indexes[0].row, colNum = indexes[0].column,
           data = dt.row(rowNum).data(),
@@ -118,5 +119,30 @@ if (Meteor.isClient) {
       .on('deselect.dt', function (e, dt, type, indexes) {
 
       });
-  });
+
+
+   // example from:
+    // http://www.sprymedia.co.uk/dataTables-1.4/example_editable.html
+    // http://www.appelsiini.net/projects/jeditable
+
+    /*var oTable;
+
+
+      /!* Apply the jEditable handlers to the table *!/
+      $('Billables tbody td').editable( function( sValue ) {
+        /!* Get the position of the current data from the node *!/
+        var aPos = oTable.fnGetPosition( this );
+
+        /!* Get the data array for this row *!/
+        var aData = oTable.fnGetData( aPos[0] );
+
+        /!* Update the data array and return the value *!/
+        aData[ aPos[1] ] = sValue;
+        return sValue;
+      }, { "onblur": 'submit' } ); /!* Submit the form when bluring a field *!/
+
+      /!* Init DataTables *!/
+      oTable = $('Billables').dataTable();*/
+    } );
+
 }
