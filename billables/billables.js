@@ -18,21 +18,12 @@ function makeTable() {
     }),
     language: Tabular.Translations.getCurrent(),
     //http://datatables.net/extensions/select/examples/initialisation/cells.html
-/*
-    columnDefs: [ {
-      orderable: false,
-      className: 'select-checkbox',
-      targets:   9
-    } ],
-*/
+
     select: {
       style: "os",
       items: "cell",
-      //selector: 'td:last-child'
     },
-/*
-    order: [[ 1, 'asc' ]],
-*/
+
     initComplete: function() {
       setupColumnFilterUI(this);
     }
@@ -95,8 +86,26 @@ function allValuesInColumn(collection, columnName) {
 }
 
 var theTable = makeTable();
+
+
 if (Meteor.isClient) {
   Template.Billables$Edit.helpers({makeTable: theTable});
+
+  /* Table edition */
+  Template.Billables$Edit.events({
+    'click tbody > tr': function (event) {
+
+      var dataTable = $(event.target).closest('table').DataTable();
+      var rowData = dataTable.row(event.currentTarget).data();
+     // var color = $('tr').css({"background":"green"});
+      //if (!rowData) return; // Won't be data if a placeholder row is clicked
+      // Your click handler logic here
+      if(rowData){
+        console.log(rowData);
+      }
+    }
+
+  });
 }
 
 /* Table cell I18N */
@@ -108,7 +117,7 @@ if (Meteor.isClient) {
 
 /* Table edition */
 if (Meteor.isClient) {
-  Template.Billables$Edit.onRendered(function() {
+  /*Template.Billables$Edit.onRendered(function() {
 
     this.$("table").on('select.dt', function (e, dt, type, indexes) {
         var rowNum = indexes[0].row, colNum = indexes[0].column,
@@ -121,28 +130,7 @@ if (Meteor.isClient) {
       });
 
 
-   // example from:
-    // http://www.sprymedia.co.uk/dataTables-1.4/example_editable.html
-    // http://www.appelsiini.net/projects/jeditable
 
-    /*var oTable;
-
-
-      /!* Apply the jEditable handlers to the table *!/
-      $('Billables tbody td').editable( function( sValue ) {
-        /!* Get the position of the current data from the node *!/
-        var aPos = oTable.fnGetPosition( this );
-
-        /!* Get the data array for this row *!/
-        var aData = oTable.fnGetData( aPos[0] );
-
-        /!* Update the data array and return the value *!/
-        aData[ aPos[1] ] = sValue;
-        return sValue;
-      }, { "onblur": 'submit' } ); /!* Submit the form when bluring a field *!/
-
-      /!* Init DataTables *!/
-      oTable = $('Billables').dataTable();*/
-    } );
+    } );*/
 
 }
