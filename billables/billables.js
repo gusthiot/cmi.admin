@@ -89,6 +89,7 @@ var theTable = makeTable();
 
 
 if (Meteor.isClient) {
+
   Template.Billables$Edit.helpers({makeTable: theTable});
 
   /* Table edition */
@@ -97,13 +98,31 @@ if (Meteor.isClient) {
 
       var dataTable = $(event.target).closest('table').DataTable();
       var rowData = dataTable.row(event.currentTarget).data();
-     // var color = $('tr').css({"background":"green"});
+
       //if (!rowData) return; // Won't be data if a placeholder row is clicked
       // Your click handler logic here
       if(rowData){
         console.log(rowData);
+        //var color = $('td').css({"color":"red"});
+        //$(this).wrapInner("<h3>hello</h3>");
       }
     }
+
+    /*Template.Billables$Edit.onRendered(function() {
+
+     this.$("table").on('select.dt', function (e, dt, type, indexes) {
+     var rowNum = indexes[0].row, colNum = indexes[0].column,
+     data = dt.row(rowNum).data(),
+     columnDescr = Billables.columns[colNum];
+     console.log("Selected " + type + ": " + columnDescr.data + " of _id " + data._id);
+     })
+     .on('deselect.dt', function (e, dt, type, indexes) {
+
+     });
+
+
+
+     } );*/
 
   });
 }
@@ -115,22 +134,3 @@ if (Meteor.isClient) {
   }});
 }
 
-/* Table edition */
-if (Meteor.isClient) {
-  /*Template.Billables$Edit.onRendered(function() {
-
-    this.$("table").on('select.dt', function (e, dt, type, indexes) {
-        var rowNum = indexes[0].row, colNum = indexes[0].column,
-          data = dt.row(rowNum).data(),
-          columnDescr = Billables.columns[colNum];
-        console.log("Selected " + type + ": " + columnDescr.data + " of _id " + data._id);
-      })
-      .on('deselect.dt', function (e, dt, type, indexes) {
-
-      });
-
-
-
-    } );*/
-
-}
