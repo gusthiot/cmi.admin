@@ -103,7 +103,7 @@ if (Meteor.isClient) {
       var rowData = dataTable.row( event.currentTarget ).data();
 
       if (rowData) {
-        Billables.editingRow.set( rowData );
+        changeEditingRow(rowData);
       }
     }
   });
@@ -115,6 +115,18 @@ if (Meteor.isClient) {
     },
   });
 
+  function changeEditingRow(rowData) {
+    var previousRowData;
+    Tracker.nonreactive(function()  {
+      previousRowData = Billables.editingRow.get( rowData );
+    });
+    if (previousRowData) {
+      // TODO: fetch new values from the DOM; fire db update;
+      // prepare to toast when done.
+    }
+    Billables.editingRow.set( rowData );
+  }
+
   var allCellTemplates = Billables.columns.map(function(x) {return Template["Billable$cell$" + x]});
 
   allCellTemplates.forEach(function(tmpl){
@@ -125,7 +137,7 @@ if (Meteor.isClient) {
         return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
       },
       formattedDate: function() {
-        return(moment(this.date).format('DD-MM-YYYY hh:mm a'));
+        return(moment(Template.currentData().startTime).format('DD-MM-YYYY hh:mm a'));
 
       }
     });
@@ -140,8 +152,8 @@ if (Meteor.isClient) {
   }});
 
 
-  Template.Billable$cell$startTime.onRendered(function() {
-   // $('#datetimepicker1').datetimepicker();
+  Template.Billable$cell$startTime$edit.onRendered(function() {
+    $('#datetimepicker1').assertSizeEquals(1).datetimepicker();
 
   });
 }

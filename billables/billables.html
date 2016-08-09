@@ -14,24 +14,23 @@
 
 <template name="Billable$cell$startTime">
     {{#if isEditing}}
-        <div class="form-group">
-            <div class='input-group date' >
-                <input type='text' class="form-control" id='datetimepicker1' value="{{startTime}}" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-
-    <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker();
-        });
-    </script>
+        {{> Billable$cell$startTime$edit}}
     {{else}}
         {{formattedDate}}
     {{/if}}
 </template>
+
+<template name="Billable$cell$startTime$edit">
+<div class="form-group">
+    <div class='input-group date' >
+        <input type='text' class="form-control" id='datetimepicker1' value="{{startTime}}" />
+        <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+    </div>
+</div>
+</template>
+
 
 <template name="Billable$columnHead">
     {{translateType type }}
