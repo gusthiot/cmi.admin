@@ -35,8 +35,8 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .side-nav {
     width: 310px !important;
 }
-/*
 
 .test {
-    background-color: #3e999f;
-}*/
+    /*background-color: #3e999f;*/
+    border: 1px solid #3e999f;
+}

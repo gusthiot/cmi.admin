@@ -1,5 +1,7 @@
 <template name="Billables$Edit">
 {{> tabular table=makeTable class="responsive-table striped"}}
+
+    Editing {{editingRow}}
 </template>
 
 <template name="Billable$LineActions">
@@ -7,11 +9,15 @@
 </template>
 
 <template name="Billable$cell$type">
+  {{translateCategory type}}
+</template>
+
+<template name="Billable$cell$startTime">
     {{#if isEditing}}
-        <input type="text">
+        <input type="text" value="{{startTime}}">
         {{else}}
-  {{translateCategory type}} ({{type}})
-  {{/if}}
+        {{startTime}}
+        {{/if}}
 </template>
 
 <template name="Billable$columnHead">

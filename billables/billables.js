@@ -1,8 +1,11 @@
 Billables = new Meteor.Collection("billables");
 
+Billables.editingRow = new ReactiveVar();
+
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
    "startTime", "billingDetails", "discount", "validationState"];
+
 /* Build dataTable*/
 function makeTable() {
   return new Tabular.Table({
@@ -13,7 +16,7 @@ function makeTable() {
         data: colSymbol,
         title: TAPi18n.__("Billables.column." + colSymbol),
         defaultContent: "-",
-        tmpl: Meteor.isClient && Template["Billable$cell$" + colSymbol]
+        tmpl: Meteor.isClient && Template["Billable$cell$" + colSymbol],
       };
     }),
     language: Tabular.Translations.getCurrent(),
@@ -92,46 +95,38 @@ if (Meteor.isClient) {
 
   Template.Billables$Edit.helpers({makeTable: theTable});
 
-  /* Table edition */
+  /* To edit a table row, click on it */
   Template.Billables$Edit.events({
     'click tbody > tr': function (event) {
 
-      var dataTable = $(event.target).closest('table').DataTable();
-      var rowData = dataTable.row(event.currentTarget).data();
+      var dataTable = $( event.target ).closest( 'table' ).DataTable();
+      var rowData = dataTable.row( event.currentTarget ).data();
 
-      var text = document.getElementsByTagName('tr')[1].getElementsByTagName('td');
-      //if (!rowData) return; // Won't be data if a placeholder row is clicked
-      // Your click handler logic here
-      if(rowData){
-        console.log('var rowData');
-        console.log(rowData);
-        console.log('var text');
-        console.log(text);
-        //return text.wrapInner = '<b></b>';
-        /*$( "td" ).wrapInner( "<div class='test'>" +
-            "<button class='btn-floating waves-effect waves-light saveItem' ><i class='material-icons'>save</i></button>" +
-              "<button class='btn-floating waves-effect waves-light cancelItem' ><i class='material-icons'>cancel</i></button>" +
-            "</div>" );
-*/
-        $("td").wrapInner("<input type='text'>");
+      if (rowData) {
+        Billables.editingRow.set( rowData );
       }
     }
-
-    /*Template.Billables$Edit.onRendered(function() {
-
-     this.$("table").on('select.dt', function (e, dt, type, indexes) {
-     var rowNum = indexes[0].row, colNum = indexes[0].column,
-     data = dt.row(rowNum).data(),
-     columnDescr = Billables.columns[colNum];
-     console.log("Selected " + type + ": " + columnDescr.data + " of _id " + data._id);
-     })
-     .on('deselect.dt', function (e, dt, type, indexes) {
-
-     });
-
-     } );*/
-
   });
+
+  Template.Billables$Edit.helpers({
+    editingRow: function () {
+      var rowData = Billables.editingRow.get();
+      return (rowData && rowData._id) ? rowData._id: "nothing";
+    },
+  });
+
+  var allCellTemplates = Billables.columns.map(function(x) {return Template["Billable$cell$" + x]});
+
+  allCellTemplates.forEach(function(tmpl){
+    if (! tmpl) return;
+    tmpl.helpers({
+      isEditing: function() {
+        var editingRow = Billables.editingRow.get();
+        return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
+      }
+    });
+  });
+
 }
 
 /* Table cell I18N */
