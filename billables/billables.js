@@ -3,7 +3,7 @@ Billables = new Meteor.Collection("billables");
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
    "startTime", "billingDetails", "discount", "validationState"];
-
+/* Build dataTable*/
 function makeTable() {
   return new Tabular.Table({
     name: "Billables",
@@ -99,12 +99,21 @@ if (Meteor.isClient) {
       var dataTable = $(event.target).closest('table').DataTable();
       var rowData = dataTable.row(event.currentTarget).data();
 
+      var text = document.getElementsByTagName('tr')[1].getElementsByTagName('td');
       //if (!rowData) return; // Won't be data if a placeholder row is clicked
       // Your click handler logic here
       if(rowData){
+        console.log('var rowData');
         console.log(rowData);
-        //var color = $('td').css({"color":"red"});
-        //$(this).wrapInner("<h3>hello</h3>");
+        console.log('var text');
+        console.log(text);
+        //return text.wrapInner = '<b></b>';
+        /*$( "td" ).wrapInner( "<div class='test'>" +
+            "<button class='btn-floating waves-effect waves-light saveItem' ><i class='material-icons'>save</i></button>" +
+              "<button class='btn-floating waves-effect waves-light cancelItem' ><i class='material-icons'>cancel</i></button>" +
+            "</div>" );
+*/
+        $("td").wrapInner("<input type='text'>");
       }
     }
 
@@ -119,8 +128,6 @@ if (Meteor.isClient) {
      .on('deselect.dt', function (e, dt, type, indexes) {
 
      });
-
-
 
      } );*/
 
