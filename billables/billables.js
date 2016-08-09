@@ -125,7 +125,7 @@ if (Meteor.isClient) {
         return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
       },
       formattedDate: function() {
-        return(moment(this.date).format('LLL'));
+        return(moment(this.date).format('DD-MM-YYYY hh:mm a'));
 
       }
     });
