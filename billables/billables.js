@@ -123,6 +123,10 @@ if (Meteor.isClient) {
       isEditing: function() {
         var editingRow = Billables.editingRow.get();
         return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
+      },
+      formattedDate: function() {
+        return(moment(this.date).format('LLL'));
+
       }
     });
   });
@@ -134,5 +138,11 @@ if (Meteor.isClient) {
   Template.Billable$cell$type.helpers({translateCategory: function(category) {
     return TAPi18n.__("Billables.category." + category);
   }});
+
+
+  Template.Billable$cell$startTime.onRendered(function() {
+   // $('#datetimepicker1').datetimepicker();
+
+  });
 }
 
