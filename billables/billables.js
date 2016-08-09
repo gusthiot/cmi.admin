@@ -153,7 +153,7 @@ if (Meteor.isClient) {
 
 
   Template.Billable$cell$startTime$edit.onRendered(function() {
-    $('#datetimepicker1').assertSizeEquals(1).datetimepicker();
+    this.$('.form-control').assertSizeEquals(1).datetimepicker();
 
   });
 }
