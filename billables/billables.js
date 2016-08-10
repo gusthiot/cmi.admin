@@ -175,11 +175,10 @@ if (Meteor.isClient) {
     }
   });
   Template.Billable$cell$startTime$edit.onRendered(function() {
+
     Template.instance().$('.form-control').assertSizeEquals(1).datetimepicker();
   });
 }
-
-
 
 if (Meteor.isClient){
   Template.Billable$cell$startTime$edit.onRendered(function() {
