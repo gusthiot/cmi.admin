@@ -84,9 +84,9 @@ if (Meteor.isClient) {
   });
 }
 
-function allValuesInColumn(collection, columnName) {
+/*function allValuesInColumn(collection, columnName) {
   return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function(t) {return t})
-}
+}*/
 
 var theTable = makeTable();
 
@@ -143,9 +143,11 @@ if (Meteor.isClient) {
 
 /* Table cell I18N */
 if (Meteor.isClient) {
-  Template.Billable$cell$type.helpers({translateCategory: function(category) {
-    return TAPi18n.__("Billables.category." + category);
-  }});
+  Template.Billable$cell$type.helpers({
+    translateCategory: function(category) {
+      return TAPi18n.__("Billables.category." + category);
+    }
+  });
 }
 
 /* Date picker */
@@ -174,5 +176,31 @@ if (Meteor.isClient) {
   });
   Template.Billable$cell$startTime$edit.onRendered(function() {
     Template.instance().$('.form-control').assertSizeEquals(1).datetimepicker();
+  });
+}
+
+
+
+if (Meteor.isClient){
+  Template.Billable$cell$startTime$edit.onRendered(function() {
+    $('textarea#icon_prefix2').characterCounter();
+  });
+}
+
+function getBillableToAccount() {
+  return Template.currentData().billableToAccount;
+}
+
+if (Meteor.isClient) {
+  Template.Billable$cell$billableToAccount.helpers({
+    toAccount: function() {
+      return getBillableToAccount();
+    }
+  });
+
+  Template.Billable$cell$billableToAccount$edit.helpers({
+    valueToAccount: function() {
+      return getBillableToAccount();
+    }
   });
 }

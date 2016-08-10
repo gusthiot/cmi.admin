@@ -8,8 +8,70 @@
   <button>X</button>
 </template>
 
+<template name="Billable$columnHead">
+    {{translateType type }}
+    <select class="browser-default">
+        <option value=""></option>
+        {{#each sortedValues}}
+            <option value="{{value}}">{{translate value}}</option>
+        {{/each}}
+    </select>
+</template>
+
 <template name="Billable$cell$type">
-  {{translateCategory type}}
+    {{#if isEditing}}
+        {{> Billable$cell$type$edit}}
+    {{else}}
+        {{translateCategory type}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$type$edit">
+    <select class="browser-default">
+        <option value="" disabled selected></option>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+    </select>
+</template>
+
+<template name="Billable$cell$operatedByUser">
+    {{#if isEditing}}
+        {{> Billable$cell$operatedByUser$edit}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$operatedByUser$edit">
+    <select class="browser-default">
+        <option value="" disabled selected></option>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+        <option value="4">Option 4</option>
+        <option value="5">Option 5</option>
+        <option value="6">Option 6</option>
+        <option value="7">Option 7</option>
+        <option value="8">Option 8</option>
+        <option value="9">Option 9</option>
+        <option value="10">Option 10</option>
+    </select>
+</template>
+
+<template name="Billable$cell$billableToAccount">
+    {{#if isEditing}}
+        {{> Billable$cell$billableToAccount$edit}}
+    {{else}}
+        {{toAccount}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$billableToAccount$edit">
+    <div class="row">
+        <div class="input-field col s12">
+            <input value="{{valueToAccount}}" id="account" type="text" class="validate">
+            <label class="active" for="account">account</label>
+        </div>
+    </div>
 </template>
 
 <template name="Billable$cell$startTime">
@@ -21,23 +83,35 @@
 </template>
 
 <template name="Billable$cell$startTime$edit">
-<div class="form-group">
-    <div class='input-group date' >
-        <input type='text' class="form-control"  value="{{asDatePickerTime startTime}}" />
-        <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar"></span>
-        </span>
+    <div class="row">
+        <div class="form-group col s12">
+            <div class='input-group date' >
+                <input type='text' class="form-control"  value="{{asDatePickerTime startTime}}" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
     </div>
-</div>
 </template>
 
-
-<template name="Billable$columnHead">
-    {{translateType type }}
-    <select class="browser-default">
-        <option value=""></option>
-        {{#each sortedValues}}
-                <option value="{{value}}">{{translate value}}</option>
-        {{/each}}
-    </select>
+<template name="Billable$cell$billingDetails">
+    {{#if isEditing}}
+        {{> Billable$cell$billingDetails$edit}}
+    {{/if}}
 </template>
+
+<template name="Billable$cell$billingDetails$edit">
+    <div class="row">
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <textarea id="icon_prefix2" class="materialize-textarea billarea" length="120"></textarea>
+                    <label for="icon_prefix2">edit</label>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>
+
