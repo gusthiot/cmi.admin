@@ -135,10 +135,6 @@ if (Meteor.isClient) {
       isEditing: function() {
         var editingRow = Billables.editingRow.get();
         return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
-      },
-      formattedDate: function() {
-        return(moment(Template.currentData().startTime).format('DD-MM-YYYY hh:mm a'));
-
       }
     });
   });
@@ -150,11 +146,33 @@ if (Meteor.isClient) {
   Template.Billable$cell$type.helpers({translateCategory: function(category) {
     return TAPi18n.__("Billables.category." + category);
   }});
-
-
-  Template.Billable$cell$startTime$edit.onRendered(function() {
-    $('#datetimepicker1').assertSizeEquals(1).datetimepicker();
-
-  });
 }
 
+/* Date picker */
+
+/**
+ * Return the date format to use.
+ *
+ * Must be the same format that the DateTimePicker expects at parse time.
+ */
+function getDateFormat() {
+  // TODO: specific to US locale.
+  return 'MM/DD/YYYY hh:mm a';
+}
+
+if (Meteor.isClient) {
+  Template.Billable$cell$startTime.helpers({
+    formattedDate: function () {
+      return (moment(Template.currentData().startTime ).format(getDateFormat()));
+    }
+  });
+
+  Template.Billable$cell$startTime$edit.helpers({
+    asDatePickerTime: function(time) {
+      return moment(time).format(getDateFormat());
+    }
+  });
+  Template.Billable$cell$startTime$edit.onRendered(function() {
+    Template.instance().$('.form-control').assertSizeEquals(1).datetimepicker();
+  });
+}
