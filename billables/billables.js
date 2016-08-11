@@ -91,19 +91,27 @@ if (Meteor.isClient) {
 var theTable = makeTable();
 
 
+
 if (Meteor.isClient) {
+  function getRowDataByTr(trElement) {
+    var dataTable = $(trElement).closest( 'table' ).DataTable();
+    return dataTable.row(trElement).data();
+  }
+  function getTrByRowData(tableElement, rowData) {
+    var dataTable = $(tableElement).DataTable();
+    return dataTable.row(function (unused_idx, data) {
+      return data._id === rowData._id;
+    }).node();
+  }
 
   Template.Billables$Edit.helpers({makeTable: theTable});
 
   /* To edit a table row, click on it */
   Template.Billables$Edit.events({
     'click tbody > tr': function (event) {
-
-      var dataTable = $( event.target ).closest( 'table' ).DataTable();
-      var rowData = dataTable.row( event.currentTarget ).data();
-
+      var rowData = getRowDataByTr(event.currentTarget);
       if (rowData) {
-        changeEditingRow(rowData);
+        changeEditingRow($(event.currentTarget).closest( 'table' ), rowData);
       }
     }
   });
@@ -115,14 +123,37 @@ if (Meteor.isClient) {
     },
   });
 
-  function changeEditingRow(rowData) {
+  function changeEditingRow(tableElement, rowData) {
     var previousRowData;
     Tracker.nonreactive(function()  {
       previousRowData = Billables.editingRow.get( rowData );
     });
-    if (previousRowData) {
+    if (previousRowData && ! _.isEqual(previousRowData._id, rowData._id)) {
       // TODO: fetch new values from the DOM; fire db update;
       // prepare to toast when done.
+      var tr = getTrByRowData(tableElement, previousRowData);
+
+      var editItem = {
+        type: $("select option:selected", tr).text(),
+        billableToAccount: $("#account", tr).val(),
+        updatedAt: new Date()
+      };
+      var dateTimePickerData = $(".starttime-edit", tr).data('DateTimePicker');
+      if (dateTimePickerData) {
+        editItem.startTime = dateTimePickerData.date().toDate();
+      }
+
+      // Message row edited successfully
+      function toastRowEdited(err){
+        if (err) {
+          alert(err);
+        } else {
+          var toastContent = '<span>1 Row edited successfully</span>';
+          Materialize.toast(toastContent, 5000);
+        }
+      }
+
+      Billables.update(rowData._id, {$set: editItem}, toastRowEdited);
     }
     Billables.editingRow.set( rowData );
   }
@@ -176,7 +207,7 @@ if (Meteor.isClient) {
   });
   Template.Billable$cell$startTime$edit.onRendered(function() {
 
-    Template.instance().$('.form-control').assertSizeEquals(1).datetimepicker();
+    Template.instance().$('.starttime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
 
@@ -203,3 +234,18 @@ if (Meteor.isClient) {
     }
   });
 }
+
+Billables.allow({
+  insert: function () {
+    return true;
+  },
+
+  remove: function (){
+    return true;
+  },
+
+  update: function() {
+    return true;
+  }
+
+});

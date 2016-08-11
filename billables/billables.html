@@ -44,16 +44,16 @@
 <template name="Billable$cell$operatedByUser$edit">
     <select class="browser-default">
         <option value="" disabled selected></option>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-        <option value="5">Option 5</option>
-        <option value="6">Option 6</option>
-        <option value="7">Option 7</option>
-        <option value="8">Option 8</option>
-        <option value="9">Option 9</option>
-        <option value="10">Option 10</option>
+        <option value="1">User 1</option>
+        <option value="2">User 2</option>
+        <option value="3">User 3</option>
+        <option value="4">User 4</option>
+        <option value="5">User 5</option>
+        <option value="6">User 6</option>
+        <option value="7">User 7</option>
+        <option value="8">User 8</option>
+        <option value="9">User 9</option>
+        <option value="10">User 10</option>
     </select>
 </template>
 
@@ -74,6 +74,28 @@
     </div>
 </template>
 
+<template name="Billable$cell$billableToProject">
+    {{#if isEditing}}
+        {{> Billable$cell$billableToProject$edit}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$billableToProject$edit">
+    <select class="browser-default">
+        <option value="" disabled selected></option>
+        <option value="1">Project 1</option>
+        <option value="2">Project 2</option>
+        <option value="3">Project 3</option>
+        <option value="4">Project 4</option>
+        <option value="5">Project 5</option>
+        <option value="6">Project 6</option>
+        <option value="7">Project 7</option>
+        <option value="8">Project 8</option>
+        <option value="9">Project 9</option>
+        <option value="10">Project 10</option>
+    </select>
+</template>
+
 <template name="Billable$cell$startTime">
     {{#if isEditing}}
         {{> Billable$cell$startTime$edit}}
@@ -86,9 +108,8 @@
     <div class="row">
         <div class="form-group col s12">
             <div class='input-group date' >
-                <input type='text' class="form-control"  value="{{asDatePickerTime startTime}}" />
+                <input type='text' class="starttime-edit form-control"  value="{{asDatePickerTime startTime}}" />
                 <span class="input-group-addon">
-
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
             </div>
@@ -116,3 +137,34 @@
     </div>
 </template>
 
+<template name="Billable$cell$discount">
+    {{#if isEditing}}
+        {{> Billable$cell$discount$edit}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$discount$edit">
+    <select class="browser-default">
+        <option value="" disabled selected></option>
+        <option value="1">Rabais 1</option>
+        <option value="2">Rabais 2</option>
+        <option value="3">Rabais 3</option>
+        <option value="4">Rabais 4</option>
+    </select>
+</template>
+
+<template name="Billable$cell$validationState">
+    {{#if isEditing}}
+        {{> Billable$cell$validationState$edit}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$validationState$edit">
+    <select class="browser-default">
+        <option value="" disabled selected></option>
+        <option value="1">Validation 1</option>
+        <option value="2">Validation 2</option>
+        <option value="3">Validation 3</option>
+        <option value="4">Validation 4</option>
+    </select>
+</template>
