@@ -3,15 +3,15 @@
 
     Editing {{editingRow}}
 </template>
-
+<!--
 <template name="Billable$LineActions">
   <button>X</button>
-</template>
+</template>-->
 
 <template name="Billable$columnHead">
     {{translateType type }}
     <select class="browser-default">
-        <option value=""></option>
+        <option value="" disable selected></option>
         {{#each sortedValues}}
             <option value="{{value}}">{{translate value}}</option>
         {{/each}}
@@ -29,9 +29,9 @@
 <template name="Billable$cell$type$edit">
     <select class="browser-default">
         <option value="" disabled selected></option>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
+        <option value="usage_fee">usage_fee</option>
+        <option value="reservation_fee">reservation_fee</option>
+        <option value="access_fee">access_fee</option>
     </select>
 </template>
 

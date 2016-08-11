@@ -9,7 +9,8 @@
       "startTime"        : "Date/heure",
       "billingDetails"   : "Détails",
       "discount"         : "Rabais",
-      "validationState"  : "Validation"
+      "validationState"  : "Validation",
+      "extras"           : ""
     },
     "category": {
       "USAGE_FEE"        : "Frais d'utilisation",

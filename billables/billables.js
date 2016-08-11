@@ -4,7 +4,7 @@ Billables.editingRow = new ReactiveVar();
 
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
-   "startTime", "billingDetails", "discount", "validationState"];
+   "startTime", "billingDetails", "discount", "validationState", "extras"];
 
 /* Build dataTable*/
 function makeTable() {
@@ -49,13 +49,10 @@ function setupColumnFilterUI(dataTableElement) {
       translateType: function(type) {
         return TAPi18n.__("Billables.column." + type)
       },
-      sortedValues: [{
-        value: "usage_fee", translate: translate
-      },
-        {value: "reservation_fee", translate: translate
-        },
-        {value: "access_fee", translate: translate
-  }
+      sortedValues:[
+        {value: "usage_fee", translate: translate},
+        {value: "reservation_fee", translate: translate},
+        {value: "access_fee", translate: translate}
       ]
     };
 
@@ -84,9 +81,9 @@ if (Meteor.isClient) {
   });
 }
 
-/*function allValuesInColumn(collection, columnName) {
+function allValuesInColumn(collection, columnName) {
   return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function(t) {return t})
-}*/
+}
 
 var theTable = makeTable();
 
