@@ -1,3 +1,7 @@
 table.table-editable td {
     cursor:text;
 }
+
+.btnAdd {
+    margin-top: 10px;
+}

@@ -4,7 +4,7 @@ Billables.editingRow = new ReactiveVar();
 
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
-   "startTime", "billingDetails", "discount", "validationState", "extras"];
+   "startTime", "billingDetails", "discount", "validationState"];
 
 /* Build dataTable*/
 function makeTable() {
@@ -88,7 +88,6 @@ function allValuesInColumn(collection, columnName) {
 var theTable = makeTable();
 
 
-
 if (Meteor.isClient) {
   function getRowDataByTr(trElement) {
     var dataTable = $(trElement).closest( 'table' ).DataTable();
@@ -141,7 +140,7 @@ if (Meteor.isClient) {
       }
 
       Billables.update(rowData._id, {$set: editItem}, {},
-          _.bind(toast, {}, Template.Billable$cell$$toastEdited));
+          _.bind(toast, {}, Template.Billable$cell$toastEdited));
     }
     Billables.editingRow.set( rowData );
   }
@@ -167,6 +166,8 @@ if (Meteor.isClient) {
       return TAPi18n.__("Billables.category." + category);
     }
   });
+
+
 }
 
 /* Date picker */
@@ -201,6 +202,12 @@ if (Meteor.isClient) {
 if (Meteor.isClient){
   Template.Billable$cell$startTime$edit.onRendered(function() {
     $('textarea#icon_prefix2').characterCounter();
+  });
+}
+
+if (Meteor.isClient){
+  Template.Billable$cell$modalUser.onRendered(function(){
+    $('.modal-trigger').leanModal();
   });
 }
 
@@ -241,12 +248,13 @@ Billables.allow({
 // ======================================================================================================
 
 // Message toast done or error for all templates
-function toast(template, err){
+function toast(template, err) {
   var toastTemplateArgs;
   if (err) {
     toastTemplateArgs = {error: err};
   }
 
-  var $toastContent = Blaze.toHTMLWithData(template, toastTemplateArgs);
-  Materialize.toast($toastContent, 5000);
+  var $toastContent = Blaze.toHTMLWithData( template, toastTemplateArgs );
+  Materialize.toast( $toastContent, 5000 );
 }
+
