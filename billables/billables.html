@@ -1,5 +1,4 @@
 <template name="Billables$Edit">
-    {{> Billable$cell$modalUser}}
 {{> tabular table=makeTable class="responsive-table striped"}}
 
     Editing {{editingRow}}
@@ -169,22 +168,14 @@
         <option value="4">Validation 4</option>
     </select>
 </template>
+<template name="Billables$addButton">
+    <!-- Modal Trigger -->
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">add</i></a>
 
-<template name="Billable$cell$addUser">
-    {{#if isEditing}}
-         {{> Billable$cell$modalUser}}
-     {{else}}
-        {{> Billable$cell$btnAdd}}
-    {{/if}}
+    {{> Billable$cell$modalUser}}
 </template>
 
 <template name="Billable$cell$modalUser">
-    <!-- Modal Trigger -->
-    <div class="row">
-        <div class="col s6 offset-s5 btnAdd">
-            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">add</i></a>
-        </div>
-    </div>
     <!-- Modal Structure -->
     <div id="modal1" class="modal bottom-sheet">
         <div class="modal-content center">
@@ -234,6 +225,10 @@
     </div>
 </template>
 
+<template name="testButton">
+    ICI UN BOUTON
+</template>
+
 
 <template name="Billable$cell$toastEdited">
     <span>
@@ -252,3 +247,5 @@
 <template name="doneIcon">
     <i class="material-icons left light-green-text text-darken-2">&#xE876;</i>
 </template>
+
+<template name="Billable$Pagination">{{> Billables$addButton}}<button class="previous">Previous</button> {{page}} of {{pages}}<button class="next">Next</button></template>

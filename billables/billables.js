@@ -29,6 +29,12 @@ function makeTable() {
 
     initComplete: function() {
       setupColumnFilterUI(this);
+    },
+
+    sPaginationType: 'meteor_template',
+    paginationTemplate: Meteor.isClient && Template.Billable$Pagination,
+    paginationUpdated: function() {
+      console.log("Pagination updated");
     }
   });
 }
@@ -256,5 +262,96 @@ function toast(template, err) {
 
   var $toastContent = Blaze.toHTMLWithData( template, toastTemplateArgs );
   Materialize.toast( $toastContent, 5000 );
+}
+
+// ======================================================================================================
+// ======================================================================================================
+
+// Pagination: app-specific code
+
+if (Meteor.isClient) {
+  Template.Billable$Pagination.events({
+    "click button.previous": function (event, templateInstance) {
+      templateInstance.paginate.previous();
+    },
+    "click button.next": function (event, templateInstance) {
+      templateInstance.paginate.next();
+    }
+  });
+}
+
+// ======================================================================================================
+// ======================================================================================================
+
+// General-purpose templatable pagination
+// TODO: Move this code into lib/ or even better, send a pull request to Aldeed with it
+if (Meteor.isClient) {
+  $.fn.dataTableExt.oPagination.meteor_template = {
+    "fnInit": function ( oSettings, nPaging, fnCallbackDraw )
+    {
+      // Pagination plugins don't even get access to computed page numbers :-(
+      // Code copied rom jquery.dataTables.js
+
+
+      var template = oSettings.oInit.paginationTemplate;
+      var view = template.constructView();
+      view.templateInstance().paginate = {
+        first: function () {
+          oSettings.oApi._fnPageChange( oSettings, "first" );
+          fnCallbackDraw( oSettings );
+        },
+        previous: function() {
+          oSettings.oApi._fnPageChange( oSettings, "previous" );
+          fnCallbackDraw( oSettings );
+        },
+        next: function() {
+          oSettings.oApi._fnPageChange( oSettings, "next" );
+          fnCallbackDraw( oSettings );
+        },
+        last: function() {
+          oSettings.oApi._fnPageChange( oSettings, "last" );
+          fnCallbackDraw( oSettings );
+        }
+      };
+
+      var Rpage = new ReactiveVar(),
+          Rpages = new ReactiveVar();
+      oSettings._meteorPagination = {
+        updatePageCounts: function () {
+          var start      = oSettings._iDisplayStart,
+              len        = oSettings._iDisplayLength,
+              visRecords = oSettings.fnRecordsDisplay(),
+              page, pages;
+          if (len == -1) {
+            // Page is technically 0, but users don't like zeroes
+            page = 1;
+            pages = 1;
+          } else {
+            page =  Math.ceil( start / len ) + 1;
+            pages = Math.ceil( visRecords / len );
+
+          }
+          Rpage.set(page);
+          Rpages.set(pages);
+        }
+      };
+      oSettings._meteorPagination.updatePageCounts();
+
+      Blaze.renderWithData(view, {
+        page: function() { return Rpage.get() },
+        pages: function() { return Rpages.get() },
+      }, nPaging);
+    },
+
+
+    "fnUpdate": function ( oSettings, fnCallbackDraw )
+    {
+      oSettings._meteorPagination.updatePageCounts();
+      if (typeof(oSettings.oInit.paginationUpdated) === "function") {
+        oSettings.oInit.paginationUpdated.call(this, fnCallbackDraw);
+      }
+    }
+  };
+
 }
 
