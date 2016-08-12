@@ -168,3 +168,21 @@
         <option value="4">Validation 4</option>
     </select>
 </template>
+
+<template name="Billable$cell$$toastEdited">
+    <span>
+        {{#if error}}
+            {{> errorIcon}}Failed to edit Row
+        {{else}}
+            {{> doneIcon}} 1 Row edited successfully
+        {{/if}}
+    </span>
+</template>
+
+<template name="errorIcon">
+    <i class="material-icons left materialize-red-text text-lighten-1">&#xE001;</i>
+</template>
+
+<template name="doneIcon">
+    <i class="material-icons left light-green-text text-darken-2">&#xE876;</i>
+</template>

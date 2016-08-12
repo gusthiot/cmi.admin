@@ -140,17 +140,8 @@ if (Meteor.isClient) {
         editItem.startTime = dateTimePickerData.date().toDate();
       }
 
-      // Message row edited successfully
-      function toastRowEdited(err){
-        if (err) {
-          alert(err);
-        } else {
-          var toastContent = '<span>1 Row edited successfully</span>';
-          Materialize.toast(toastContent, 5000);
-        }
-      }
-
-      Billables.update(rowData._id, {$set: editItem}, toastRowEdited);
+      Billables.update(rowData._id, {$set: editItem}, {},
+          _.bind(toast, {}, Template.Billable$cell$$toastEdited));
     }
     Billables.editingRow.set( rowData );
   }
@@ -203,7 +194,6 @@ if (Meteor.isClient) {
     }
   });
   Template.Billable$cell$startTime$edit.onRendered(function() {
-
     Template.instance().$('.starttime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
@@ -246,3 +236,17 @@ Billables.allow({
   }
 
 });
+
+// ======================================================================================================
+// ======================================================================================================
+
+// Message toast done or error for all templates
+function toast(template, err){
+  var toastTemplateArgs;
+  if (err) {
+    toastTemplateArgs = {error: err};
+  }
+
+  var $toastContent = Blaze.toHTMLWithData(template, toastTemplateArgs);
+  Materialize.toast($toastContent, 5000);
+}
