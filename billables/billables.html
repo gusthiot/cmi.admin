@@ -22,12 +22,12 @@
     {{#if isEditing}}
         {{> Billable$cell$type$edit}}
     {{else}}
-        {{translateCategory type}}
+        {{type}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$type$edit">
-    <select class="browser-default">
+    <select class="browser-default typeEdit">
         <option value="" disabled selected></option>
         <option value="usage_fee">usage_fee</option>
         <option value="reservation_fee">reservation_fee</option>
@@ -38,11 +38,13 @@
 <template name="Billable$cell$operatedByUser">
     {{#if isEditing}}
         {{> Billable$cell$operatedByUser$edit}}
+    {{else}}
+        {{operatedByUser}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$operatedByUser$edit">
-    <select class="browser-default">
+    <select class="browser-default userEdit">
         <option value="" disabled selected></option>
         <option value="1">User 1</option>
         <option value="2">User 2</option>
@@ -77,11 +79,13 @@
 <template name="Billable$cell$billableToProject">
     {{#if isEditing}}
         {{> Billable$cell$billableToProject$edit}}
+    {{else}}
+        {{billableToProject}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$billableToProject$edit">
-    <select class="browser-default">
+    <select class="browser-default projectEdit">
         <option value="" disabled selected></option>
         <option value="1">Project 1</option>
         <option value="2">Project 2</option>
@@ -108,7 +112,7 @@
     <div class="row">
         <div class="form-group col s12">
             <div class='input-group date' >
-                <input type='text' class="starttime-edit form-control"  value="{{asDatePickerTime startTime}}" />
+                <input type='text' class="startTime-edit form-control"  value="{{asDatePickerTime startTime}}" />
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -120,6 +124,8 @@
 <template name="Billable$cell$billingDetails">
     {{#if isEditing}}
         {{> Billable$cell$billingDetails$edit}}
+    {{else}}
+        {{billingDetails}}
     {{/if}}
 </template>
 
@@ -129,8 +135,8 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea billarea" length="120"></textarea>
-                    <label for="icon_prefix2">edit</label>
+                    <textarea id="icon_prefix2" class="materialize-textarea billarea" length="120">{{billingDetails}}</textarea>
+
                 </div>
             </div>
         </form>
@@ -140,11 +146,13 @@
 <template name="Billable$cell$discount">
     {{#if isEditing}}
         {{> Billable$cell$discount$edit}}
+    {{else}}
+        {{discount}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$discount$edit">
-    <select class="browser-default">
+    <select class="browser-default discountEdit">
         <option value="" disabled selected></option>
         <option value="1">Rabais 1</option>
         <option value="2">Rabais 2</option>
@@ -156,11 +164,13 @@
 <template name="Billable$cell$validationState">
     {{#if isEditing}}
         {{> Billable$cell$validationState$edit}}
+    {{else}}
+        {{validationState}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$validationState$edit">
-    <select class="browser-default">
+    <select class="browser-default stateEdit">
         <option value="" disabled selected></option>
         <option value="1">Validation 1</option>
         <option value="2">Validation 2</option>

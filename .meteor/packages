@@ -35,3 +35,4 @@ gildaspk:autoform-materialize
 materialize:materialize
 momentjs:moment
 tsega:bootstrap3-datetimepicker
+aldeed:simple-schema

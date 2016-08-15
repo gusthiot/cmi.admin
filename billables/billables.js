@@ -1,5 +1,44 @@
 Billables = new Meteor.Collection("billables");
 
+var Schemas = {};
+
+Schemas.Billable = new SimpleSchema({
+  type: {
+    type: String,
+    allowedValues: ["USAGE_FEE", "RESERVATION_FEE", "ACCESS_FEE"]
+  },
+  operatedByUser: {
+    type: String
+  },
+  billableToAccount: {
+    type: Number
+  },
+  billableToProject: {
+    type: String
+  },
+  startTime: {
+    type: Date
+  },
+  billingDetails: {
+    type: String,
+    max: 120
+  },
+  discount: {
+    type: String
+  },
+  validationState: {
+    type: String
+  },
+  updatedAt: {
+    type: Date
+  }
+});
+
+Billables.attachSchema(Schemas.Billable);
+
+console.log(Schemas);
+
+
 Billables.editingRow = new ReactiveVar();
 
 Billables.columns =
@@ -121,7 +160,7 @@ if (Meteor.isClient) {
   Template.Billables$Edit.helpers({
     editingRow: function () {
       var rowData = Billables.editingRow.get();
-      return (rowData && rowData._id) ? rowData._id: "nothing";
+      return (rowData && rowData._id ? rowData._id: "nothing");
     },
   });
 
@@ -135,11 +174,17 @@ if (Meteor.isClient) {
       var tr = getTrByRowData(tableElement, previousRowData);
 
       var editItem = {
-        type: $("select option:selected", tr).text(),
+        type: $(".typeEdit option:selected", tr).text(),
+        operatedByUser: $(".userEdit option:selected", tr).text(),
         billableToAccount: $("#account", tr).val(),
+        billableToProject: $(".projectEdit option:selected", tr).text(),
+        billingDetails: $("#icon_prefix2", tr).val(),
+        discount: $(".discountEdit option:selected", tr).text(),
+        validationState: $(".stateEdit option:selected", tr).text(),
         updatedAt: new Date()
       };
-      var dateTimePickerData = $(".starttime-edit", tr).data('DateTimePicker');
+
+      var dateTimePickerData = $(".startTime-edit", tr).data('DateTimePicker');
       if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
       }
@@ -198,7 +243,7 @@ if (Meteor.isClient) {
     }
   });
   Template.Billable$cell$startTime$edit.onRendered(function() {
-    Template.instance().$('.starttime-edit').assertSizeEquals(1).datetimepicker();
+    Template.instance().$('.startTime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
 
