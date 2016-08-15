@@ -1,5 +1,9 @@
 Billables = new Meteor.Collection("billables");
 
+if (Meteor.isClient){
+  Meteor.subscribe('Billables');
+}
+
 var Schemas = {};
 
 Schemas.Billable = new SimpleSchema({
@@ -36,6 +40,7 @@ Schemas.Billable = new SimpleSchema({
 
 Billables.attachSchema(Schemas.Billable);
 
+
 console.log(Schemas);
 
 
@@ -60,16 +65,13 @@ function makeTable() {
     }),
     language: Tabular.Translations.getCurrent(),
     //http://datatables.net/extensions/select/examples/initialisation/cells.html
-
     select: {
       style: "os",
       items: "cell",
     },
-
     initComplete: function() {
       setupColumnFilterUI(this);
     },
-
     sPaginationType: 'meteor_template',
     paginationTemplate: Meteor.isClient && Template.Billable$Pagination,
     paginationUpdated: function() {
@@ -277,6 +279,14 @@ if (Meteor.isClient) {
   });
 }
 
+
+if (Meteor.isServer) {
+  // This code only runs on the server
+  Meteor.publish('Billables', function () {
+    return Billables.find({});
+  });
+}
+
 Billables.allow({
   insert: function () {
     return true;
@@ -291,7 +301,6 @@ Billables.allow({
   }
 
 });
-
 // ======================================================================================================
 // ======================================================================================================
 
