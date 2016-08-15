@@ -225,11 +225,6 @@
     </div>
 </template>
 
-<template name="testButton">
-    ICI UN BOUTON
-</template>
-
-
 <template name="Billable$cell$toastEdited">
     <span>
         {{#if error}}
@@ -248,4 +243,6 @@
     <i class="material-icons left light-green-text text-darken-2">&#xE876;</i>
 </template>
 
-<template name="Billable$Pagination">{{> Billables$addButton}}<button class="previous">Previous</button> {{page}} of {{pages}}<button class="next">Next</button></template>
+<template name="Billable$Pagination">
+    {{> Billables$addButton}}<button class="previous btn-large waves-effect waves-light">Previous</button> <span class="letSize">{{page}} of {{pages}}</span> <button class="next btn-large waves-effect waves-light">Next</button>
+</template>
