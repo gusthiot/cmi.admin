@@ -80,23 +80,28 @@ Router.route("/packages/bootstrap-3/(.*)",
     { where: "server" });
 
 if (Meteor.isClient) {
-    Template.nav.onRendered(function(){
-        $(".button-collapse").assertSizeAtLeast(1).sideNav();
+    Template.nav.onRendered(function () {
+        var instance = Template.instance();
+        instance.$(".button-collapse").assertSizeAtLeast(1).sideNav();
+        Tracker.autorun(function () {
+            if (IsScreenFullSize.get()) {
+                // Un-slide (like Materialize does for "fixed" on large screens)
+                instance.$('#navmenu-slidable').css('transform', '');
+            }
+        });
     });
     Template.nav$Menu.onRendered(function () {
-        $(".dropdown-button").assertSizeAtLeast(1).dropdown();
+        Template.instance().$(".dropdown-button").assertSizeAtLeast(1).dropdown();
     });
+
 
     IsScreenFullSize = MediaQuery("(min-width: 992px)");  // Same as Materialize's "hide-on-med-and-down"
     Template.nav.helpers({
-        isScreenFullSize: function () {
-          return IsScreenFullSize.get();
-        },
-        navAttributes: function () {
+        sideNavClassOnMobile: function () {
             if (IsScreenFullSize.get()) {
                 return {};
             } else {
-                return {id: "navmenu-slidable", class: "side-nav"}
+                return {class: "side-nav"}
             }
         }
     })

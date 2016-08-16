@@ -22,7 +22,7 @@
                     <div class="nav-wrapper">
                         <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
                         <a href="#" data-activates="navmenu-slidable" class="button-collapse"><i class="material-icons">menu</i></a>
-                        <ul {{navAttributes}}>
+                        <ul id="navmenu-slidable" {{sideNavClassOnMobile}}>
                             {{> nav$Menu}}
                         </ul>
                     </div>
@@ -30,7 +30,6 @@
             </nav>
         </div>
     </header>
-    {{#if isScreenFullSize}}FULL SIZE{{else}}MOBILE{{/if}}
 </template>
 
 <template name="nav$Menu">
