@@ -107,3 +107,20 @@ if (Meteor.isClient) {
         }
     })
 }
+
+/* Collect and render all modals at the bottom of the DOM */
+import { flatMap } from 'lodash';
+
+if (Meteor.isClient) {
+    Template.nav.helpers({
+        allModalTemplates: function () {
+            return flatMap(_.keys(Template), function (k) {
+                if (k.match(/Modal$/)) {
+                    return [{ tmpl: k }];
+                } else {
+                    return [];
+                }
+            });
+        }
+    })
+}

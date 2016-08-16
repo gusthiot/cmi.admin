@@ -32,6 +32,11 @@
             </nav>
         </div>
     </header>
+    {{! All templates whose name end with Modal are rendered here. }}
+    {{! This prevents inheriting the z-index of whatever other elements the modals happen to be children of }}
+    {{#each allModalTemplates}}
+    {{> Template.dynamic template=tmpl}}
+    {{/each}}
 </template>
 
 <template name="nav$Menu">
