@@ -247,19 +247,19 @@ if (Meteor.isClient) {
   });
 
   Template.Billable$cell$startTime$edit.onRendered(function() {
-    Template.instance().$('.startTime-edit').assertSizeEquals(1).datetimepicker();
+      this.$('.startTime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
 
 if (Meteor.isClient){
   Template.Billable$cell$billingDetails$edit.onRendered(function() {
-    $('textarea#icon_prefix2').characterCounter();
+    this.$('textarea#icon_prefix2').characterCounter();
   });
 }
 
 if (Meteor.isClient){
   Template.Billable$cell$modalUser.onRendered(function(){
-    $('.modal-trigger').leanModal();
+    this.$('.modal-trigger').leanModal();
   });
 }
 

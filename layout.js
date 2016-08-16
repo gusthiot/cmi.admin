@@ -81,17 +81,18 @@ Router.route("/packages/bootstrap-3/(.*)",
 
 if (Meteor.isClient) {
     Template.nav.onRendered(function () {
-        var instance = Template.instance();
-        instance.$(".button-collapse").assertSizeAtLeast(1).sideNav();
+        var $ = this.$.bind(this);
+        $(".button-collapse").assertSizeAtLeast(1).sideNav();
         Tracker.autorun(function () {
             if (IsScreenFullSize.get()) {
                 // Un-slide (like Materialize does for "fixed" on large screens)
-                instance.$('#navmenu-slidable').css('transform', '');
+                $('#navmenu-slidable').css('transform', '');
             }
         });
     });
     Template.nav$Menu.onRendered(function () {
-        Template.instance().$(".dropdown-button").assertSizeAtLeast(1).dropdown();
+        var $ = this.$.bind(this);
+        $(".dropdown-button").assertSizeAtLeast(1).dropdown();
     });
 
 
