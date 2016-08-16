@@ -40,10 +40,6 @@ Schemas.Billable = new SimpleSchema({
 
 Billables.attachSchema(Schemas.Billable);
 
-
-console.log(Schemas);
-
-
 Billables.editingRow = new ReactiveVar();
 
 Billables.columns =
@@ -251,13 +247,14 @@ if (Meteor.isClient) {
       return moment(time).format(getDateFormat());
     }
   });
+
   Template.Billable$cell$startTime$edit.onRendered(function() {
     Template.instance().$('.startTime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
 
 if (Meteor.isClient){
-  Template.Billable$cell$startTime$edit.onRendered(function() {
+  Template.Billable$cell$billingDetails$edit.onRendered(function() {
     $('textarea#icon_prefix2').characterCounter();
   });
 }
