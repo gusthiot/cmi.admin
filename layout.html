@@ -20,8 +20,10 @@
             <nav class="navTop">
                 <div class="container">
                     <div class="nav-wrapper">
-                        <a href="#!" class="brand-logo center"><img src="/images/CMi-logo.png"></a>
-                        <a href="#" data-activates="navmenu-slidable" class="button-collapse"><i class="material-icons">menu</i></a>
+                        <ul>
+                            <li><a href="#" data-activates="navmenu-slidable" class="button-collapse"><i class="material-icons">menu</i></a></li>
+                            <li><a><img src="/images/CMi-logo.png"></a></li>
+                        </ul>
                         <ul id="navmenu-slidable" {{sideNavClassOnMobile}}>
                             {{> nav$Menu}}
                         </ul>
