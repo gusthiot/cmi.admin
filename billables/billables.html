@@ -178,14 +178,14 @@
 </template>
 <template name="Billables$addButton">
     <!-- Modal Trigger -->
-    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">add</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i class="material-icons">add</i></a>
 
     {{> Billable$cell$modalUser}}
 </template>
 
 <template name="Billable$cell$modalUser">
     <!-- Modal Structure -->
-    <div id="modal1" class="modal bottom-sheet">
+    <div id="modalAddUser" class="modal bottom-sheet">
         <div class="modal-content center">
             <h4>Add User</h4>
             <div class="row">

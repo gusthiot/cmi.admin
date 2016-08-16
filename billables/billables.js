@@ -258,8 +258,8 @@ if (Meteor.isClient){
 }
 
 if (Meteor.isClient){
-  Template.Billable$cell$modalUser.onRendered(function(){
-    this.$('.modal-trigger').leanModal();
+  Template.Billables$addButton.onRendered(function(){
+    this.$('.modal-trigger').assertSizeEquals(1).leanModal();
   });
 }
 
