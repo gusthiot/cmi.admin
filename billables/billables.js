@@ -182,7 +182,7 @@ if (Meteor.isClient) {
         updatedAt: new Date()
       };
 
-      var dateTimePickerData = $(".startTisme-edit", tr).data('DateTimePicker');
+      var dateTimePickerData = $(".startTime-edit", tr).data('DateTimePicker');
       if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
       }
@@ -214,13 +214,11 @@ if (Meteor.isClient) {
 
 }
 
-/* Table cell I18N */
+/* Table cell I18N  global template helpers */
 if (Meteor.isClient) {
-  Template.Billable$cell$type.helpers({
-    translateCategory: function(category) {
-      return TAPi18n.__("Billables.category." + category);
-    }
-  });
+    Template.registerHelper( 'translateCategory', (category) => {
+        return TAPi18n.__("Billables.category." + category);
+    });
 }
 
 /* Date picker */
