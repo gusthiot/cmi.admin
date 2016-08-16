@@ -186,13 +186,20 @@ if (Meteor.isClient) {
         updatedAt: new Date()
       };
 
-      var dateTimePickerData = $(".startTime-edit", tr).data('DateTimePicker');
+      var dateTimePickerData = $(".startTisme-edit", tr).data('DateTimePicker');
       if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
       }
 
-      Billables.update(rowData._id, {$set: editItem}, {},
-          _.bind(toast, {}, Template.Billable$cell$toastEdited));
+      Billables.update(rowData._id, {$set: editItem}, function(error, result){
+        if(error){
+          return toast(Template.Billable$cell$toastEdited, error);
+        }
+        else {
+          result = toast(Template.Billable$cell$toastEdited);
+          return result;
+        }
+      });
     }
     Billables.editingRow.set( rowData );
   }
@@ -310,7 +317,6 @@ function toast(template, err) {
   if (err) {
     toastTemplateArgs = {error: err};
   }
-
   var $toastContent = Blaze.toHTMLWithData( template, toastTemplateArgs );
   Materialize.toast( $toastContent, 5000 );
 }
