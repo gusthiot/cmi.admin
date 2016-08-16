@@ -172,7 +172,7 @@ if (Meteor.isClient) {
       var tr = getTrByRowData(tableElement, previousRowData);
 
       var editItem = {
-        type: $(".typeEdit option:selected", tr).text(),
+        type: $(".typeEdit option:selected", tr).val(),
         operatedByUser: $(".userEdit option:selected", tr).text(),
         billableToAccount: $("#account", tr).val(),
         billableToProject: $(".projectEdit option:selected", tr).text(),

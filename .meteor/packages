@@ -28,7 +28,6 @@ fortawesome:fontawesome
 aldeed:tabular
 standard-minifier-css
 standard-minifier-js
-mrt:bootstrap-3
 gildaspk:autoform-materialize
 
 
@@ -36,3 +35,4 @@ materialize:materialize
 momentjs:moment
 tsega:bootstrap3-datetimepicker
 aldeed:simple-schema
+nerdmed:mediaqueries
