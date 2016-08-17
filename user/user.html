@@ -1,18 +1,24 @@
 <template name="User$Pick">
         <div class="dropdown" {{addID}}>
-            <input type="text" class="usersearch" data-toggle="dropdown" placeholder="{{_ "User.search.search-here"}}">
+            <form class="red lighten-3">
+                <div class="input-field">
+                    <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown" required placeholder="{{_ "User.search.search-here"}}">
+                    <label for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
             {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
-            <ul class="usersearch dropdown-menu">
+            <ul id="userSearchDrop" class="usersearch dropdown-content">
                 {{#if cmiUsers}}
                     {{#each cmiUsers}}
                         <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
                     {{/each}}
-                    <li role="separator" class="divider"></li>
+                    <li class="divider"></li>
                 {{/if}}
                 {{#if messageCode}}
                     <li class="message">{{_ messageCode}}</li>
                     {{#if withLDAP}}
-                        <li role="separator" class="divider"></li>
+                        <li class="divider"></li>
                     {{/if}}
                 {{/if}}
                 {{#if wantLDAP}}

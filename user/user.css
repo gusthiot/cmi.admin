@@ -8,3 +8,8 @@ li.message {
 .modal-title {
     color: black !important;
 }
+
+form, .input-field{
+    height: 63px;
+    width: 330px;
+}

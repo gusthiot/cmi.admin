@@ -92,7 +92,9 @@ if (Meteor.isClient) {
     });
     Template.nav$Menu.onRendered(function () {
         var $ = this.$.bind(this);
-        $(".dropdown-button").assertSizeAtLeast(1).dropdown();
+        $(".dropdown-button").assertSizeAtLeast(1).dropdown({
+            belowOrigin: true, // Displays dropdown below the button
+        });
     });
 
 
