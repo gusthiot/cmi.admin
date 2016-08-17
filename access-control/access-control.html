@@ -2,7 +2,7 @@
   <div class="collapse navbar-collapse" id="navbar-whoami">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a class="dropdown-button" data-activates="become-dropdown">{{user.fullName}}<span class="caret"></span></a>
+          <a class="dropdown-button" data-activates="become-dropdown">{{user.fullName}}<i class="material-icons right">keyboard_arrow_down</i></a>
           <ul id="become-dropdown" class="dropdown-content">
            <li><a href="/user/{{user._id}}/edit">{{_ "AccessControl.gotoUserPrefs"}}</a></li>
             {{#if hasBecome}}
@@ -35,7 +35,7 @@
             <div class="modal-content center">
                 <h4 class="modal-title">{{_ "AccessControl.BecomeUserTitle"}}</h4>
                 {{> User$Pick id="AccessControlBecomeThisUser"}}
-                <button class="modal-action modal-close">&times;</button>
+                <a href="#!" class="modal-action modal-close btn-floating btn-large waves-effect waves-light red"><i class="material-icons">close</i></a>
             </div>
         </div>
     {{/if}}

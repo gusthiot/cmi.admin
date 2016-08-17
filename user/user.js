@@ -222,7 +222,7 @@ Template.User$Pick.helpers({
 });  // Template.User$Pick.helpers
 
 function openDropdown(that) {
-  if (! that.$(".dropdown-menu").is(":visible")) {
+  if (! that.$(".dropdown-content").is(":visible")) {
     // Careful to hit the right DOM entry!
     // Toggling on the .dropdown-menu *appears* to work, but that kills
     // all event handlers therein.
@@ -241,8 +241,7 @@ Template.User$Pick.events({
     console.log("CLICK");
   },
   "click a.user": function(event, that) {
-    that.$("div").trigger("user:selected",
-                          [$(event.target).attr("data-value")]);
+    that.$("div").trigger("user:selected", [$(event.target).attr("data-value")]);
     that.$("input.usersearch").val($(event.target).text());
     event.preventDefault();
   },
@@ -252,3 +251,9 @@ Template.User$Pick.events({
   }
 });  // Template.User$Pick.events
 
+Template.User$Pick.onRendered(function() {
+  $('.usersearch').assertSizeAtLeast(1).dropdown({
+        belowOrigin: true // Displays dropdown below the button
+      }
+  );
+});
