@@ -239,6 +239,7 @@ Template.User$Pick.events({
   },
   "click": function(event, that) {
     console.log("CLICK");
+    event.preventDefault();
   },
   "click a.user": function(event, that) {
     that.$("div").trigger("user:selected", [$(event.target).attr("data-value")]);
