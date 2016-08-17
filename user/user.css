@@ -10,7 +10,8 @@ li.message {
 }
 
 /* input search user from navbar */
+
 form, .input-field{
     height: 63px;
-    width: 330px;
+    width: 100%;
 }

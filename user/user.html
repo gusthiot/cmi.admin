@@ -51,15 +51,14 @@
               {{else}}
                   <h1>{{_ "User.EditForm" object.fullName}}</h1>
               {{/if}}
-              {{! quickForm schema=schema id="User$EditForm" type="update" template="bootstrap3" label-class="col s3" input-col-class="col s9" id-prefix="my-prefix"}}
               <form class="col s12">
                   <div class="row">
-                      <div class="input-field">
+                      <div class="input-field col s6">
                           <i class="material-icons prefix">account_circle</i>
                           <input id="icon_account" type="text" class="validate">
                           <label for="icon_account">Full name</label>
                       </div>
-                      <div class="input-field">
+                      <div class="input-field col s6">
                           <i class="material-icons prefix">vpn_key</i>
                           <input id="icon_password" type="password" class="validate">
                           <label for="icon_password">Password</label>
