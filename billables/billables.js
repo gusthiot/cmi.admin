@@ -136,6 +136,7 @@ if (Meteor.isClient) {
     var dataTable = $(trElement).closest( 'table' ).DataTable();
     return dataTable.row(trElement).data();
   }
+
   function getTrByRowData(tableElement, rowData) {
     var dataTable = $(tableElement).DataTable();
     return dataTable.row(function (unused_idx, data) {
@@ -183,6 +184,7 @@ if (Meteor.isClient) {
       };
 
       var dateTimePickerData = $(".startTime-edit", tr).data('DateTimePicker');
+
       if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
       }

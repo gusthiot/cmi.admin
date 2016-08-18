@@ -11,7 +11,7 @@ li.message {
 
 /* input search user from navbar */
 
-form.userInput{
+.userInput{
     height: 63px;
     width: 400px;
     margin-top: 20px;
