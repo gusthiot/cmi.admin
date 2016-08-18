@@ -1,13 +1,14 @@
 <template name="User$Pick">
         <div class="dropdown" {{addID}}>
-            <form class="red lighten-3">
-                <div class="input-field">
-                    <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown" required placeholder="{{_ "User.search.search-here"}}">
-                    <label for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
-                </div>
-            </form>
+
+            <div class="input-field userInput">
+                <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown" required placeholder="{{_ "User.search.search-here"}}">
+                <label for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+            </div>
+
             {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
+
             <ul id="userSearchDrop" class="usersearch dropdown-content">
                 {{#if cmiUsers}}
                     {{#each cmiUsers}}
@@ -64,7 +65,7 @@
                           <label for="icon_password">Password</label>
                       </div>
                       <div class="card-panel">
-                          <h4>Profile</h4>
+
                           <hr>
                           <select>
                               <option value="" disabled selected>Choose your language</option>

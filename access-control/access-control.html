@@ -31,17 +31,28 @@
 <template name="AccessControl$BecomeModal">
     {{#if canBecome}}
     {{! Modal Structure }}
-        <div id="becomeUserModal" class="modal">
-            <div class="modal-content center">
-                <div class="row">
-                    <div class="col s8 offset-s2">
-                        <h4 class="modal-title">{{_ "AccessControl.BecomeUserTitle"}}</h4>
-                        {{> User$Pick id="AccessControlBecomeThisUser"}}
+    <div id="becomeUserModal" class="modal">
+        <div class="modal-content center">
+            <h4 class="modal-title center marBottom">{{_ "AccessControl.BecomeUserTitle"}}</h4>
+            <div class="row">
+                <form class="col s6 offset-s4">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            {{> User$Pick id="AccessControlBecomeThisUser"}}
+                        </div>
                     </div>
-                </div>
-
-                <a href="#!" class="modal-action modal-close btn-floating btn-large waves-effect waves-light red"><i class="material-icons">close</i></a>
+                </form>
             </div>
         </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a href="#!" class="modal-action modal-close btn-floating btn-large waves-effect waves-light red"><i class="material-icons">close</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
     {{/if}}
 </template>

@@ -11,7 +11,16 @@ li.message {
 
 /* input search user from navbar */
 
-form, .input-field{
+form.userInput{
     height: 63px;
-    width: 100%;
+    width: 400px;
+    margin-top: 20px;
+}
+
+#becomeUserModal {
+    height: 500px;
+}
+
+.marBottom {
+    margin-bottom: 50px;
 }

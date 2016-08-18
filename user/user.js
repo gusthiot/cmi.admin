@@ -20,8 +20,11 @@ if (Meteor.isClient) {
   User.bySciper = function(sciper) {
     return User.collection.findOne({_id: sciper});
   }
+}
 
-  // init materialize
+
+if (Meteor.isClient) {
+  // initialization of Materialize framework
   AutoForm.setDefaultTemplate('materialize');
 
   // select option in template
@@ -30,10 +33,8 @@ if (Meteor.isClient) {
   });
 }
 
-
 function updateUser(that, change) {
-  User.collection.update({_id: that._id},
-                         {$set: change});
+  User.collection.update({_id: that._id}, {$set: change});
 }
 
 User.prototype.lang = function(opt_set) {
@@ -43,9 +44,9 @@ User.prototype.lang = function(opt_set) {
       updateUser(this, {"profile.lang": opt_set});
     }
   } else if (currentValue) {
-    return currentValue;
+      return currentValue;
   } else if (Meteor.isClient) {
-    return I18N.browserLanguage();
+      return I18N.browserLanguage();
   }
 };
 
@@ -79,9 +80,7 @@ Meteor.startup(function() {
   // As per http://stackoverflow.com/a/21853298/435004:
   // this merges gently with the default publish in accounts_server.js !
   Policy.canReadOwnFullName.publish(null, function() {
-    return Meteor.users.find({
-      _id: this.userId
-    }, { fields: {_id: true, fullName: true}});
+    return Meteor.users.find({_id: this.userId}, {fields: {_id: true, fullName: true}});
   });
   Policy.canReadUserBasicDetails.publish(null, function() {
     return Meteor.users.find({}, {fields: {_id: true, fullName: true}});
