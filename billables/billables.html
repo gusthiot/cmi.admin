@@ -21,14 +21,10 @@
     {{#if isEditing}}
         {{! TODO: We should ideally have the exact same temlate body for all drop-down selectable cells.
         Referencing "type" below defeats that. }}
-        {{> Billable$cell$type$edit currentValue=type}}
+        {{> SelectWidget options=SelectWidget$options currentValue=type}}
     {{else}}
         {{translate type}}
     {{/if}}
-</template>
-
-<template name="Billable$cell$type$edit">
-    {{> SelectWidget options=SelectWidget$options currentValue=currentValue}}
 </template>
 
 <template name="SelectWidget">

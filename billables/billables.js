@@ -370,18 +370,16 @@ if (Meteor.isClient) {
 /**
  * Select widget for translatable, single-choice string values.
  *
- * @param templateNameWithout$edit
+ * @param templateName
  * @param allowedKeysOrSchema
  */
-function SelectWidget(templateNameWithout$edit, allowedKeysOrSchema) {
-    var fieldName = templateNameWithout$edit.substr(templateNameWithout$edit.lastIndexOf('$') + 1); // e.g. "type"
+function SelectWidget(templateName, allowedKeysOrSchema) {
+    var fieldName = templateName.substr(templateName.lastIndexOf('$') + 1); // e.g. "type"
 
     var topLevelTranslationKey = "Billables";
     function translate(k) {
         return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
     }
-
-    var editTemplateName = templateNameWithout$edit + "$edit";
 
     var allowedKeys;
     if (allowedKeysOrSchema instanceof SimpleSchema) {
@@ -392,10 +390,7 @@ function SelectWidget(templateNameWithout$edit, allowedKeysOrSchema) {
         throw new Meteor.Error("allowedKeys must be a SimpleSchema or an array");
     }
 
-    Template[templateNameWithout$edit].helpers( {
-        translate: translate,
-    });
-    Template[editTemplateName].helpers({
+    Template[templateName].helpers({
         translate: translate,
         SelectWidget$options: function () {
             return {
