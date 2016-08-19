@@ -126,3 +126,7 @@ if (Meteor.isClient) {
         }
     })
 }
+
+if (Meteor.isClient) {
+    Tequila.start();
+}
