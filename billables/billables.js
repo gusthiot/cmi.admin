@@ -198,6 +198,7 @@ if (Meteor.isClient) {
           return result;
         }
       });
+        // Session.set('editItemId', null);
     }
     Billables.editingRow.set( rowData );
   }
@@ -225,11 +226,13 @@ if(Meteor.isClient) {
 
     Template.Billable$cell$valSaveBtn$edit.events({
         'click .cancelItem': function(){
-            Session.set('editItemId', null);
+            //Session.set('editItemId', null);
             console.log("cancelled");
             return false;
         },
         'click .saveItem': function(){
+            // TODO: function to update when we click on the button or update the function changeEditingRow()
+            // Session.set('editItemId', null);
             console.log("saved");
             return false;
         }
