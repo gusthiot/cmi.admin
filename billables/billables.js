@@ -231,6 +231,7 @@ if(Meteor.isClient) {
             return false;
         },
         'click .saveItem': function(){
+
             // TODO: function to update when we click on the button or update the function changeEditingRow()
             // Session.set('editItemId', null);
             console.log("saved");
