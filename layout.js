@@ -111,7 +111,7 @@ if (Meteor.isClient) {
 }
 
 /* Collect and render all modals at the bottom of the DOM */
-import { flatMap } from 'lodash';
+import flatMap from 'lodash/flatMap';
 
 if (Meteor.isClient) {
     Template.nav.helpers({
