@@ -9,7 +9,8 @@
       "startTime"        : "Start Time",
       "billingDetails"   : "Billing Details",
       "discount"         : "Discount",
-      "validationState"  : "Validation"
+      "validationState"  : "Validation",
+      "valSaveBtn"       : ""
     },
     "category": {
       "USAGE_FEE"        : "Usage fee",

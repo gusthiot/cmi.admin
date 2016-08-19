@@ -177,6 +177,18 @@
         <option value="4">Validation 4</option>
     </select>
 </template>
+
+<template name="Billable$cell$valSaveBtn">
+    {{#if isEditing}}
+        {{> Billable$cell$valSaveBtn$edit}}
+    {{/if}}
+</template>
+
+<template name="Billable$cell$valSaveBtn$edit">
+    <button class="btn-floating waves-effect waves-light saveItem" ><i class="material-icons">save</i></button>
+    <button class="btn-floating waves-effect waves-light cancelItem" ><i class="material-icons">cancel</i></button>
+</template>
+
 <template name="Billables$addButton">
     <!-- Modal Trigger -->
     <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i class="material-icons">add</i></a>

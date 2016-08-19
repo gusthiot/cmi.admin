@@ -44,7 +44,7 @@ Billables.editingRow = new ReactiveVar();
 
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
-   "startTime", "billingDetails", "discount", "validationState"];
+   "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];
 
 /* Build dataTable*/
 function makeTable() {
@@ -148,7 +148,7 @@ if (Meteor.isClient) {
 
   /* To edit a table row, click on it */
   Template.Billables$Edit.events({
-    'click tbody > tr': function (event) {
+    'click tr': function (event) {
       var rowData = getRowDataByTr(event.currentTarget);
       if (rowData) {
         changeEditingRow($(event.currentTarget).closest( 'table' ), rowData);
@@ -215,6 +215,29 @@ if (Meteor.isClient) {
   });
 
 }
+
+if(Meteor.isClient) {
+    /*Template.Billable$cell$valSaveBtn$edit.helpers({
+        editing: function(){
+            return Session.equals('editItemId', this._id);
+        }
+    });*/
+
+    Template.Billable$cell$valSaveBtn$edit.events({
+        'click .cancelItem': function(){
+            Session.set('editItemId', null);
+            console.log("cancelled");
+            return false;
+        },
+        'click .saveItem': function(){
+            console.log("saved");
+            return false;
+        }
+
+    });
+
+}
+
 
 /* Table cell I18N  global template helpers */
 if (Meteor.isClient) {

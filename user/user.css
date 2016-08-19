@@ -14,13 +14,9 @@ li.message {
 .userInput{
     height: 63px;
     width: 400px;
-    margin-top: 20px;
 }
 
-#becomeUserModal {
-    height: 500px;
-}
 
 .marBottom {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
