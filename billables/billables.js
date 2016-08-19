@@ -131,6 +131,37 @@ function allValuesInColumn(collection, columnName) {
 var theTable = makeTable();
 
 
+function updateServerAndToast(tr, currentRowData) {
+    var editItem = {
+        type: $( ".typeEdit option:selected", tr ).val(),
+        operatedByUser: $( ".userEdit option:selected", tr ).text(),
+        billableToAccount: $( "#account", tr ).val(),
+        billableToProject: $( ".projectEdit option:selected", tr ).text(),
+        billingDetails: $( "#icon_prefix2", tr ).val(),
+        discount: $( ".discountEdit option:selected", tr ).text(),
+        validationState: $( ".stateEdit option:selected", tr ).text(),
+    };
+
+    var dateTimePickerData = $( ".startTime-edit", tr ).data( 'DateTimePicker' );
+    if (dateTimePickerData) {
+        editItem.startTime = dateTimePickerData.date().toDate();
+    }
+
+    // TODO: if editItem is deeply equal to currentRowData, do nothing.
+
+    Billables.update( currentRowData._id,
+        {$set: _.extend(editItem, { updatedAt: new Date() })},
+        function (error, result) {
+        if (error) {
+            return toast( Template.Billable$cell$toastEdited, error );
+        }
+        else {
+            result = toast( Template.Billable$cell$toastEdited );
+            return result;
+        }
+    } );
+}
+
 if (Meteor.isClient) {
   function getRowDataByTr(trElement) {
     var dataTable = $(trElement).closest( 'table' ).DataTable();
@@ -164,91 +195,53 @@ if (Meteor.isClient) {
   });
 
   function changeEditingRow(tableElement, rowData) {
-    var previousRowData;
-    Tracker.nonreactive(function()  {
-      previousRowData = Billables.editingRow.get( rowData );
-    });
-    if (previousRowData && ! _.isEqual(previousRowData._id, rowData._id)) {
-      // prepare to toast when done.
-      var tr = getTrByRowData(tableElement, previousRowData);
-
-      var editItem = {
-        type: $(".typeEdit option:selected", tr).val(),
-        operatedByUser: $(".userEdit option:selected", tr).text(),
-        billableToAccount: $("#account", tr).val(),
-        billableToProject: $(".projectEdit option:selected", tr).text(),
-        billingDetails: $("#icon_prefix2", tr).val(),
-        discount: $(".discountEdit option:selected", tr).text(),
-        validationState: $(".stateEdit option:selected", tr).text(),
-        updatedAt: new Date()
-      };
-
-      var dateTimePickerData = $(".startTime-edit", tr).data('DateTimePicker');
-
-      if (dateTimePickerData) {
-        editItem.startTime = dateTimePickerData.date().toDate();
+      var previousRowData;
+      Tracker.nonreactive( function () {
+          previousRowData = Billables.editingRow.get( rowData );
+      } );
+      if (previousRowData && !_.isEqual( previousRowData._id, rowData._id )) {
+          updateServerAndToast( getTrByRowData( tableElement, previousRowData ), previousRowData );
       }
-
-      Billables.update(rowData._id, {$set: editItem}, function(error, result){
-        if(error){
-          return toast(Template.Billable$cell$toastEdited, error);
-        }
-        else {
-          result = toast(Template.Billable$cell$toastEdited);
-          return result;
-        }
-      });
-        // Session.set('editItemId', null);
-    }
-    Billables.editingRow.set( rowData );
+      Billables.editingRow.set( rowData );
   }
 
-  var allCellTemplates = Billables.columns.map(function(x) {return Template["Billable$cell$" + x]});
+    var allCellTemplates = Billables.columns.map( function (x) {
+        return Template["Billable$cell$" + x]
+    } );
 
-  allCellTemplates.forEach(function(tmpl){
-    if (! tmpl) return;
-    tmpl.helpers({
-      isEditing: function() {
-        var editingRow = Billables.editingRow.get();
-        return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
-      }
-    });
-  });
-
-}
-
-if(Meteor.isClient) {
-    /*Template.Billable$cell$valSaveBtn$edit.helpers({
-        editing: function(){
-            return Session.equals('editItemId', this._id);
-        }
-    });*/
+    allCellTemplates.forEach( function (tmpl) {
+        if (!tmpl) return;
+        tmpl.helpers( {
+            isEditing: function () {
+                var editingRow = Billables.editingRow.get();
+                return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
+            }
+        } );
+    } );
 
     Template.Billable$cell$valSaveBtn$edit.events({
         'click .cancelItem': function(){
             //Session.set('editItemId', null);
             console.log("cancelled");
-            return false;
-        },
-        'click .saveItem': function(){
+            var tr = $(event.currentTarget).closest( 'tr' );
+            var row = table.row(tr);
 
-            // TODO: function to update when we click on the button or update the function changeEditingRow()
-            // Session.set('editItemId', null);
-            console.log("saved");
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
             return false;
         }
-
     });
 
 }
 
-
-/* Table cell I18N  global template helpers */
-if (Meteor.isClient) {
-    Template.registerHelper( 'translateCategory', (category) => {
-        return TAPi18n.__("Billables.category." + category);
-    });
-}
 
 /* Date picker */
 
@@ -332,6 +325,16 @@ Billables.allow({
   }
 
 });
+
+// ======================================================================================================
+// ======================================================================================================
+// Cell widgets
+// TODO: a lot of code for the cell widgets is to be moved here.
+
+if (Meteor.isClient) {
+    SelectWidget("Billable$cell$type", Billables.simpleSchema());
+}
+
 // ======================================================================================================
 // ======================================================================================================
 
@@ -364,5 +367,50 @@ if (Meteor.isClient) {
 // ======================================================================================================
 // ======================================================================================================
 
+/**
+ * Select widget for translatable, single-choice string values.
+ *
+ * @param templateNameWithout$edit
+ * @param allowedKeysOrSchema
+ */
+function SelectWidget(templateNameWithout$edit, allowedKeysOrSchema) {
+    var fieldName = templateNameWithout$edit.substr(templateNameWithout$edit.lastIndexOf('$') + 1); // e.g. "type"
 
+    var topLevelTranslationKey = "Billables";
+    function translate(k) {
+        return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
+    }
 
+    var editTemplateName = templateNameWithout$edit + "$edit";
+
+    var allowedKeys;
+    if (allowedKeysOrSchema instanceof SimpleSchema) {
+        allowedKeys = allowedKeysOrSchema.getDefinition(fieldName).allowedValues;
+    } else if ("length" in allowedKeys) {
+        allowedKeys = allowedKeysOrSchema;
+    } else {
+        throw new Meteor.Error("allowedKeys must be a SimpleSchema or an array");
+    }
+
+    Template[templateNameWithout$edit].helpers( {
+        translate: translate,
+    });
+    Template[editTemplateName].helpers({
+        translate: translate,
+        SelectWidget$options: function () {
+            return {
+                uniqueClass: fieldName + "Edit",
+                maybeSelected: function(currentValue, value) {
+                    return (currentValue === value) ? {selected: '1'}: {};
+                },
+                values: _.map(allowedKeys, function (k) {
+                    return {
+                        translate: translate,
+                        value: k
+                    };
+                })
+            }
+        },
+    });
+
+}

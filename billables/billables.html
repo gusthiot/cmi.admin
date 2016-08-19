@@ -19,18 +19,24 @@
 
 <template name="Billable$cell$type">
     {{#if isEditing}}
-        {{> Billable$cell$type$edit}}
+        {{! TODO: We should ideally have the exact same temlate body for all drop-down selectable cells.
+        Referencing "type" below defeats that. }}
+        {{> Billable$cell$type$edit currentValue=type}}
     {{else}}
-        {{translateCategory type}}
+        {{translate type}}
     {{/if}}
 </template>
 
 <template name="Billable$cell$type$edit">
-    <select class="browser-default typeEdit">
+    {{> SelectWidget options=SelectWidget$options currentValue=currentValue}}
+</template>
+
+<template name="SelectWidget">
+    <select class="browser-default {{options.uniqueClass}}">
         <option value="" disabled selected></option>
-        <option value="USAGE_FEE">{{translateCategory 'USAGE_FEE'}}</option>
-        <option value="RESERVATION_FEE">{{translateCategory 'RESERVATION_FEE'}}</option>
-        <option value="ACCESS_FEE">{{translateCategory 'ACCESS_FEE'}}</option>
+        {{#each options.values}}
+            <option value="{{value}}" {{../options.maybeSelected ../currentValue value}}>{{translate value}}</option>
+        {{/each}}
     </select>
 </template>
 
@@ -185,7 +191,6 @@
 </template>
 
 <template name="Billable$cell$valSaveBtn$edit">
-    <button class="btn-floating waves-effect waves-light saveItem" ><i class="material-icons">save</i></button>
     <button class="btn-floating waves-effect waves-light cancelItem" ><i class="material-icons">cancel</i></button>
 </template>
 
