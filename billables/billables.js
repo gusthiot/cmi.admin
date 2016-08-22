@@ -135,9 +135,9 @@ function updateServerAndToast(tr, currentRowData) {
     var editItem = {
         type: $( ".typeEdit option:selected", tr ).val(),
         operatedByUser: $( ".userEdit option:selected", tr ).text(),
-        billableToAccount: $( "#account", tr ).val(),
+        billableToAccount: $( ".accountEdit", tr ).val(),
         billableToProject: $( ".projectEdit option:selected", tr ).text(),
-        billingDetails: $( "#icon_prefix2", tr ).val(),
+        billingDetails: $( ".billAreaEdit", tr ).val(),
         discount: $( ".discountEdit option:selected", tr ).text(),
         validationState: $( ".stateEdit option:selected", tr ).text(),
     };
@@ -223,19 +223,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function(){
             //Session.set('editItemId', null);
             console.log("cancelled");
-            var tr = $(event.currentTarget).closest( 'tr' );
-            var row = table.row(tr);
-
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
-            }
             return false;
         }
     });
