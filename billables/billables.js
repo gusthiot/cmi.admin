@@ -146,20 +146,23 @@ function updateServerAndToast(tr, currentRowData) {
     if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
-
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
+    if(editItem.equals(currentRowData)){
+        alert("equals");
+    } else {
+        Billables.update( currentRowData._id,
+            {$set: _.extend(editItem, { updatedAt: new Date() })},
+            function (error, result) {
+                if (error) {
+                    return toast( Template.Billable$cell$toastEdited, error );
+                }
+                else {
+                    result = toast( Template.Billable$cell$toastEdited );
+                    return result;
+                }
+            });
+    }
 
-    Billables.update( currentRowData._id,
-        {$set: _.extend(editItem, { updatedAt: new Date() })},
-        function (error, result) {
-        if (error) {
-            return toast( Template.Billable$cell$toastEdited, error );
-        }
-        else {
-            result = toast( Template.Billable$cell$toastEdited );
-            return result;
-        }
-    } );
 }
 
 if (Meteor.isClient) {
@@ -230,7 +233,8 @@ if (Meteor.isClient) {
 }
 
 
-/* Date picker */
+// ========================= Date picker ================================================
+// ======================================================================================
 
 /**
  * Return the date format to use.
@@ -259,6 +263,9 @@ if (Meteor.isClient) {
       this.$('.startTime-edit').assertSizeEquals(1).datetimepicker();
   });
 }
+
+// ========================================================================================
+// ========================================================================================
 
 if (Meteor.isClient){
   Template.Billable$cell$billingDetails$edit.onRendered(function() {
@@ -362,7 +369,6 @@ if (Meteor.isClient) {
  */
 function SelectWidget(templateName, allowedKeysOrSchema) {
     var fieldName = templateName.substr(templateName.lastIndexOf('$') + 1); // e.g. "type"
-
     var topLevelTranslationKey = "Billables";
     function translate(k) {
         return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
