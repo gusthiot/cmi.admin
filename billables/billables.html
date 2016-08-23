@@ -111,7 +111,7 @@
 
 <template name="Billable$cell$startTime$edit">
     <div class="row">
-        <div class="form-group col s12">
+        <div class="form-group col s12" style="position: relative;">
             <div class="input-group date" >
                 <input type="text" class="startTimeEdit form-control"  value="{{asDatePickerTime startTime}}" />
                 <span class="input-group-addon">
@@ -133,11 +133,10 @@
 <template name="Billable$cell$billingDetails$edit">
     <div class="row">
         <form class="col s12">
-            <div class="row">
+            <div class="row" >
                 <div class="input-field col s12">
                     <i class="material-icons prefix">mode_edit</i>
                     <textarea id="icon_prefix2" class="materialize-textarea billAreaEdit" length="120">{{billingDetails}}</textarea>
-
                 </div>
             </div>
         </form>
