@@ -148,17 +148,23 @@ function updateServerAndToast(tr, currentRowData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
-    Billables.update( currentRowData._id,
-        {$set: _.extend(editItem, { updatedAt: new Date() })},
-        function (error, result) {
-            if (error) {
-                return toast( Template.Billable$cell$toastEdited, error );
-            }
-            else {
-                result = toast( Template.Billable$cell$toastEdited );
-                return result;
-            }
-        });
+    if (editItem && !_.isEqual( editItem._id, currentRowData._id )) {
+        alert("equals");
+    } else {
+        alert("Not equals");
+        Billables.update( currentRowData._id,
+            {$set: _.extend(editItem, { updatedAt: new Date() })},
+            function (error, result) {
+                if (error) {
+                    return toast( Template.Billable$cell$toastEdited, error );
+                }
+                else {
+                    result = toast( Template.Billable$cell$toastEdited );
+                    return result;
+                }
+            });
+    }
+
 
 
 }
