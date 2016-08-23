@@ -30,9 +30,8 @@ standard-minifier-css
 standard-minifier-js
 gildaspk:autoform-materialize
 
-
 materialize:materialize
 momentjs:moment
-tsega:bootstrap3-datetimepicker
 aldeed:simple-schema
 nerdmed:mediaqueries
+tsega:bootstrap3-datetimepicker

@@ -46,6 +46,7 @@ Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
    "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];
 
+
 /* Build dataTable*/
 function makeTable() {
   return new Tabular.Table({
@@ -142,15 +143,15 @@ function updateServerAndToast(tr, currentRowData) {
         validationState: $( ".stateEdit option:selected", tr ).text(),
     };
 
-    var dateTimePickerData = $( ".startTime-edit", tr ).data( 'DateTimePicker' );
+    var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
     if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
     if(_.isEqual(editItem, currentRowData)){
-        alert("equals");
+        console.log("equals");
     } else {
-        alert("Not equals");
+        console.log("Not equals");
         Billables.update( currentRowData._id,
             {$set: _.extend(editItem, { updatedAt: new Date() })},
             function (error, result) {
@@ -188,6 +189,7 @@ if (Meteor.isClient) {
       if (rowData) {
         changeEditingRow($(event.currentTarget).closest( 'table' ), rowData);
       }
+
     }
   });
 
@@ -261,7 +263,7 @@ if (Meteor.isClient) {
   });
 
   Template.Billable$cell$startTime$edit.onRendered(function() {
-      this.$('.startTime-edit').assertSizeEquals(1).datetimepicker();
+      this.$('.startTimeEdit').assertSizeEquals(1).datetimepicker();
   });
 }
 
