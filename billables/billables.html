@@ -71,7 +71,7 @@
 <template name="Billable$cell$billableToAccount$edit">
     <div class="row">
         <div class="input-field col s12">
-            <input value="{{valueToAccount}}" id="account" type="text" class="validate">
+            <input value="{{valueToAccount}}" id="account" type="text" class="validate accountEdit">
             <label class="active" for="account">account</label>
         </div>
     </div>
@@ -111,12 +111,10 @@
 
 <template name="Billable$cell$startTime$edit">
     <div class="row">
-        <div class="form-group col s12">
-            <div class='input-group date' >
-                <input type='text' class="startTime-edit form-control"  value="{{asDatePickerTime startTime}}" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+        <div class="form-group col s12" style="position: relative;">
+            <div class="input-group date" >
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input type="text" class="startTimeEdit set-due-date form-control"  value="{{asDatePickerTime startTime}}" />
             </div>
         </div>
     </div>
@@ -133,11 +131,10 @@
 <template name="Billable$cell$billingDetails$edit">
     <div class="row">
         <form class="col s12">
-            <div class="row">
+            <div class="row" >
                 <div class="input-field col s12">
                     <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea billarea" length="120">{{billingDetails}}</textarea>
-
+                    <textarea id="icon_prefix2" class="materialize-textarea billAreaEdit" length="120">{{billingDetails}}</textarea>
                 </div>
             </div>
         </form>

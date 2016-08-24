@@ -46,6 +46,7 @@ Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
    "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];
 
+
 /* Build dataTable*/
 function makeTable() {
   return new Tabular.Table({
@@ -135,31 +136,37 @@ function updateServerAndToast(tr, currentRowData) {
     var editItem = {
         type: $( ".typeEdit option:selected", tr ).val(),
         operatedByUser: $( ".userEdit option:selected", tr ).text(),
-        billableToAccount: $( "#account", tr ).val(),
+        billableToAccount: $( ".accountEdit", tr ).val(),
         billableToProject: $( ".projectEdit option:selected", tr ).text(),
-        billingDetails: $( "#icon_prefix2", tr ).val(),
+        billingDetails: $( ".billAreaEdit", tr ).val(),
         discount: $( ".discountEdit option:selected", tr ).text(),
         validationState: $( ".stateEdit option:selected", tr ).text(),
     };
 
-    var dateTimePickerData = $( ".startTime-edit", tr ).data( 'DateTimePicker' );
+    var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
     if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
-
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
+    if (editItem && !_.isEqual( editItem._id, currentRowData._id )) {
+        alert("equals");
+    } else {
+        alert("Not equals");
+        Billables.update( currentRowData._id,
+            {$set: _.extend(editItem, { updatedAt: new Date() })},
+            function (error, result) {
+                if (error) {
+                    return toast( Template.Billable$cell$toastEdited, error );
+                }
+                else {
+                    result = toast( Template.Billable$cell$toastEdited );
+                    return result;
+                }
+            });
+    }
 
-    Billables.update( currentRowData._id,
-        {$set: _.extend(editItem, { updatedAt: new Date() })},
-        function (error, result) {
-        if (error) {
-            return toast( Template.Billable$cell$toastEdited, error );
-        }
-        else {
-            result = toast( Template.Billable$cell$toastEdited );
-            return result;
-        }
-    } );
+
+
 }
 
 if (Meteor.isClient) {
@@ -184,6 +191,7 @@ if (Meteor.isClient) {
       if (rowData) {
         changeEditingRow($(event.currentTarget).closest( 'table' ), rowData);
       }
+
     }
   });
 
@@ -223,19 +231,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function(){
             //Session.set('editItemId', null);
             console.log("cancelled");
-            var tr = $(event.currentTarget).closest( 'tr' );
-            var row = table.row(tr);
-
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
-            }
             return false;
         }
     });
@@ -243,7 +238,8 @@ if (Meteor.isClient) {
 }
 
 
-/* Date picker */
+// ========================= Date picker ================================================
+// ======================================================================================
 
 /**
  * Return the date format to use.
@@ -269,9 +265,12 @@ if (Meteor.isClient) {
   });
 
   Template.Billable$cell$startTime$edit.onRendered(function() {
-      this.$('.startTime-edit').assertSizeEquals(1).datetimepicker();
+      this.$('.startTimeEdit').assertSizeEquals(1).datetimepicker();
   });
 }
+
+// ========================================================================================
+// ========================================================================================
 
 if (Meteor.isClient){
   Template.Billable$cell$billingDetails$edit.onRendered(function() {
@@ -375,7 +374,6 @@ if (Meteor.isClient) {
  */
 function SelectWidget(templateName, allowedKeysOrSchema) {
     var fieldName = templateName.substr(templateName.lastIndexOf('$') + 1); // e.g. "type"
-
     var topLevelTranslationKey = "Billables";
     function translate(k) {
         return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
