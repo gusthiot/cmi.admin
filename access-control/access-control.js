@@ -8,9 +8,10 @@ var debug = Debug("access-control.js");
 
 /******** Tequila *********/
 
-Meteor.startup(function() {
-  Tequila.options.bypass.push("/images/");
-});
+Tequila.options.bypass.push("/images/");
+if (Meteor.isClient) {
+  Tequila.options.autoStart = false;
+}
 
 // In Meteor.users documents, the _id is the user's SCIPER:
 Tequila.options.getUserId = function getUserId(tequilaResponse) {

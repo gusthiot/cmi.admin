@@ -1,0 +1,28 @@
+<template name="Widget$Gallery$gallery">
+    <table>
+        {{#each w in widgets}}
+            <tr id="widget-gallery-{{w}}">{{> Widget$Gallery$item wid=w}}</tr>
+        {{/each}}
+    </table>
+</template>
+
+<template name="Widget$$NotFound">Widget not found: {{name}}</template>
+
+<template name="Widget$Gallery$item">
+    <td><code>Widget.{{wid}}</code></td>
+    <td><select class="editability browser-default">
+        <option value="readonly"><code>"readonly"</code></option>
+        <option value="editable"><code>"editable"</code></option>
+    </select></td>
+    {{> Template.dynamic (moreControls wid)}}
+    <td>{{> Template.dynamic (widgetHere wid)}}</td>
+    <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
+</template>
+
+<!-------------------- Widget-specific scaffolding ------------------------->
+
+<template name="Widget$Gallery$MoreControls$Select">
+    <td>Allowed values:<textarea>Red
+Green
+Blue</textarea></td>
+</template>
