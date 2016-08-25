@@ -237,16 +237,19 @@ if (Meteor.isClient) {
             }*/
 
             var tr = $(this).closest('tr');
-            var id = $(this).closest('table').attr('id');
+            /*var id = $(this).closest('table').attr('id');   *///  ??????????????????????? ===  undefined
+            var id = $(this).index();
             var table = $('#' + id).DataTable();
-            var row = table.row(tr);
+            var row = table.row(tr).data();
 
             console.log(tr);
             console.log(id);
             console.log(table);
             console.log(tr);
 
-            if (row.child.isShown()) {
+            function isShown() { return row.child.show()}
+
+            if (!row.child.isShown()) {
                 // This row is already open - close it
                 row.child.hide();
                 tr.removeClass('shown');
