@@ -1,3 +1,9 @@
+<template name="Widget$$NotFound">Widget not found: {{name}}</template>
+
+<!-- Entry points. The real templates are recreated programmatically in
+     widget.js; the empty surrogates below only serve to trick the
+     IDE into grokking their names. -->
+<template name="Widget$Select"></template>
 
 <template name="Widget$Select$readonly">
     {{widget.translateKey widget.value}}

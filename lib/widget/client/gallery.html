@@ -1,12 +1,16 @@
 <template name="Widget$Gallery$gallery">
+    {{! Usage example: }}
+    {{_ "WidgetGallery.whatIsYourFavoriteColor"}}
+    {{> Widget$Select values=myValues editable=myEditableFunc
+                         translateKey=myTranslation onChange=myChangedCallback }}
+    <br>
     <table>
         {{#each w in widgets}}
-            <tr id="widget-gallery-{{w}}">{{> Widget$Gallery$item wid=w}}</tr>
+            {{> Template.dynamic (galleryItemOf w)}}
+            {{> Template.dynamic (galleryItemOf w)}}
         {{/each}}
     </table>
 </template>
-
-<template name="Widget$$NotFound">Widget not found: {{name}}</template>
 
 <template name="Widget$Gallery$item">
     <td><code>Widget.{{wid}}</code></td>
@@ -19,7 +23,15 @@
     <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
 </template>
 
+<template name="Widget$Gallery$test">
+    Hello, {{world}}
+</template>
+
 <!-------------------- Widget-specific scaffolding ------------------------->
+
+<template name="Widget$Gallery$Select">
+
+</template>
 
 <template name="Widget$Gallery$MoreControls$Select">
     <td>Allowed values:<textarea>Red
