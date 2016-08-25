@@ -147,11 +147,12 @@ function updateServerAndToast(tr, currentRowData) {
     if (dateTimePickerData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
+
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
-    if (editItem && !_.isEqual( editItem._id, currentRowData._id )) {
-        alert("equals");
-    } else {
+    if (editItem && !_.isEqual( editItem, currentRowData )) {
         alert("Not equals");
+    } else {
+        alert("equals");
         Billables.update( currentRowData._id,
             {$set: _.extend(editItem, { updatedAt: new Date() })},
             function (error, result) {
@@ -226,11 +227,37 @@ if (Meteor.isClient) {
             }
         } );
     } );
-
+// ===================== hide row with the cancel button ==============================
+// ====================================================================================
     Template.Billable$cell$valSaveBtn$edit.events({
-        'click .cancelItem': function(){
-            //Session.set('editItemId', null);
-            console.log("cancelled");
+        'click .cancelItem': function(e){
+            /*if ($(e.target).is(':not(td)')) {
+                alert('This is inside td');
+                return;
+            }*/
+
+
+            var tr = $(this).parents('tr');
+            //var tr = $(this).closest('tr');
+            var id = $(this).closest('table').attr('id');    // id ==== undefined ??????????????????????????
+            var table = $('#' + id).DataTable();
+            var row = table.row(tr);
+
+            console.log(tr);
+            console.log(id);
+            console.log(table);
+            console.log(tr);
+
+             //  isShown() ==> method isShown() doesn't work from dataTables
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            }
+
+            /*e.preventDefault();
+            $(this).closest('tr').children().hide();*/
+
             return false;
         }
     });
@@ -248,7 +275,7 @@ if (Meteor.isClient) {
  */
 function getDateFormat() {
   // TODO: specific to US locale.
-  return 'MM/DD/YYYY hh:mm a';
+  return 'MM/DD/YYYY hh:mm A';
 }
 
 if (Meteor.isClient) {
