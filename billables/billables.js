@@ -236,32 +236,29 @@ if (Meteor.isClient) {
                 return;
             }*/
 
-            var tr = $(this).closest('tr');
-            /*var id = $(this).closest('table').attr('id');   *///  ??????????????????????? ===  undefined
-            var id = $(this).index();
+
+            var tr = $(this).parents('tr');
+            //var tr = $(this).closest('tr');
+            var id = $(this).closest('table').attr('id');    // id ==== undefined ??????????????????????????
             var table = $('#' + id).DataTable();
-            var row = table.row(tr).data();
+            var row = table.row(tr);
 
             console.log(tr);
             console.log(id);
             console.log(table);
             console.log(tr);
 
-            function isShown() { return row.child.show()}
+             //  isShown() ==> method isShown() doesn't work from dataTables
 
-            if (!row.child.isShown()) {
+            if (row.child.isShown()) {
                 // This row is already open - close it
                 row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                // Open this row
-                tr.addClass('shown');
             }
 
             /*e.preventDefault();
             $(this).closest('tr').children().hide();*/
 
-            //return false;
+            return false;
         }
     });
 
