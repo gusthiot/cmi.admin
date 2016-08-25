@@ -1,4 +1,4 @@
-var debug = Debug("devsupport/kafka.js");
+var debug = require("debug")("devsupport/kafka.js");
 
 var uniqueId = (function(that) {
   if (that.Random) {

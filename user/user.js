@@ -2,7 +2,7 @@
  * Model and controller for users
  */
 
-var debug = Debug("user.js");
+var debug = require("debug")("user/user.js");
 
 /**
  * @constructor
