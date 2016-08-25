@@ -1,8 +1,8 @@
 <template name="Widget$Gallery$gallery">
     {{! Usage example: }}
     {{_ "WidgetGallery.whatIsYourFavoriteColor"}}
-    {{> Widget$Select values=myValues editable=myEditableFunc
-                         translateKey=myTranslation onChange=myChangedCallback }}
+    {{> Widget$Select values=myFavoriteColors editable=myEditableFunc
+            callbacks=myCallbacks }}
     <br>
     <table>
         {{#each w in widgets}}

@@ -5,6 +5,7 @@
      IDE into grokking their names. -->
 <template name="Widget$Select"></template>
 
+<!-- Widget templates -->
 <template name="Widget$Select$readonly">
     {{widget.translateKey widget.value}}
 </template>
@@ -13,7 +14,7 @@
     <select class="browser-default">
         <option value="" disabled></option>
         {{#each value in widget.values}}
-            <option value="{{value}}" {{widget.maybeSelected widget.value value}}>{{widget.translateKey value}}</option>
+            <option value="{{value}}" {{maybeSelected widget.value value}}>{{widget.translateKey value}}</option>
         {{/each}}
     </select>
 </template>
