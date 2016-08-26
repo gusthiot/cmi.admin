@@ -1,0 +1,12 @@
+{
+  "WidgetGallery": {
+    "whatIsYourFavoriteColor": "What is your favorite color?",
+    "colorName": {
+      "RED": "Red",
+      "GREEN": "Green",
+      "BLUE": "Blue",
+      "YELLOW": "Yellow",
+      "BLACK": "Black"
+    }
+  }
+}

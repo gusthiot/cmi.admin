@@ -1,0 +1,56 @@
+<template name="Widget$Gallery$gallery">
+    <table>
+        {{#each w in widgets}}
+            {{>Widget$Gallery$moar wid=w}}
+        {{/each}}
+    </table>
+    {{> Widget$Gallery$example}}
+</template>
+
+<template name="Widget$Gallery$moar">
+{{#each repeat in moar}}
+    {{> Template.dynamic (galleryItem wid repeat.isLast)}}
+{{/each}}
+
+</template>
+
+<!-- For each widget name, a template is created programmatically e.g.
+     Widget$Gallery$item$Select that invokes this one. -->
+<template name="Widget$Gallery$$genericItem">
+    <tr>
+    <td>{{#if isLast}}<button class="moar">+</button>{{/if}}</td>
+        <td><code>Widget.{{wid}}</code></td>
+    <td><select class="editability browser-default">
+        <option value="readonly"><code>"readonly"</code></option>
+        <option value="editable"><code>"editable"</code></option>
+    </select></td>
+    {{> Template.dynamic (moreControls wid)}}
+    <td>{{> Template.dynamic (widgetHere wid)}}</td>
+    <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
+    </tr>
+</template>
+
+<template name="Widget$Gallery$test">
+    Hello, {{world}}
+</template>
+
+<!-- Complete yet simple example, without any metaprogramming -->
+<template name="Widget$Gallery$example">
+   <hr>
+    <div>{{_ "WidgetGallery.whatIsYourFavoriteColor"}}
+        {{> Widget$Select values=myFavoriteColors editable=myEditableFunc
+                helpers=myHelpers }}
+    </div>
+</template>
+
+<!-------------------- Widget-specific scaffolding ------------------------->
+
+<template name="Widget$Gallery$Select">
+
+</template>
+
+<template name="Widget$Gallery$MoreControls$Select">
+    <td>Allowed values:<textarea>RED
+GREEN
+BLUE</textarea></td>
+</template>

@@ -4,7 +4,7 @@
  * This file is for mechanism only – See policy.js for the policy
  */
 
-var debug = Debug("access-control.js");
+var debug = require("debug")("access-control.js");
 
 /******** Tequila *********/
 
