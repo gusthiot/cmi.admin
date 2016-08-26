@@ -1,3 +1,5 @@
+var debug = require("debug")("billables.js");
+
 Billables = new Meteor.Collection("billables");
 
 if (Meteor.isClient){
@@ -150,10 +152,7 @@ function updateServerAndToast(tr, currentRowData) {
 
     // TODO: if editItem is deeply equal to currentRowData, do nothing.
     if (editItem && !_.isEqual( editItem, currentRowData )) {
-        alert("Not equals");
-    } else {
-        alert("equals");
-        Billables.update( currentRowData._id,
+        Billables.update(currentRowData._id,
             {$set: _.extend(editItem, { updatedAt: new Date() })},
             function (error, result) {
                 if (error) {
@@ -164,6 +163,8 @@ function updateServerAndToast(tr, currentRowData) {
                     return result;
                 }
             });
+    } else {
+        debug("No update needed");
     }
 
 
@@ -171,48 +172,66 @@ function updateServerAndToast(tr, currentRowData) {
 }
 
 if (Meteor.isClient) {
-  function getRowDataByTr(trElement) {
-    var dataTable = $(trElement).closest( 'table' ).DataTable();
-    return dataTable.row(trElement).data();
-  }
-
-  function getTrByRowData(tableElement, rowData) {
-    var dataTable = $(tableElement).DataTable();
-    return dataTable.row(function (unused_idx, data) {
-      return data._id === rowData._id;
-    }).node();
-  }
-
-  Template.Billables$Edit.helpers({makeTable: theTable});
-
-  /* To edit a table row, click on it */
-  Template.Billables$Edit.events({
-    'click tr': function (event) {
-      var rowData = getRowDataByTr(event.currentTarget);
-      if (rowData) {
-        changeEditingRow($(event.currentTarget).closest( 'table' ), rowData);
-      }
-
+    function getRowDataByTr(trElement) {
+        var dataTable = $(trElement).closest( 'table' ).DataTable();
+        return dataTable.row(trElement).data();
     }
-  });
 
-  Template.Billables$Edit.helpers({
-    editingRow: function () {
-      var rowData = Billables.editingRow.get();
-      return (rowData && rowData._id ? rowData._id: "nothing");
-    },
-  });
+    function getTrByRowData(tableElement, rowData) {
+        var dataTable = $(tableElement).DataTable();
+        return dataTable.row(function (unused_idx, data) {
+            return data._id === rowData._id;
+        }).node();
+    }
 
-  function changeEditingRow(tableElement, rowData) {
-      var previousRowData;
-      Tracker.nonreactive( function () {
-          previousRowData = Billables.editingRow.get( rowData );
-      } );
-      if (previousRowData && !_.isEqual( previousRowData._id, rowData._id )) {
-          updateServerAndToast( getTrByRowData( tableElement, previousRowData ), previousRowData );
-      }
-      Billables.editingRow.set( rowData );
-  }
+    Template.Billables$Edit.helpers({makeTable: theTable});
+
+    /* To edit a table row, click on it */
+    Template.Billables$Edit.events({
+        'click tr': function (event) {
+            var rowData = getRowDataByTr(event.currentTarget);
+            if (rowData) {
+                // No need to use the submit button; clicking elsewhere means to validate
+                var previousRowData = Tracker.nonreactive( function () {
+                    return Billables.editingRow.get();
+                } );
+                if (previousRowData && !_.isEqual( previousRowData._id, rowData._id )) {
+                    // Don't save if clicking within the same line
+                    saveEditingRow($(event.currentTarget).closest('table'));
+                }
+                changeEditingRow($(event.currentTarget));
+            }
+
+        }
+    });
+
+    Template.Billables$Edit.helpers({
+        editingRow: function () {
+            var rowData = Billables.editingRow.get();
+            return (rowData && rowData._id ? rowData._id: "nothing");
+        },
+    });
+
+    function saveEditingRow(tableElement) {
+        var currentRowData = Tracker.nonreactive( function () {
+            return Billables.editingRow.get();
+        });
+        updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
+    }
+
+    function changeEditingRow(rowData_or_element_or_undefined) {
+        var newEditingRow;
+        if (rowData_or_element_or_undefined === undefined) {
+            newEditingRow = undefined;
+        } else if (rowData_or_element_or_undefined instanceof jQuery) {
+            rowData_or_element_or_undefined.assertSizeEquals(1);
+            newEditingRow = getRowDataByTr(rowData_or_element_or_undefined);
+        } else {
+            // Otherwise, assume this is the result of the .row() API in DataTables.
+            newEditingRow = rowData_or_element_or_undefined;
+        }
+        Billables.editingRow.set(newEditingRow);
+    }
 
     var allCellTemplates = Billables.columns.map( function (x) {
         return Template["Billable$cell$" + x]
@@ -230,35 +249,9 @@ if (Meteor.isClient) {
 // ===================== hide row with the cancel button ==============================
 // ====================================================================================
     Template.Billable$cell$valSaveBtn$edit.events({
-        'click .cancelItem': function(e){
-            /*if ($(e.target).is(':not(td)')) {
-                alert('This is inside td');
-                return;
-            }*/
-
-
-            var tr = $(this).parents('tr');
-            //var tr = $(this).closest('tr');
-            var id = $(this).closest('table').attr('id');    // id ==== undefined ??????????????????????????
-            var table = $('#' + id).DataTable();
-            var row = table.row(tr);
-
-            console.log(tr);
-            console.log(id);
-            console.log(table);
-            console.log(tr);
-
-             //  isShown() ==> method isShown() doesn't work from dataTables
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-            }
-
-            /*e.preventDefault();
-            $(this).closest('tr').children().hide();*/
-
-            return false;
+        'click .cancelItem': function(e) {
+            changeEditingRow(undefined);
+            e.stopPropagation();
         }
     });
 
