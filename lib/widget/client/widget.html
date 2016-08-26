@@ -12,7 +12,7 @@
 
 <template name="Widget$Select$editable">
     <select class="browser-default">
-        <option value="" disabled></option>
+        <option value="" attributesOfEmptyOption></option>
         {{#each value in widget.values}}
             <option value="{{value}}" {{maybeSelected widget.value value}}>{{widget.translateKey value}}</option>
         {{/each}}
