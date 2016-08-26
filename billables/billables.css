@@ -1,3 +1,6 @@
 table.table-editable td {
     cursor:text;
 }
+.letSize{
+    font-size: 20px;
+}

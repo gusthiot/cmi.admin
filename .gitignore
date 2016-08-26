@@ -6,4 +6,8 @@
 .dir-locals.el
 NOTES.org
 /node_modules/
+.DS_Store
 
+dbdump.zip
+dump/
+meteor-settings.json

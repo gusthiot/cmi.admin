@@ -4,13 +4,14 @@
  * This file is for mechanism only – See policy.js for the policy
  */
 
-var debug = Debug("access-control.js");
+var debug = require("debug")("access-control.js");
 
 /******** Tequila *********/
 
-Meteor.startup(function() {
-  Tequila.options.bypass.push("/images/");
-});
+Tequila.options.bypass.push("/images/");
+if (Meteor.isClient) {
+  Tequila.options.autoStart = false;
+}
 
 // In Meteor.users documents, the _id is the user's SCIPER:
 Tequila.options.getUserId = function getUserId(tequilaResponse) {
@@ -36,35 +37,42 @@ Become.policy(function(uid_from, uid_to) {
 });
 
 /********** Access control UI ****************/
-if (! Meteor.isClient) return;
-
-Template.AccessControl$WhoAmI.helpers({
-  user: function() { return Meteor.user() },
-  canBecome: function() {
+if (Meteor.isClient) {
+  function canBecome() {
     try {
       Policy.canBecomeAnotherUser.check(Meteor.user());
       return true;
     } catch (e) {
       return false;
     }
-  },
-  hasBecome: function() { return false }
-});
-
-Template.User$Pick.events({
-  'user:selected #AccessControlBecomeThisUser': function(event, that, id) {
-    Become.become(id, signalServerError("Become"));
-    event.preventDefault();
   }
-});
 
-Template.AccessControl$WhoAmI.events({
-  'click #unbecome': Become.restore
-});
+  Template.AccessControl$WhoAmI.helpers({
+    user: function() { return Meteor.user() },
+    canBecome: canBecome,
+    hasBecome: function() { return false }
+  });
+  Template.AccessControl$BecomeModal.helpers({canBecome: canBecome});
 
-Template.AccessControl$WhoAmI.helpers({
-  hasBecome: function() {
-    return !! Become.realUser();
-  },
-  realUser: function() { return Become.realUser(); }
-});
+  Template.User$Pick.events({
+    'user:selected #AccessControlBecomeThisUser': function(event, that, id) {
+      Become.become(id, signalServerError("Become"));
+      event.preventDefault();
+    }
+  });
+
+  Template.AccessControl$WhoAmI.events({
+    'click #unbecome': Become.restore
+  });
+
+  Template.AccessControl$WhoAmI.helpers({
+    hasBecome: function() {
+      return !! Become.realUser();
+    },
+    realUser: function() { return Become.realUser(); }
+  });
+
+  Template.AccessControl$BtnBecome.onRendered(function () {
+    this.$('.modal-trigger').leanModal();
+  });
+}

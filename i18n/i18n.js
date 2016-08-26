@@ -34,9 +34,12 @@ if (Meteor.isClient) {
     currentLanguage: currentLanguage
   });
   Template.I18N$SelectLanguage.onRendered(function () {
-    $(this.findAll(".dropdown-menu a.flag")).click(function() {
-      var newLang = $(this).data('value');
-      Meteor.user().lang(newLang);
-    });
+    var $ = this.$.bind(this);
+    $(".dropdown-button").assertSizeAtLeast(1).dropdown();
+  });
+  Template.I18N$flag.events( {
+    'click li': function () {
+      Meteor.user().lang( this.code );
+    }
   });
 }

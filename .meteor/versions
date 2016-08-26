@@ -39,6 +39,7 @@ es5-shim@4.5.11
 fastclick@1.0.12
 fortawesome:fontawesome@4.5.0
 geojson-utils@1.0.9
+gildaspk:autoform-materialize@0.0.26
 hot-code-push@1.0.4
 html-tools@1.0.10
 htmljs@1.0.10
@@ -59,6 +60,7 @@ launch-screen@1.0.12
 livedata@1.0.18
 localstorage@1.0.11
 logging@1.0.13
+materialize:materialize@0.97.6
 mdg:validation-error@0.5.1
 meteor@1.1.15
 meteor-base@1.0.4
@@ -74,7 +76,7 @@ modules-runtime@0.6.4
 momentjs:moment@2.13.1
 mongo@1.1.8
 mongo-id@1.0.5
-mrt:bootstrap-3@0.3.8
+nerdmed:mediaqueries@0.1.5
 npm-mongo@1.4.44
 observe-sequence@1.0.12
 ordered-dict@1.0.8
@@ -97,6 +99,7 @@ tap:i18n@1.8.2
 templating@1.1.10
 templating-tools@1.0.4
 tracker@1.0.14
+tsega:bootstrap3-datetimepicker@4.17.37_1
 ui@1.0.11
 underscore@1.0.9
 url@1.0.10

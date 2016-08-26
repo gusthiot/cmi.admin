@@ -5,3 +5,18 @@ li.message {
 /* Oh, and some italics to spice things up: */
     font-style: italic;
 }
+.modal-title {
+    color: black !important;
+}
+
+/* input search user from navbar */
+
+.userInput{
+    height: 63px;
+    width: 400px;
+}
+
+
+.marBottom {
+    margin-bottom: 30px;
+}

@@ -2,7 +2,7 @@
  * Model and controller for users
  */
 
-var debug = Debug("user.js");
+var debug = require("debug")("user/user.js");
 
 /**
  * @constructor
@@ -22,9 +22,19 @@ if (Meteor.isClient) {
   }
 }
 
+
+if (Meteor.isClient) {
+  // initialization of Materialize framework
+  AutoForm.setDefaultTemplate('materialize');
+
+  // select option in template
+  Template.User$Edit.onRendered(function(){
+    $('select').material_select();
+  });
+}
+
 function updateUser(that, change) {
-  User.collection.update({_id: that._id},
-                         {$set: change});
+  User.collection.update({_id: that._id}, {$set: change});
 }
 
 User.prototype.lang = function(opt_set) {
@@ -34,9 +44,9 @@ User.prototype.lang = function(opt_set) {
       updateUser(this, {"profile.lang": opt_set});
     }
   } else if (currentValue) {
-    return currentValue;
+      return currentValue;
   } else if (Meteor.isClient) {
-    return I18N.browserLanguage();
+      return I18N.browserLanguage();
   }
 };
 
@@ -70,9 +80,7 @@ Meteor.startup(function() {
   // As per http://stackoverflow.com/a/21853298/435004:
   // this merges gently with the default publish in accounts_server.js !
   Policy.canReadOwnFullName.publish(null, function() {
-    return Meteor.users.find({
-      _id: this.userId
-    }, { fields: {_id: true, fullName: true}});
+    return Meteor.users.find({_id: this.userId}, {fields: {_id: true, fullName: true}});
   });
   Policy.canReadUserBasicDetails.publish(null, function() {
     return Meteor.users.find({}, {fields: {_id: true, fullName: true}});
@@ -169,6 +177,7 @@ Template.User$Edit.events({
  */
 Template.User$Pick.onCreated(function () {
   var self = this;
+  console.log("User$Pick onCreated: starting");
   User.template = this; // To access from the browser console
   self.search = User.Search.open();
 
@@ -177,9 +186,10 @@ Template.User$Pick.onCreated(function () {
   Tracker.autorun(function() {
     var query = self.query.get(),
       wantLDAP = self.wantLDAP.get();
-    debug("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
+    console.log("Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")");
     if (query) self.search.search(query, wantLDAP);
   });
+  console.log("User$Pick onCreated: done");
 });
 
 function that() { return Template.instance(); }
@@ -211,7 +221,7 @@ Template.User$Pick.helpers({
 });  // Template.User$Pick.helpers
 
 function openDropdown(that) {
-  if (! that.$(".dropdown-menu").is(":visible")) {
+  if (! that.$(".dropdown-content").is(":visible")) {
     // Careful to hit the right DOM entry!
     // Toggling on the .dropdown-menu *appears* to work, but that kills
     // all event handlers therein.
@@ -222,12 +232,16 @@ function openDropdown(that) {
 
 Template.User$Pick.events({
   "keyup input.usersearch": function(event, that) {
+    console.log("Search term is now " + event.currentTarget.value);
     that.query.set(event.currentTarget.value);
     openDropdown(that);  // If we arrived via keyboard
   },
+  "click": function(event, that) {
+    console.log("CLICK");
+    event.preventDefault();
+  },
   "click a.user": function(event, that) {
-    that.$("div").trigger("user:selected",
-                          [$(event.target).attr("data-value")]);
+    that.$("div").trigger("user:selected", [$(event.target).attr("data-value")]);
     that.$("input.usersearch").val($(event.target).text());
     event.preventDefault();
   },
@@ -236,3 +250,10 @@ Template.User$Pick.events({
     event.preventDefault();
   }
 });  // Template.User$Pick.events
+
+Template.User$Pick.onRendered(function() {
+  $('.usersearch').assertSizeAtLeast(1).dropdown({
+        belowOrigin: true // Displays dropdown below the button
+      }
+  );
+});

@@ -1,16 +1,16 @@
 <template name="I18N$SelectLanguage">
     <div class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{> I18N$flag code=currentLanguage}}<span class="caret"></span></a>
-        <ul class="dropdown-menu">
+      <a class="dropdown-button" data-activates="flags-dropdown">{{> I18N$flag code=currentLanguage}}<i class="material-icons right">arrow_drop_down</i></a>
+        <ul id="flags-dropdown" class="dropdown-content">
             {{#each languages}}
-            <li>{{> I18N$flag}}</li>
+            {{> I18N$flag}}
             {{/each}}
         </ul>
     </div>
 </template>
 
 <template name="I18N$flag">
-  {{! TODO: the empty <i></i> sucks. Better to override a.flag margins or whatever, 
+  {{! TODO: the empty <b></b> sucks. Better to override a.flag margins or whatever,
       and as a bonus we would get a narrower drop-down flag menu. }}
-  <a href="#" class="flag flag-{{code}}" data-value="{{code}}"><i></i></a>
+  <li class="flag flag-{{code}}" data-value="{{code}}"><b></b></li>
 </template>
