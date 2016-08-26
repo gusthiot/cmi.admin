@@ -11,8 +11,8 @@
 
 <template name="Widget$Gallery$moar"><button>+</button></template>
 
-<!-- Verbatim copies of this template exist for each widget name, e.g.
-     Widget$Gallery$Select, inheriting all helpers and callbacks -->
+<!-- For each widget name, a template is created programmatically e.g.
+     Widget$Gallery$item$Select that invokes this one. -->
 <template name="Widget$Gallery$$genericItem">
     <td>{{#if isLast}}<button>+</button>{{/if}}<code>Widget.{{wid}}</code></td>
     <td><select class="editability browser-default">
@@ -33,7 +33,7 @@
    <hr>
     <div>{{_ "WidgetGallery.whatIsYourFavoriteColor"}}
         {{> Widget$Select values=myFavoriteColors editable=myEditableFunc
-                callbacks=myCallbacks }}
+                helpers=myHelpers }}
     </div>
 </template>
 
