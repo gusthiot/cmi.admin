@@ -37,27 +37,9 @@
 </template>
 
 <template name="Billable$cell$operatedByUser">
-    {{#if isEditing}}
-        {{> Billable$cell$operatedByUser$edit}}
-    {{else}}
-        {{operatedByUser}}
-    {{/if}}
-</template>
-
-<template name="Billable$cell$operatedByUser$edit">
-    <select class="browser-default userEdit">
-        <option value="" disabled selected></option>
-        <option value="1">User 1</option>
-        <option value="2">User 2</option>
-        <option value="3">User 3</option>
-        <option value="4">User 4</option>
-        <option value="5">User 5</option>
-        <option value="6">User 6</option>
-        <option value="7">User 7</option>
-        <option value="8">User 8</option>
-        <option value="9">User 9</option>
-        <option value="10">User 10</option>
-    </select>
+    <div class="userEdit">
+    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate}}
+    </div>
 </template>
 
 <template name="Billable$cell$billableToAccount">
@@ -78,28 +60,11 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-    {{#if isEditing}}
-        {{> Billable$cell$billableToProject$edit}}
-    {{else}}
-        {{billableToProject}}
-    {{/if}}
+    <div class="projectEdit">
+        {{> Widget$Select value=billableToProject values=projects editable=isEditing}}
+    </div>
 </template>
 
-<template name="Billable$cell$billableToProject$edit">
-    <select class="browser-default projectEdit">
-        <option value="" disabled selected></option>
-        <option value="1">Project 1</option>
-        <option value="2">Project 2</option>
-        <option value="3">Project 3</option>
-        <option value="4">Project 4</option>
-        <option value="5">Project 5</option>
-        <option value="6">Project 6</option>
-        <option value="7">Project 7</option>
-        <option value="8">Project 8</option>
-        <option value="9">Project 9</option>
-        <option value="10">Project 10</option>
-    </select>
-</template>
 
 <template name="Billable$cell$startTime">
     {{#if isEditing}}
@@ -142,39 +107,15 @@
 </template>
 
 <template name="Billable$cell$discount">
-    {{#if isEditing}}
-        {{> Billable$cell$discount$edit}}
-    {{else}}
-        {{discount}}
-    {{/if}}
-</template>
-
-<template name="Billable$cell$discount$edit">
-    <select class="browser-default discountEdit">
-        <option value="" disabled selected></option>
-        <option value="1">Rabais 1</option>
-        <option value="2">Rabais 2</option>
-        <option value="3">Rabais 3</option>
-        <option value="4">Rabais 4</option>
-    </select>
+    <div class="discountEdit">
+        {{> Widget$Select value=discount values=discounts editable=isEditing}}
+    </div>
 </template>
 
 <template name="Billable$cell$validationState">
-    {{#if isEditing}}
-        {{> Billable$cell$validationState$edit}}
-    {{else}}
-        {{validationState}}
-    {{/if}}
-</template>
-
-<template name="Billable$cell$validationState$edit">
-    <select class="browser-default stateEdit">
-        <option value="" disabled selected></option>
-        <option value="1">Validation 1</option>
-        <option value="2">Validation 2</option>
-        <option value="3">Validation 3</option>
-        <option value="4">Validation 4</option>
-    </select>
+    <div class="stateEdit">
+        {{> Widget$Select value=validationState values=validationStates editable=isEditing}}
+    </div>
 </template>
 
 <template name="Billable$cell$valSaveBtn">

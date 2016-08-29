@@ -1,3 +1,11 @@
+
+
+var Widget;
+
+if (Meteor.isClient) {
+    Widget = require("../lib/widget/client/widget");
+}
+
 var debug = require("debug")("billables.js");
 
 Billables = new Meteor.Collection("billables");
@@ -142,12 +150,12 @@ var theTable = makeTable();
 function updateServerAndToast(tr, currentRowData) {
     var editItem = {
         type: $( ".typeEdit option:selected", tr ).val(),
-        operatedByUser: $( ".userEdit option:selected", tr ).text(),
+        operatedByUser: $( ".userEdit option:selected", tr ).val(),
         billableToAccount: $( ".accountEdit", tr ).val(),
-        billableToProject: $( ".projectEdit option:selected", tr ).text(),
+        billableToProject: $( ".projectEdit option:selected", tr ).val(),
         billingDetails: $( ".billAreaEdit", tr ).val(),
-        discount: $( ".discountEdit option:selected", tr ).text(),
-        validationState: $( ".stateEdit option:selected", tr ).text(),
+        discount: $( ".discountEdit option:selected", tr ).val(),
+        validationState: $( ".stateEdit option:selected", tr ).val(),
     };
 
     var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
@@ -195,18 +203,19 @@ if (Meteor.isClient) {
     Template.Billables$Edit.events({
         'click tr': function (event) {
             var rowData = getRowDataByTr(event.currentTarget);
-            if (rowData) {
-                // No need to use the submit button; clicking elsewhere means to validate
-                var previousRowData = Tracker.nonreactive( function () {
-                    return Billables.editingRow.get();
-                } );
-                if (previousRowData && !_.isEqual( previousRowData._id, rowData._id )) {
-                    // Don't save if clicking within the same line
-                    saveEditingRow($(event.currentTarget).closest('table'));
-                }
-                changeEditingRow($(event.currentTarget));
-            }
+            if (! rowData) { return; }
 
+            // No need to use the submit button; clicking elsewhere means to validate
+            var previousRowData = Tracker.nonreactive( function () {
+                return Billables.editingRow.get();
+            } );
+            if (previousRowData && _.isEqual( previousRowData._id, rowData._id )) {
+                // Don't save if clicking within the same line
+                event.stopPropagation();
+                return;
+            }
+            saveEditingRow($(event.currentTarget).closest('table'));
+            changeEditingRow($(event.currentTarget));
         }
     });
 
@@ -221,6 +230,7 @@ if (Meteor.isClient) {
         var currentRowData = Tracker.nonreactive( function () {
             return Billables.editingRow.get();
         });
+        if (! currentRowData) { return; }
         updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
     }
 
@@ -357,6 +367,57 @@ Billables.allow({
 
 if (Meteor.isClient) {
     SelectWidget("Billable$cell$type", Billables.simpleSchema());
+}
+// ======================================================================================================
+// ================================ Users select drop-down ==============================================================
+
+if (Meteor.isClient){
+    Template.Billable$cell$operatedByUser.helpers({
+        users: () => ["243371", "275977"],
+        userTranslate: () => {
+            return {
+                translateKey: function (k) {
+                    var userId = User.collection.findOne({_id: k});
+                    if(userId){
+                        return TAPi18n.__(userId.fullName);
+                    } else {
+                        return k;
+                    }
+
+                },
+            }
+        },
+
+
+
+    });
+}
+
+// ======================================================================================================
+// ================================ Projects select drop-down ==============================================================
+
+if (Meteor.isClient){
+    Template.Billable$cell$billableToProject.helpers({
+        projects: () => ["Project 1", "Project 2","Project 3","Project 4","Project 5","Project 6","Project 7","Project 8","Project 9","Project 10"],
+    });
+}
+
+// ======================================================================================================
+// ================================ Rabais select drop-down ==============================================================
+
+if (Meteor.isClient){
+    Template.Billable$cell$discount.helpers({
+        discounts: () => ["Rabais 1", "Rabais 2","Rabais 3","Rabais 4"],
+    });
+}
+
+// ======================================================================================================
+// ================================ validationStates select drop-down ==============================================================
+
+if (Meteor.isClient){
+    Template.Billable$cell$validationState.helpers({
+        validationStates: () => ["Validation 1", "Validation 2","Validation 3","Validation 4"],
+    });
 }
 
 // ======================================================================================================
