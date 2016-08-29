@@ -10,33 +10,38 @@ var Schemas = {};
 
 Schemas.Billable = new SimpleSchema({
   type: {
-    type: String,
-    allowedValues: ["USAGE_FEE", "RESERVATION_FEE", "ACCESS_FEE"]
+      type: String,
+      allowedValues: ["USAGE_FEE", "RESERVATION_FEE", "ACCESS_FEE"]
   },
   operatedByUser: {
-    type: String
+      type: String,
+      optional: true
   },
   billableToAccount: {
-    type: Number
+      type: Number
   },
   billableToProject: {
-    type: String
+      type: String,
+      optional: true
   },
   startTime: {
-    type: Date
+      type: Date
   },
   billingDetails: {
-    type: String,
-    max: 120
+      type: String,
+      optional: true,
+      max: 120
   },
   discount: {
-    type: String
+      type: String,
+      optional: true
   },
   validationState: {
-    type: String
+      type: String,
+      optional: true
   },
   updatedAt: {
-    type: Date
+      type: Date
   }
 });
 
