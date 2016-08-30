@@ -392,6 +392,12 @@ if (Meteor.isClient){
 
 // ======================================================================================================
 // ================================ Projects select drop-down ===========================================
+/**
+ * return all projects on database (future implementation)
+ *
+ *  var billableToProject = _.pluck(Billables.find().fetch(), "billableToProject");
+ *  return billableToProject;
+ */
 
 if (Meteor.isClient){
     Template.Billable$cell$billableToProject.helpers({
@@ -401,6 +407,12 @@ if (Meteor.isClient){
 
 // ======================================================================================================
 // ================================ Rabais select drop-down =============================================
+/**
+ * return all discount on database (future implementation)
+ *
+ *  var discount = _.pluck(Billables.find().fetch(), "discount");
+ *  return discount;
+ */
 
 if (Meteor.isClient){
     Template.Billable$cell$discount.helpers({
@@ -410,6 +422,12 @@ if (Meteor.isClient){
 
 // ======================================================================================================
 // ================================ validationStates select drop-down ===================================
+/**
+ * return all validation on database (future implementation)
+ *
+ *  var validationState = _.pluck(Billables.find().fetch(), "validationState");
+ *  return validationState;
+ */
 
 if (Meteor.isClient){
     Template.Billable$cell$validationState.helpers({
