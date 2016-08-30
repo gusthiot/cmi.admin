@@ -19,7 +19,7 @@
 
 <template name="Billable$cell$type">
     {{#if isEditing}}
-        {{! TODO: We should ideally have the exact same temlate body for all drop-down selectable cells.
+        {{! TODO: We should ideally have the exact same template body for all drop-down selectable cells.
         Referencing "type" below defeats that. }}
         {{> SelectWidget options=SelectWidget$options currentValue=type}}
     {{else}}
