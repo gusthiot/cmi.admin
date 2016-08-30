@@ -163,7 +163,6 @@ function updateServerAndToast(tr, currentRowData) {
         editItem.startTime = dateTimePickerData.date().toDate();
     }
 
-    // TODO: if editItem is deeply equal to currentRowData, do nothing.
     if (editItem && !_.isEqual( editItem, currentRowData )) {
         Billables.update(currentRowData._id,
             {$set: _.extend(editItem, { updatedAt: new Date() })},
@@ -179,8 +178,6 @@ function updateServerAndToast(tr, currentRowData) {
     } else {
         debug("No update needed");
     }
-
-
 
 }
 
@@ -261,6 +258,7 @@ if (Meteor.isClient) {
             }
         } );
     } );
+
 // ===================== hide row with the cancel button ==============================
 // ====================================================================================
     Template.Billable$cell$valSaveBtn$edit.events({
@@ -372,7 +370,11 @@ if (Meteor.isClient) {
 
 if (Meteor.isClient){
     Template.Billable$cell$operatedByUser.helpers({
-        users: () => ["243371", "275977"],
+        users: () => {
+            var dbIdsFind = _.pluck(User.collection.find().fetch(), "_id");
+            return dbIdsFind;
+
+        },
         userTranslate: () => {
             return {
                 translateKey: function (k) {
@@ -382,13 +384,9 @@ if (Meteor.isClient){
                     } else {
                         return k;
                     }
-
                 },
             }
         },
-
-
-
     });
 }
 
