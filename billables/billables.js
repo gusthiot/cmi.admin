@@ -215,7 +215,8 @@ if (Meteor.isClient) {
         updateServerAndToast: function (tr, currentRowData) {
             var editItem = {
                 type: $( ".typeEdit option:selected", tr ).val(),
-                operatedByUser: $( ".userEdit option:selected", tr ).val(),
+                // operatedByUser: $( ".userEdit option:selected", tr ).val(),
+                operatedByUser: this.childrenByTag().operatedByUser.value(),
                 billableToAccount: $( ".accountEdit", tr ).val(),
                 billableToProject: $( ".projectEdit option:selected", tr ).val(),
                 billingDetails: $( ".billAreaEdit", tr ).val(),

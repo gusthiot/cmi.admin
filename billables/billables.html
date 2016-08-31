@@ -37,9 +37,7 @@
 </template>
 
 <template name="Billable$cell$operatedByUser">
-    <div class="userEdit">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate}}
-    </div>
+    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
