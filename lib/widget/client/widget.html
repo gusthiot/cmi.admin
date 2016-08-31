@@ -19,3 +19,10 @@
     </select>
 </template>
 
+<template name="Widget$InputText$readonly">
+    {{widget.value}}
+</template>
+
+<template name="Widget$InputText$editable">
+    <input type="text" {{b "value: value" }}>
+</template>
