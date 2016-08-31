@@ -226,7 +226,7 @@ if (Meteor.isClient) {
                 operatedByUser: this.childrenByTag().operatedByUser.value(),
                 billableToAccount: this.childrenByTag().billableToAccount.value(),
                 billableToProject: this.childrenByTag().billableToProject.value(),
-                billingDetails: $( ".billAreaEdit", tr ).val(),
+                billingDetails: this.childrenByTag().billingDetails.value(),
                 discount: this.childrenByTag().discount.value(),
                 validationState: this.childrenByTag().validationState.value(),
             };

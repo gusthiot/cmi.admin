@@ -26,3 +26,21 @@
 <template name="Widget$InputText$editable">
     <input type="text" {{b "value: value" }}>
 </template>
+
+
+<template name="Widget$TextArea$readonly">
+    {{widget.value}}
+</template>
+
+<template name="Widget$TextArea$editable">
+    <div class="row">
+        <form class="col s12">
+            <div class="row" >
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <textarea id="icon_prefix2" class="materialize-textarea" length="120" {{b "value: value" }}></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>

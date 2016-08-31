@@ -78,11 +78,7 @@
 </template>
 
 <template name="Billable$cell$billingDetails">
-    {{#if isEditing}}
-        {{> Billable$cell$billingDetails$edit}}
-    {{else}}
-        {{billingDetails}}
-    {{/if}}
+    {{> Widget$TextArea vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billingDetails$edit">
