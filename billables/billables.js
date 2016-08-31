@@ -224,7 +224,7 @@ if (Meteor.isClient) {
             var editedItem = {
                 type: $( ".typeEdit option:selected", tr ).val(),
                 operatedByUser: this.childrenByTag().operatedByUser.value(),
-                billableToAccount: $( ".accountEdit", tr ).val(),
+                billableToAccount: this.childrenByTag().billableToAccount.value(),
                 billableToProject: this.childrenByTag().billableToProject.value(),
                 billingDetails: $( ".billAreaEdit", tr ).val(),
                 discount: this.childrenByTag().discount.value(),
