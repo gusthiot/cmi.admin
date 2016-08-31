@@ -41,11 +41,7 @@
 </template>
 
 <template name="Billable$cell$billableToAccount">
-    {{#if isEditing}}
-        {{> Billable$cell$billableToAccount$edit}}
-    {{else}}
-        {{toAccount}}
-    {{/if}}
+    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billableToAccount$edit">
@@ -58,9 +54,7 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-    <div class="projectEdit">
         {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
-    </div>
 </template>
 
 
@@ -105,15 +99,11 @@
 </template>
 
 <template name="Billable$cell$discount">
-    <div class="discountEdit">
         {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
-    </div>
 </template>
 
 <template name="Billable$cell$validationState">
-    <div class="stateEdit">
         {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
-    </div>
 </template>
 
 <template name="Billable$cell$valSaveBtn">
