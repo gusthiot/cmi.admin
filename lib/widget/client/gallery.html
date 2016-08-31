@@ -24,9 +24,9 @@
         <option value="readonly"><code>"readonly"</code></option>
         <option value="editable"><code>"editable"</code></option>
     </select></td>
-    {{> Template.dynamic (moreControls wid)}}
     <td>{{> Template.dynamic (widgetHere wid)}}</td>
     <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
+        {{> Template.dynamic (moreControls wid)}}
     </tr>
 </template>
 
