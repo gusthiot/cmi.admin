@@ -60,6 +60,11 @@ if (Devsupport.isActive()) {
     Router.route('/test', function () {
         this.render("Test");
     });
+
+    Router.route('/viewmodel', function () {
+        this.render("people");
+    });
+
     Router.route('/devsupport/kafka/(.*)', function () {
         var topic = this.params[0];
         Kafka.subscribe(topic);

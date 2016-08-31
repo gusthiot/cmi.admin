@@ -185,11 +185,29 @@ if (Meteor.isClient) {
             this.editingRow(newEditingRow);
         },
 
-        saveEditingRow: function (tableElement) {
+        rowClicked: function (trElement) {
+            var rowData = getRowDataByTr(trElement);
+            if (! rowData) { return; }
+
+            // No need to use the submit button; clicking elsewhere means to validate
+            var previousRowData = this._previousRowData();
+            if (previousRowData && _.isEqual( previousRowData._id, rowData._id )) {
+                // Don't save if clicking within the same line
+                event.stopPropagation();
+                return;
+            }
+            this.saveEditingRow(trElement.closest('table'));
+            this.changeEditingRow($(trElement));
+        },
+
+        _previousRowData: function () {
             var self = this;
-            var currentRowData = Tracker.nonreactive( function () {
+            return Tracker.nonreactive( function () {
                 return self.editingRow();
             });
+        },
+        saveEditingRow: function (tableElement) {
+            var currentRowData = this._previousRowData();
             if (! currentRowData) { return; }
             this.updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
         },
@@ -234,20 +252,7 @@ if (Meteor.isClient) {
      * TODO: the viewmodel should handle that event and controller code */
     Template.Billables$Edit.events({
         'click tr': function (event, that) {
-            var rowData = getRowDataByTr(event.currentTarget);
-            if (! rowData) { return; }
-
-            // No need to use the submit button; clicking elsewhere means to validate
-            var previousRowData = Tracker.nonreactive( function () {
-                return that.viewmodel.editingRow();
-            } );
-            if (previousRowData && _.isEqual( previousRowData._id, rowData._id )) {
-                // Don't save if clicking within the same line
-                event.stopPropagation();
-                return;
-            }
-            that.viewmodel.saveEditingRow($(event.currentTarget).closest('table'));
-            that.viewmodel.changeEditingRow($(event.currentTarget));
+            Template.Billables$Edit.find(that).viewmodel.rowClicked(event.currentTarget);
         }
     });
 
@@ -275,9 +280,9 @@ if (Meteor.isClient) {
 // ===================== hide row with the cancel button ==============================
 // ====================================================================================
     Template.Billable$cell$valSaveBtn$edit.events({
-        'click .cancelItem': function(e, that) {
+        'click .cancelItem': function(event, that) {
             Template.Billables$Edit.find(that).viewmodel.changeEditingRow(undefined);
-            e.stopPropagation();
+            event.stopPropagation();
         }
     });
 
