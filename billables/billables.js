@@ -1,9 +1,8 @@
-
-
 var Widget;
 
 if (Meteor.isClient) {
     Widget = require("../lib/widget/client/widget");
+    require("../lib/client/find-templates");
 }
 
 var debug = require("debug")("billables.js");
@@ -55,8 +54,6 @@ Schemas.Billable = new SimpleSchema({
 
 Billables.attachSchema(Schemas.Billable);
 
-Billables.editingRow = new ReactiveVar();
-
 Billables.columns =
   ["type", "operatedByUser", "billableToAccount", "billableToProject",
    "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];
@@ -81,8 +78,8 @@ function makeTable() {
       style: "os",
       items: "cell",
     },
-    initComplete: function() {
-      setupColumnFilterUI(this);
+    initComplete: function() {  // Client only
+      setupColumnFilterUI(Template.Billables$Edit.find().view, this);
     },
     sPaginationType: 'meteor_template',
     paginationTemplate: Meteor.isClient && Template.Billable$Pagination,
@@ -92,7 +89,18 @@ function makeTable() {
   });
 }
 
-function setupColumnFilterUI(dataTableElement) {
+if (Meteor.isClient) {
+    Template.Billables$Edit.find = function(that) {
+        if (that === undefined) {
+            that = Template.instance();
+        }
+        if (that instanceof Blaze.TemplateInstance) {
+            return Template.instance().findParent("Template.Billables$Edit");
+        }
+    }
+}
+
+function setupColumnFilterUI(parentView, dataTableElement) {
   var columns = dataTableElement.api().columns();
   // From https://datatables.net/examples/api/multi_filter_select.html
   columns.every( function () {
@@ -122,7 +130,7 @@ function setupColumnFilterUI(dataTableElement) {
     view.templateInstance().dataTable = {
       column: column
     };
-    Blaze.renderWithData(view, context, column.header());
+    Blaze.renderWithData(view, context, column.header(), undefined, parentView);
   });
 }
 
@@ -147,40 +155,6 @@ function allValuesInColumn(collection, columnName) {
 var theTable = makeTable();
 
 
-function updateServerAndToast(tr, currentRowData) {
-    var editItem = {
-        type: $( ".typeEdit option:selected", tr ).val(),
-        operatedByUser: $( ".userEdit option:selected", tr ).val(),
-        billableToAccount: $( ".accountEdit", tr ).val(),
-        billableToProject: $( ".projectEdit option:selected", tr ).val(),
-        billingDetails: $( ".billAreaEdit", tr ).val(),
-        discount: $( ".discountEdit option:selected", tr ).val(),
-        validationState: $( ".stateEdit option:selected", tr ).val(),
-    };
-
-    var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
-    if (dateTimePickerData) {
-        editItem.startTime = dateTimePickerData.date().toDate();
-    }
-
-    if (editItem && !_.isEqual( editItem, currentRowData )) {
-        Billables.update(currentRowData._id,
-            {$set: _.extend(editItem, { updatedAt: new Date() })},
-            function (error, result) {
-                if (error) {
-                    return toast( Template.Billable$cell$toastEdited, error );
-                }
-                else {
-                    result = toast( Template.Billable$cell$toastEdited );
-                    return result;
-                }
-            });
-    } else {
-        debug("No update needed");
-    }
-
-}
-
 if (Meteor.isClient) {
     function getRowDataByTr(trElement) {
         var dataTable = $(trElement).closest( 'table' ).DataTable();
@@ -194,58 +168,97 @@ if (Meteor.isClient) {
         }).node();
     }
 
+    /* Controller code for setting / changing the current line being edited */
+    Template.Billables$Edit.viewmodel({
+        editingRow: undefined,
+        changeEditingRow: function(rowData_or_element_or_undefined) {
+            var newEditingRow;
+            if (rowData_or_element_or_undefined === undefined) {
+                newEditingRow = undefined;
+            } else if (rowData_or_element_or_undefined instanceof jQuery) {
+                rowData_or_element_or_undefined.assertSizeEquals(1);
+                newEditingRow = getRowDataByTr(rowData_or_element_or_undefined);
+            } else {
+                // Otherwise, assume this is the result of the .row() API in DataTables.
+                newEditingRow = rowData_or_element_or_undefined;
+            }
+            this.editingRow(newEditingRow);
+        },
+
+        saveEditingRow: function (tableElement) {
+            var self = this;
+            var currentRowData = Tracker.nonreactive( function () {
+                return self.editingRow();
+            });
+            if (! currentRowData) { return; }
+            this.updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
+        },
+
+        updateServerAndToast: function (tr, currentRowData) {
+            var editItem = {
+                type: $( ".typeEdit option:selected", tr ).val(),
+                operatedByUser: $( ".userEdit option:selected", tr ).val(),
+                billableToAccount: $( ".accountEdit", tr ).val(),
+                billableToProject: $( ".projectEdit option:selected", tr ).val(),
+                billingDetails: $( ".billAreaEdit", tr ).val(),
+                discount: $( ".discountEdit option:selected", tr ).val(),
+                validationState: $( ".stateEdit option:selected", tr ).val(),
+            };
+
+            var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
+            if (dateTimePickerData) {
+                editItem.startTime = dateTimePickerData.date().toDate();
+            }
+
+            if (editItem && !_.isEqual( editItem, currentRowData )) {
+                Billables.update(currentRowData._id,
+                    {$set: _.extend(editItem, { updatedAt: new Date() })},
+                    function (error, result) {
+                        if (error) {
+                            return toast( Template.Billable$cell$toastEdited, error );
+                        }
+                        else {
+                            result = toast( Template.Billable$cell$toastEdited );
+                            return result;
+                        }
+                    });
+            } else {
+                debug("No update needed");
+            }
+        },
+    });
+
     Template.Billables$Edit.helpers({makeTable: theTable});
 
-    /* To edit a table row, click on it */
+    /* To edit a table row, click on it
+     * TODO: the viewmodel should handle that event and controller code */
     Template.Billables$Edit.events({
-        'click tr': function (event) {
+        'click tr': function (event, that) {
             var rowData = getRowDataByTr(event.currentTarget);
             if (! rowData) { return; }
 
             // No need to use the submit button; clicking elsewhere means to validate
             var previousRowData = Tracker.nonreactive( function () {
-                return Billables.editingRow.get();
+                return that.viewmodel.editingRow();
             } );
             if (previousRowData && _.isEqual( previousRowData._id, rowData._id )) {
                 // Don't save if clicking within the same line
                 event.stopPropagation();
                 return;
             }
-            saveEditingRow($(event.currentTarget).closest('table'));
-            changeEditingRow($(event.currentTarget));
+            that.viewmodel.saveEditingRow($(event.currentTarget).closest('table'));
+            that.viewmodel.changeEditingRow($(event.currentTarget));
         }
     });
 
     Template.Billables$Edit.helpers({
         editingRow: function () {
-            var rowData = Billables.editingRow.get();
+            var rowData = that.viewmodel.editingRow();
             return (rowData && rowData._id ? rowData._id: "nothing");
         },
     });
 
-    function saveEditingRow(tableElement) {
-        var currentRowData = Tracker.nonreactive( function () {
-            return Billables.editingRow.get();
-        });
-        if (! currentRowData) { return; }
-        updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
-    }
-
-    function changeEditingRow(rowData_or_element_or_undefined) {
-        var newEditingRow;
-        if (rowData_or_element_or_undefined === undefined) {
-            newEditingRow = undefined;
-        } else if (rowData_or_element_or_undefined instanceof jQuery) {
-            rowData_or_element_or_undefined.assertSizeEquals(1);
-            newEditingRow = getRowDataByTr(rowData_or_element_or_undefined);
-        } else {
-            // Otherwise, assume this is the result of the .row() API in DataTables.
-            newEditingRow = rowData_or_element_or_undefined;
-        }
-        Billables.editingRow.set(newEditingRow);
-    }
-
-    var allCellTemplates = Billables.columns.map( function (x) {
+     var allCellTemplates = Billables.columns.map( function (x) {
         return Template["Billable$cell$" + x]
     } );
 
@@ -253,7 +266,7 @@ if (Meteor.isClient) {
         if (!tmpl) return;
         tmpl.helpers( {
             isEditing: function () {
-                var editingRow = Billables.editingRow.get();
+                var editingRow = Template.Billables$Edit.find().viewmodel.editingRow();
                 return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
             }
         } );
@@ -262,8 +275,8 @@ if (Meteor.isClient) {
 // ===================== hide row with the cancel button ==============================
 // ====================================================================================
     Template.Billable$cell$valSaveBtn$edit.events({
-        'click .cancelItem': function(e) {
-            changeEditingRow(undefined);
+        'click .cancelItem': function(e, that) {
+            Template.Billables$Edit.find(that).viewmodel.changeEditingRow(undefined);
             e.stopPropagation();
         }
     });
