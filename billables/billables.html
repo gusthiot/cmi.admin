@@ -37,9 +37,7 @@
 </template>
 
 <template name="Billable$cell$operatedByUser">
-    <div class="userEdit">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate}}
-    </div>
+    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
@@ -61,7 +59,7 @@
 
 <template name="Billable$cell$billableToProject">
     <div class="projectEdit">
-        {{> Widget$Select value=billableToProject values=projects editable=isEditing}}
+        {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
     </div>
 </template>
 
@@ -108,13 +106,13 @@
 
 <template name="Billable$cell$discount">
     <div class="discountEdit">
-        {{> Widget$Select value=discount values=discounts editable=isEditing}}
+        {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
     </div>
 </template>
 
 <template name="Billable$cell$validationState">
     <div class="stateEdit">
-        {{> Widget$Select value=validationState values=validationStates editable=isEditing}}
+        {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
     </div>
 </template>
 

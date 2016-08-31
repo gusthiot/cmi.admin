@@ -206,43 +206,59 @@ if (Meteor.isClient) {
                 return self.editingRow();
             });
         },
-        saveEditingRow: function (tableElement) {
-            var currentRowData = this._previousRowData();
-            if (! currentRowData) { return; }
-            this.updateServerAndToast(getTrByRowData( tableElement, currentRowData ), currentRowData );
+        _tableElement: function() {
+            return this.templateInstance.$('table').assertSizeEquals(1)[0];
         },
 
-        updateServerAndToast: function (tr, currentRowData) {
-            var editItem = {
+        /**
+         * Fetch the data of the current editable row, as updated by the user.
+         * @returns {{type: (*|jQuery), operatedByUser, billableToAccount: (*|jQuery), billableToProject: (*|jQuery), billingDetails: (*|jQuery), discount: (*|jQuery), validationState: (*|jQuery)}}
+         */
+        editedItem: function() {
+            var currentRowData = this._previousRowData();
+            if (! currentRowData) { return; }
+
+            var tableElement = this._tableElement(),
+                tr = getTrByRowData( tableElement, currentRowData );
+
+            var editedItem = {
                 type: $( ".typeEdit option:selected", tr ).val(),
-                operatedByUser: $( ".userEdit option:selected", tr ).val(),
+                operatedByUser: this.childrenByTag().operatedByUser.value(),
                 billableToAccount: $( ".accountEdit", tr ).val(),
-                billableToProject: $( ".projectEdit option:selected", tr ).val(),
+                billableToProject: this.childrenByTag().billableToProject.value(),
                 billingDetails: $( ".billAreaEdit", tr ).val(),
-                discount: $( ".discountEdit option:selected", tr ).val(),
-                validationState: $( ".stateEdit option:selected", tr ).val(),
+                discount: this.childrenByTag().discount.value(),
+                validationState: this.childrenByTag().validationState.value(),
             };
 
             var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
             if (dateTimePickerData) {
-                editItem.startTime = dateTimePickerData.date().toDate();
+                editedItem.startTime = dateTimePickerData.date().toDate();
             }
 
-            if (editItem && !_.isEqual( editItem, currentRowData )) {
-                Billables.update(currentRowData._id,
-                    {$set: _.extend(editItem, { updatedAt: new Date() })},
-                    function (error, result) {
-                        if (error) {
-                            return toast( Template.Billable$cell$toastEdited, error );
-                        }
-                        else {
-                            result = toast( Template.Billable$cell$toastEdited );
-                            return result;
-                        }
-                    });
-            } else {
-                debug("No update needed");
+            return editedItem;
+        },
+        saveEditingRow: function () {
+            var editItem = this.editedItem();
+            if (! editItem) {
+                return;
             }
+            var previousRowData = this._previousRowData();
+            if (_.isEqual( editItem, previousRowData )) {
+                debug("No update needed");
+                return;
+            }
+            Billables.update(previousRowData._id,
+                {$set: _.extend(editItem, { updatedAt: new Date() })},
+                function (error, result) {
+                    if (error) {
+                        return toast( Template.Billable$cell$toastEdited, error );
+                    }
+                    else {
+                        result = toast( Template.Billable$cell$toastEdited );
+                        return result;
+                    }
+                });
         },
     });
 
