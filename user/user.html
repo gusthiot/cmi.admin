@@ -1,83 +1,89 @@
 <template name="User$Pick">
-        <div class="dropdown" {{addID}}>
+    <div class="dropdown" {{addID}}>
 
-            <div class="input-field userInput">
-                <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown" required placeholder="{{_ "User.search.search-here"}}">
-                <label for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-            </div>
+        <div class="input-field userInput">
+            <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown"
+                   required placeholder="{{_
+                    "User.search.search-here"}}">
+            <label for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
+        </div>
 
-            {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
+        {{! TODO: widget implementation from (widget.js & widget.html)}}
+        {{! Widget$InputUserSearch vmTag="userSearchDrop" value=userSearchDrop}}
 
-            <ul id="userSearchDrop" class="usersearch dropdown-content">
-                {{#if cmiUsers}}
-                    {{#each cmiUsers}}
-                        <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
-                    {{/each}}
+
+        {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
+
+        <ul id="userSearchDrop" class="usersearch dropdown-content">
+            {{#if cmiUsers}}
+                {{#each cmiUsers}}
+                    <li><a href="#" class="user" data-value="{{_id}}">{{fullName}}</a></li>
+                {{/each}}
+                <li class="divider"></li>
+            {{/if}}
+            {{#if messageCode}}
+                <li class="message">{{_ messageCode}}</li>
+                {{#if withLDAP}}
                     <li class="divider"></li>
                 {{/if}}
-                {{#if messageCode}}
-                    <li class="message">{{_ messageCode}}</li>
-                    {{#if withLDAP}}
-                        <li class="divider"></li>
-                    {{/if}}
-                {{/if}}
-                {{#if wantLDAP}}
-                    {{#if ldapUsers}}
-                        {{#each ldapUsers}}
-                            <li><a href="#" class="user" data-value="{{_id}}">{{ldapFullName}}</a></li>
-                        {{/each}}
-                    {{else}}
-                        <li class="message">
-                            {{_ "User.search.noldapsearchresults"}}
-                        </li>
-                    {{/if}}
+            {{/if}}
+            {{#if wantLDAP}}
+                {{#if ldapUsers}}
+                    {{#each ldapUsers}}
+                        <li><a href="#" class="user" data-value="{{_id}}">{{ldapFullName}}</a></li>
+                    {{/each}}
                 {{else}}
-                    {{#if withLDAP}}
-                        <li>
-                            <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
-                        </li>
-                    {{/if}}
+                    <li class="message">
+                        {{_ "User.search.noldapsearchresults"}}
+                    </li>
                 {{/if}}
-            </ul>
-        </div>
+            {{else}}
+                {{#if withLDAP}}
+                    <li>
+                        <a href="#" class="ldapbutton"><i class="fa fa-folder"></i> {{_ "User.search.ldap"}}</a>
+                    </li>
+                {{/if}}
+            {{/if}}
+        </ul>
+    </div>
 </template>
 
 <template name="User$Edit">
-  <div class="container">
-      <div class="row">
-          <div class="col s8 offset-s2">
-              {{#if editingSelf}}
-                  <h1>{{_ "User.EditFormSelf"}}</h1>
-              {{else}}
-                  <h1>{{_ "User.EditForm" object.fullName}}</h1>
-              {{/if}}
-              <form class="col s12">
-                  <div class="row">
-                      <div class="input-field col s6">
-                          <i class="material-icons prefix">account_circle</i>
-                          <input id="icon_account" type="text" class="validate">
-                          <label for="icon_account">Full name</label>
-                      </div>
-                      <div class="input-field col s6">
-                          <i class="material-icons prefix">vpn_key</i>
-                          <input id="icon_password" type="password" class="validate">
-                          <label for="icon_password">Password</label>
-                      </div>
-                      <div class="card-panel">
+    <div class="container">
+        <div class="row">
+            <div class="col s8 offset-s2">
+                {{#if editingSelf}}
+                    <h1>{{_ "User.EditFormSelf"}}</h1>
+                {{else}}
+                    <h1>{{_ "User.EditForm" object.fullName}}</h1>
+                {{/if}}
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input id="icon_account" type="text" class="validate">
+                            <label for="icon_account">Full name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">vpn_key</i>
+                            <input id="icon_password" type="password" class="validate">
+                            <label for="icon_password">Password</label>
+                        </div>
+                        <div class="card-panel">
 
-                          <hr>
-                          <select>
-                              <option value="" disabled selected>Choose your language</option>
-                              <option value="1">Option 1</option>
-                              <option value="2">Option 2</option>
-                              <option value="3">Option 3</option>
-                              <option value="4">Option 4</option>
-                          </select>
-                      </div>
-                  </div>
-              </form>
-          </div>
-      </div>
+                            <hr>
+                            <select>
+                                <option value="" disabled selected>Choose your language</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                                <option value="4">Option 4</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>

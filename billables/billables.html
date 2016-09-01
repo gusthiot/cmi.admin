@@ -41,7 +41,7 @@
 </template>
 
 <template name="Billable$cell$billableToAccount">
-    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
+    {{> Widget$InputBillableText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billableToAccount$edit">
@@ -78,7 +78,7 @@
 </template>
 
 <template name="Billable$cell$billingDetails">
-    {{> Widget$TextArea vmTag="billingDetails" value=billingDetails editable=isEditing}}
+    {{> Widget$TextAreaDetails vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billingDetails$edit">
