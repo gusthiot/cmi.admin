@@ -339,12 +339,6 @@ if (Meteor.isClient) {
 // ========================================================================================
 
 if (Meteor.isClient){
-  Template.Billable$cell$billingDetails$edit.onRendered(function() {
-    this.$('textarea#icon_prefix2').characterCounter();
-  });
-}
-
-if (Meteor.isClient){
   Template.Billables$addButton.onRendered(function(){
     this.$('.modal-trigger').assertSizeEquals(1).leanModal();
   });

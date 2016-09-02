@@ -78,20 +78,7 @@
 </template>
 
 <template name="Billable$cell$billingDetails">
-    {{> Widget$TextArea vmTag="billingDetails" value=billingDetails editable=isEditing}}
-</template>
-
-<template name="Billable$cell$billingDetails$edit">
-    <div class="row">
-        <form class="col s12">
-            <div class="row" >
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea billAreaEdit" length="120">{{billingDetails}}</textarea>
-                </div>
-            </div>
-        </form>
-    </div>
+    {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>
 
 <template name="Billable$cell$discount">
