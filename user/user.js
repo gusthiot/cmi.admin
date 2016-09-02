@@ -208,32 +208,6 @@ function that() {
     return Template.instance();
 }
 
-/*Template.User$Pick.helpers( {
-    wantLDAP: function () {
-        return that().wantLDAP.get();
-    },
-    cmiUsers: function () {
-        return that().search.find( {ldapFullName: {$exists: false}} );
-    },
-    ldapUsers: function () {
-        return that().search.find( {ldapFullName: {$exists: true}} );
-    },
-    isLoading: function () {
-        return that().search.isLoading()
-    },
-    messageCode: function () {
-        var status = that().search.status();
-        if (!status || status.status === "nosearchyet") {
-            return undefined;
-        } else if (status.status === "OK") {
-            return status.resultCount ? undefined : "User.search.nosearchresults";
-        } else {
-            var i18nKey = (status.message || status.error || status.status);
-            return "User.search." + i18nKey;
-        }
-    }
-} );  // Template.User$Pick.helpers*/
-
 function openDropdown(that) {
     if (!that.$( ".dropdown-content" ).is( ":visible" )) {
         // Careful to hit the right DOM entry!
