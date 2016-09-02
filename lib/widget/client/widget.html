@@ -4,6 +4,8 @@
      widget.js; the empty surrogates below only serve to trick the
      IDE into grokking their names. -->
 <template name="Widget$Select"></template>
+<template name="Widget$InputText"></template>
+<template name="Widget$Textarea"></template>
 
 <!-- Widget templates -->
 <template name="Widget$Select$readonly">
@@ -28,11 +30,11 @@
 </template>
 
 
-<template name="Widget$TextArea$readonly">
+<template name="Widget$Textarea$readonly">
     {{widget.value}}
 </template>
 
-<template name="Widget$TextArea$editable">
+<template name="Widget$Textarea$editable">
     <div class="row">
         <form class="col s12">
             <div class="row" >
