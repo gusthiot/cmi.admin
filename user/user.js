@@ -208,7 +208,7 @@ function that() {
     return Template.instance();
 }
 
-Template.User$Pick.helpers( {
+/*Template.User$Pick.helpers( {
     wantLDAP: function () {
         return that().wantLDAP.get();
     },
@@ -232,7 +232,7 @@ Template.User$Pick.helpers( {
             return "User.search." + i18nKey;
         }
     }
-} );  // Template.User$Pick.helpers
+} );  // Template.User$Pick.helpers*/
 
 function openDropdown(that) {
     if (!that.$( ".dropdown-content" ).is( ":visible" )) {
@@ -245,7 +245,31 @@ function openDropdown(that) {
 }
 
 // TODO: implementation of viewmodel for user User$pick searching input
-Template.User$Pick.viewmodel( {} );
+Template.User$Pick.viewmodel( {
+    wantLDAP: function () {
+        return that().wantLDAP.get();
+    },
+    cmiUsers: function () {
+        return that().search.find( {ldapFullName: {$exists: false}} );
+    },
+    ldapUsers: function () {
+        return that().search.find( {ldapFullName: {$exists: true}} );
+    },
+    isLoading: function () {
+        return that().search.isLoading()
+    },
+    messageCode: function () {
+        var status = that().search.status();
+        if (!status || status.status === "nosearchyet") {
+            return undefined;
+        } else if (status.status === "OK") {
+            return status.resultCount ? undefined : "User.search.nosearchresults";
+        } else {
+            var i18nKey = (status.message || status.error || status.status);
+            return "User.search." + i18nKey;
+        }
+    }
+} );
 
 
 Template.User$Pick.events( {
