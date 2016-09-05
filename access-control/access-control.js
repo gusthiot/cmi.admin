@@ -3,6 +3,12 @@
  *
  * This file is for mechanism only – See policy.js for the policy
  */
+var Widget;
+
+if (Meteor.isClient) {
+  Widget = require( "../lib/widget/client/widget" );
+  require( "../lib/client/find-templates" );
+}
 
 var debug = require("debug")("access-control.js");
 

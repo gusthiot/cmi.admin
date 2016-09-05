@@ -1,16 +1,8 @@
 <template name="User$Pick">
     <div class="dropdown" {{addID}}>
 
-        <div class="input-field userInput">
-            <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown"
-                   required placeholder="{{_
-                    "User.search.search-here"}}">
-            <label for="search"><i class="material-icons">search</i></label>
-            <i class="material-icons">close</i>
-        </div>
-
-        {{! TODO: widget implementation take example from (widget.js & widget.html)}}
-        {{> Widget$InputUserSearch vmTag="fullName" value=fullName}}
+        {{! widget search user }}
+        {{> Widget$InputUserSearch value="" values=userSearchDrop editable=true helpers="" vmTag=""}}
 
 
         {{#if isLoading}}<i class="fa fa-spinner fa-pulse"></i>{{/if}}
