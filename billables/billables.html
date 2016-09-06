@@ -59,7 +59,11 @@
 
 
 <template name="Billable$cell$startTime">
-    {{> Widget$InputBillableDateHour vmTag="startTime" value=startTime editable=isEditing}}
+    {{#if isEditing}}
+        {{> Billable$cell$startTime$edit}}
+    {{else}}
+        {{formattedDate}}
+    {{/if}}
 </template>
 
 <template name="Billable$cell$startTime$edit">
