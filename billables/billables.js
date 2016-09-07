@@ -324,7 +324,7 @@ function getDateFormat() {
 }
 
 if (Meteor.isClient) {
-    Template.Billable$cell$startTime.helpers( {
+    Template.Billable$cell$startTime.viewmodel( {
         formattedDate: function () {
             return (moment( Template.currentData().startTime ).format( getDateFormat() ));
         }

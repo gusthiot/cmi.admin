@@ -59,11 +59,7 @@
 
 
 <template name="Billable$cell$startTime">
-    {{#if isEditing}}
-        {{> Billable$cell$startTime$edit}}
-    {{else}}
-        {{formattedDate}}
-    {{/if}}
+    {{> Widget$InputDatePicker vmTag="startTime" value=formattedDate editable=isEditing helpers=asDatePickerTime}}
 </template>
 
 <template name="Billable$cell$startTime$edit">
