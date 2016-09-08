@@ -59,17 +59,17 @@
     </div>
 </template>
 
-<template name="Widget$InputDatePicker$readonly">
+<template name="Widget$Date$readonly">
     {{widget.value}}
 </template>
 
-<template name="Widget$InputDatePicker$editable">
+<template name="Widget$Date$editable">
     <div class="row">
         <div class="form-group col s12">
             <div class="input-group date">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 <input type="text" class="startTimeEdit set-due-date form-control"
-                       value="{{asDatePickerTime startTime}}" {{b "value: value"}}/>
+                       value="{{asDatePickerTime widget.value}}"/>
             </div>
         </div>
     </div>
