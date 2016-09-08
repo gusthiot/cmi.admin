@@ -1,58 +1,63 @@
 <template name="AccessControl$WhoAmI">
-  <div class="collapse navbar-collapse" id="navbar-whoami">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a class="dropdown-button" data-activates="become-dropdown">{{user.fullName}}<i class="material-icons right">arrow_drop_down</i></a>
-          <ul id="become-dropdown" class="dropdown-content">
-           <li><a href="/user/{{user._id}}/edit">{{_ "AccessControl.gotoUserPrefs"}}</a></li>
-            {{#if hasBecome}}
-            <li><a id="unbecome" href="#">{{_ "AccessControl.restoreIdentity" realUser.fullName}}</a></li>
-            {{else}}
-            {{#if canBecome}}
-                {{> AccessControl$BtnBecome}}
-            {{/if}}
-            {{/if}}
-          </ul>
-        </li>
-      </ul>
-  </div>
+    <div class="collapse navbar-collapse" id="navbar-whoami">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a class="dropdown-button" data-activates="become-dropdown">{{user.fullName}}<i
+                        class="material-icons right">arrow_drop_down</i></a>
+                <ul id="become-dropdown" class="dropdown-content">
+                    <li><a href="/user/{{user._id}}/edit">{{_ "AccessControl.gotoUserPrefs"}}</a></li>
+                    {{#if hasBecome}}
+                        <li><a id="unbecome" href="#">{{_ "AccessControl.restoreIdentity" realUser.fullName}}</a></li>
+                    {{else}}
+                        {{#if canBecome}}
+                            {{> AccessControl$BtnBecome}}
+                        {{/if}}
+                    {{/if}}
+                </ul>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <template name="AccessControl$BtnBecome">
     {{! Modal Trigger }}
-    <li id="AccessControl-WhoAmI-become"><a data-target="becomeUserModal" class="modal-trigger" >{{_ "AccessControl.BecomeUser,,,"}}</a></li>
+    <li id="AccessControl-WhoAmI-become"><a data-target="becomeUserModal" class="modal-trigger">{{_
+            "AccessControl.BecomeUser,,,"}}</a></li>
 </template>
 
 <template name="AccessControl$PermissionDenied">
-  <h1>{{_ "AccessControl.PermissionDenied.title"}}</h1>
-  <p>{{_ "AccessControl.PermissionDenied.blurb"}}</p>
+    <h1>{{_ "AccessControl.PermissionDenied.title"}}</h1>
+    <p>{{_ "AccessControl.PermissionDenied.blurb"}}</p>
 </template>
 
 <template name="AccessControl$BecomeModal">
     {{#if canBecome}}
     {{! Modal Structure }}
-    <div id="becomeUserModal" class="modal">
-        <div class="modal-content center">
-            <h4 class="modal-title center marBottom">{{_ "AccessControl.BecomeUserTitle"}}</h4>
-            <div class="row">
-                <form class="col s6 offset-s2">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            {{> User$Pick id="AccessControlBecomeThisUser"}}
+        <div id="becomeUserModal" class="modal">
+            <div class="modal-content center">
+                <h4 class="modal-title center marBottom">{{_ "AccessControl.BecomeUserTitle"}}</h4>
+                <div class="row">
+                    <form class="col s6 offset-s2">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                {{> User$Pick id="AccessControlBecomeThisUser"}}
+                                {{! Widget$InputUserSearch value="" values=userSearchDrop editable=true helpers="" vmTag=""}}
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <div class="row">
-                <div class="col s6 center">
-                    <div class="row">
-                        <a href="#!" class="modal-action modal-close btn-floating btn-large waves-effect waves-light red"><i class="material-icons">close</i></a>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col s6 center">
+                        <div class="row">
+                            <a href="#!"
+                               class="modal-action modal-close btn-floating btn-large waves-effect waves-light red"><i
+                                    class="material-icons">close</i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-     </div>
     {{/if}}
 </template>

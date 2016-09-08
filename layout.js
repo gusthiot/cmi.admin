@@ -1,4 +1,4 @@
-/**
+  /**
  * Mapping between URLs and templates.
  *
  * In Meteor, both the client and the server know this mapping; one doesn't

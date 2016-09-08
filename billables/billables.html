@@ -1,6 +1,6 @@
 <template name="Billables$Edit">
-{{> tabular table=makeTable class="responsive-table striped"}}
-   <span style="color:red;">id :  {{editingRow}}</span>
+    {{> tabular table=makeTable class="responsive-table striped"}}
+    <span style="color:red;">id :  {{editingRow}}</span>
 </template>
 <!--
 <template name="Billable$LineActions">
@@ -19,8 +19,8 @@
 
 <template name="Billable$cell$type">
     {{#if isEditing}}
-        {{! TODO: We should ideally have the exact same template body for all drop-down selectable cells.
-        Referencing "type" below defeats that. }}
+    {{! TODO: We should ideally have the exact same template body for all drop-down selectable cells.
+    Referencing "type" below defeats that. }}
         {{> SelectWidget options=SelectWidget$options currentValue=type}}
     {{else}}
         {{translate type}}
@@ -41,7 +41,7 @@
 </template>
 
 <template name="Billable$cell$billableToAccount">
-    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
+    {{> Widget$InputBillableText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billableToAccount$edit">
@@ -54,24 +54,21 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-        {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
+    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
 </template>
 
 
 <template name="Billable$cell$startTime">
-    {{#if isEditing}}
-        {{> Billable$cell$startTime$edit}}
-    {{else}}
-        {{formattedDate}}
-    {{/if}}
+    {{> Widget$Date vmTag="startTime" value=formattedDate editable=isEditing helpers=asDatePickerTime}}
 </template>
 
 <template name="Billable$cell$startTime$edit">
     <div class="row">
         <div class="form-group col s12" style="position: relative;">
-            <div class="input-group date" >
+            <div class="input-group date">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                <input type="text" class="startTimeEdit set-due-date form-control"  value="{{asDatePickerTime startTime}}" />
+                <input type="text" class="startTimeEdit set-due-date form-control"
+                       value="{{asDatePickerTime startTime}}"/>
             </div>
         </div>
     </div>
@@ -81,12 +78,13 @@
     {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>
 
+                              length="120">{{billingDetails}}</textarea>
 <template name="Billable$cell$discount">
-        {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
+    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
 </template>
 
 <template name="Billable$cell$validationState">
-        {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
+    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
 </template>
 
 <template name="Billable$cell$valSaveBtn">
@@ -96,12 +94,13 @@
 </template>
 
 <template name="Billable$cell$valSaveBtn$edit">
-    <button class="btn-floating waves-effect waves-light cancelItem" ><i class="material-icons">cancel</i></button>
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
 </template>
 
 <template name="Billables$addButton">
     <!-- Modal Trigger -->
-    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i class="material-icons">add</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i
+            class="material-icons">add</i></a>
 
     {{> Billable$cell$modalUser}}
 </template>
@@ -142,7 +141,8 @@
             <div class="row">
                 <div class="col s6 center">
                     <div class="row">
-                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light green" href="#!"><i class="material-icons">done</i></a>
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light green"
+                           href="#!"><i class="material-icons">done</i></a>
                     </div>
                 </div>
             </div>
@@ -169,5 +169,8 @@
 </template>
 
 <template name="Billable$Pagination">
-    {{> Billables$addButton}}<button class="previous btn-large waves-effect waves-light">Previous</button> <span class="letSize">{{page}} of {{pages}}</span> <button class="next btn-large waves-effect waves-light">Next</button>
+    {{> Billables$addButton}}
+    <button class="previous btn-large waves-effect waves-light">Previous</button>
+    <span class="letSize">{{page}} of {{pages}}</span>
+    <button class="next btn-large waves-effect waves-light">Next</button>
 </template>
