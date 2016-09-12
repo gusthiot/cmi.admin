@@ -1,6 +1,5 @@
 <template name="Billables$Edit">
     {{> tabular table=makeTable class="responsive-table striped"}}
-    <span style="color:red;">id :  {{editingRow}}</span>
 </template>
 <!--
 <template name="Billable$LineActions">
@@ -57,7 +56,6 @@
     {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
 </template>
 
-
 <template name="Billable$cell$startTime">
     {{> Widget$Date vmTag="startTime" value=formattedDate editable=isEditing helpers=asDatePickerTime}}
 </template>
@@ -73,7 +71,6 @@
         </div>
     </div>
 </template>
-
 <template name="Billable$cell$billingDetails">
     {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>
