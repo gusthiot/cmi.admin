@@ -73,6 +73,8 @@ meteorspark:util@0.2.0
 minifier-css@1.1.12
 minifier-js@1.1.12
 minimongo@1.0.17
+mizzao:build-fetcher@0.2.0
+mizzao:jquery-ui@1.11.4
 mobile-experience@1.0.4
 mobile-status-bar@1.0.12
 modules@0.6.2
@@ -104,7 +106,6 @@ tap:i18n@1.8.2
 templating@1.1.10
 templating-tools@1.0.4
 tracker@1.0.14
-tsega:bootstrap3-datetimepicker@4.17.37_1
 ui@1.0.11
 underscore@1.0.9
 url@1.0.10

@@ -68,11 +68,7 @@
 <template name="Widget$Date$editable">
     <div class="row">
         <div class="form-group col s12">
-            <div class="input-group date" style="{position: relative;}">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                <input type="text" class="startTimeEdit set-due-date form-control"
-                       value="{{asDatePickerTime widget.value}}"/>
-            </div>
+           <input type="text" id="datepicker" value="{{asDatePickerTime widget.value}}">
         </div>
     </div>
 </template>

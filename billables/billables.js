@@ -320,7 +320,7 @@ if (Meteor.isClient) {
  */
 function getDateFormat() {
     // TODO: specific to US locale.
-    return 'MM/DD/YYYY hh:mm A';
+    return 'MM/DD/YYYY';
 }
 
 if (Meteor.isClient) {
@@ -337,7 +337,15 @@ if (Meteor.isClient) {
     });
 
     Template.Billable$cell$startTime$edit.onRendered(function () {
-        this.$('.startTimeEdit').assertSizeEquals(1).datetimepicker();
+        this.$('.datepicker').assertSizeEquals(1).pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 15, // Creates a dropdown of 15 years to control year
+            format: getDateFormat(), // format
+            // Close on a user action
+            closeOnSelect: true,
+            closeOnClear: true
+        });
+
     });
 }
 
