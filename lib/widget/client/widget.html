@@ -66,15 +66,17 @@
 </template>
 
 <template name="Widget$Date$editable">
-    <div class="row">
-        <div class="form-group col s4">
-           <input type="text" id="datepicker" value="{{asDatePickerTime widget.value }}">
-        </div>
-        <div class="form-group col s2">
-            <input type="text" value="10:02">
-        </div>
-        <div class="form-group col s2">
-            <input type="text" value="11:00">
+    <div class="input-field col s12">
+        <div class="row">
+            <div class="form-group col s6">
+               <input type="text" id="datepicker" value="{{asDatePickerTime widget.value }}">
+            </div>
+            <div class="form-group col s3">
+                <input type="text" value="10:02">
+            </div>
+            <div class="form-group col s3">
+                <input type="text" value="11:00">
+            </div>
         </div>
     </div>
 </template>
