@@ -280,9 +280,12 @@ Template.Widget$Date$editable.onRendered(function () {
     // http://senthilraj.github.io/TimePicki/options.html#
     this.$('#timepicker').assertSizeEquals(1).timepicki({
         custom_classes:"timeColor",
+<<<<<<< HEAD
         show_meridian:false,
         min_hour_value:0,
         max_hour_value:23
-
+=======
+        show_meridian:false // false -> 24h, true -> 1 - 12 AM/PM
+>>>>>>> 0578a34424c7bd1235cc75fd450a69d2eea39309
     });
 });
