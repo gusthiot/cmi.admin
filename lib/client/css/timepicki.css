@@ -15,7 +15,7 @@ Author: senthil
 .time,
 .mins,
 .meridian {
-	width: 40px; /* original 60px */
+	width: 35px; /* original 60px */
 	float: left;
 	margin: 0 10px;
 	font-size: 20px;
