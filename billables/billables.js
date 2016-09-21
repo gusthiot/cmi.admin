@@ -237,11 +237,17 @@ if (Meteor.isClient) {
                 validationState: this.childrenByTag().validationState.value(),
             };
 
-            // TODO: change this code for datetime and datepicker and return datetimepicker
             var dateTimePickerData = $(".startTimeEdit", tr).data('DateTimePicker');
             if (dateTimePickerData) {
                 editedItem.startTime = dateTimePickerData.date().toDate();
             }
+
+            // TODO: change this code for datetime and datepicker and return datetimepicker
+           /* var dateTimeData = $("#timepicker").val();
+            var datePickerData = $("#datepicker").val();
+            if(dateTimeData && datePickerData) {
+                editedItem.startTime = (dateTimeData + datePickerData).date().val().toDate();
+            }*/
 
             return editedItem;
         },
