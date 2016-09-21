@@ -34,5 +34,6 @@ materialize:materialize
 momentjs:moment
 aldeed:simple-schema
 nerdmed:mediaqueries
-tsega:bootstrap3-datetimepicker
 manuel:viewmodel
+mrt:jquery-ui
+mizzao:jquery-ui

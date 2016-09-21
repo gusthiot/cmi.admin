@@ -1,6 +1,5 @@
 <template name="Billables$Edit">
     {{> tabular table=makeTable class="responsive-table striped"}}
-    <span style="color:red;">id :  {{editingRow}}</span>
 </template>
 <!--
 <template name="Billable$LineActions">
@@ -57,21 +56,8 @@
     {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
 </template>
 
-
 <template name="Billable$cell$startTime">
     {{> Widget$Date vmTag="startTime" value=formattedDate editable=isEditing helpers=asDatePickerTime}}
-</template>
-
-<template name="Billable$cell$startTime$edit">
-    <div class="row">
-        <div class="form-group col s12" style="position: relative;">
-            <div class="input-group date">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                <input type="text" class="startTimeEdit set-due-date form-control"
-                       value="{{asDatePickerTime startTime}}"/>
-            </div>
-        </div>
-    </div>
 </template>
 
 <template name="Billable$cell$billingDetails">
@@ -171,5 +157,5 @@
     {{> Billables$addButton}}
     <button class="previous btn-large waves-effect waves-light">Previous</button>
     <span class="letSize">{{page}} of {{pages}}</span>
-    <button class="next btn-large waves-effect waves-light">Next</button>
+    <button class="nexts btn-large waves-effect waves-light">Next</button>
 </template>

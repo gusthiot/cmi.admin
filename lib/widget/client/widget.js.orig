@@ -3,16 +3,7 @@
  *
  * Widgets are reusable Blaze templates that follow Meteor's
  * [recommendations](https://guide.meteor.com/blaze.html#reusable-components),
- * as well as project-specific naming conventions and behavior for CMi AdminBase,
- * described below.
- *
- * Widget templates are named like this: Widget$What, where the What part indicates
- * the type of data that can be displayed or edited by the widget.
- *
- * Widget templates have the following common attributes:
- *
- *    - value
- *    - editable
+ * as well as project-specific naming conventions and behavior for CMi AdminBase.
  *
  * @example myapp.html
  *
@@ -33,6 +24,8 @@
  *     }
  *   }
  * });
+ *
+ *
  *
  * @see [Patterns and Practices for passing data between templates](https://forums.meteor.com/t/patterns-and-practices-for-passing-data-between-templates/2951/86)
  */
@@ -174,7 +167,6 @@ WidgetBase.prototype.helpers = function (helpers) {
 };
 
 WidgetBase.prototype.viewmodel = function (viewmodelInit) {
-    viewmodelInit = _.extend({}, {value: undefined}, viewmodelInit);
     this.mapEditableTemplates(function (tmpl) {
         tmpl.viewmodel(viewmodelInit);
     });
@@ -240,6 +232,7 @@ Widget.declareClass("Select")
             return userHelper ? userHelper(key) : key;
         }
     }).viewmodel({
+    value: '',   // TODO: move into superclass, but careful: .viewmodel() may not be called several times
     events: {
         'change select': function (event, templateInstance) {
             this.value(event.target.value);
@@ -255,71 +248,44 @@ Widget.declareClass("Textarea");
 Widget.declareClass("InputUserSearch");
 
 
-function dateFormatExpectedByDatepicker() {
-    return 'MM/DD/YYYY';
+function dateFormatExpectedByDatetimepicker() {
+    return 'MM-DD-YYYY';
 }
 
 Widget.declareClass("Date")
     .helpers({
         asDatePickerTime: function (time) {
-            return moment.utc(time, dateFormatExpectedByDatepicker()).format(dateFormatExpectedByDatepicker());
+            return moment(time, dateFormatExpectedByDatetimepicker()).format(dateFormatExpectedByDatetimepicker());
         },
         formattedDate: function () {
-            return (moment(Template.currentData().startTime, dateFormatExpectedByDatepicker()).format(dateFormatExpectedByDatepicker()));
+            return (moment(Template.currentData().startTime, dateFormatExpectedByDatetimepicker()).format(dateFormatExpectedByDatetimepicker()));
         },
         dateToLocalizedString: function(t) {
-            var m = moment(new Date(t));
-            if (m === undefined) {
+            if (t === undefined) {
                 return undefined;
             }
             var lang = TAPi18n.getLanguage();
-            return m.locale(lang).format("L LTS");
+            return t.locale(lang).format("LLLL");
         }
     }).viewmodel({
-      value: ''
-    });
-
-Template.Widget$Date$editable.onRendered(function () {
-    var self = this;
-    self.changed = function() {
-        var oldMoment = self.viewmodel.value(),
-            newDate = self.$("input.datepicker").datepicker("getDate"),
-            newHour = self.$("input.timepicker").attr("data-timepicki-tim"),
-            newMinute = self.$("input.timepicker").attr("data-timepicki-mini");
-
-
-        var newMoment = moment({
-            year: newDate ? newDate.getFullYear() : oldMoment.year(),
-            month: newDate ? newDate.getMonth() : oldMoment.month(),
-            date: newDate ? newDate.getDate() : oldMoment.date(),
-            hour: newHour ? 0 + newHour : oldMoment.hour(),
-            minute: newMinute ? 0 + newMinute : oldMoment.minute(),
-            second: 0,
-        });
-
-        self.viewmodel.value(newMoment);
-    };
-    self.$('input.datepicker').assertSizeEquals(1).datepicker({
-        showWeek: true,
-        weekHeader: "W",
-        onSelect: function() {
-            self.changed();
-        }
-    });
-    // http://senthilraj.github.io/TimePicki/options.html#
-    self.$('input.timepicker').assertSizeEquals(1).timepicki({
-        custom_classes:"timeColor",
-        show_meridian:false,
-        min_hour_value:0,
-        max_hour_value:23,
-        on_change: function(ele) {
-            self.changed();
-        }
-    });
+    value: '',
+    events: ''
 });
 
-Template.Widget$Date$editable.events({
-    "blur input.datepicker": function () {
-        Template.instance().changed();
-    }
-})
+Template.Widget$Date$editable.onRendered(function () {
+    this.$('#datepicker').assertSizeEquals(1).datepicker({
+        showWeek: true,
+        weekHeader: "W"
+    });
+    // http://senthilraj.github.io/TimePicki/options.html#
+    this.$('#timepicker').assertSizeEquals(1).timepicki({
+        custom_classes:"timeColor",
+<<<<<<< HEAD
+        show_meridian:false,
+        min_hour_value:0,
+        max_hour_value:23
+=======
+        show_meridian:false // false -> 24h, true -> 1 - 12 AM/PM
+>>>>>>> 0578a34424c7bd1235cc75fd450a69d2eea39309
+    });
+});

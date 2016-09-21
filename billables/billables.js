@@ -1,21 +1,21 @@
 var Widget;
 
 if (Meteor.isClient) {
-    Widget = require( "../lib/widget/client/widget" );
-    require( "../lib/client/find-templates" );
+    Widget = require("../lib/widget/client/widget");
+    require("../lib/client/find-templates");
 }
 
-var debug = require( "debug" )( "billables.js" );
+var debug = require("debug")("billables.js");
 
-Billables = new Meteor.Collection( "billables" );
+Billables = new Meteor.Collection("billables");
 
 if (Meteor.isClient) {
-    Meteor.subscribe( 'Billables' );
+    Meteor.subscribe('Billables');
 }
 
 var Schemas = {};
 
-Schemas.Billable = new SimpleSchema( {
+Schemas.Billable = new SimpleSchema({
     type: {
         type: String,
         allowedValues: ["USAGE_FEE", "RESERVATION_FEE", "ACCESS_FEE"]
@@ -50,9 +50,9 @@ Schemas.Billable = new SimpleSchema( {
     updatedAt: {
         type: Date
     }
-} );
+});
 
-Billables.attachSchema( Schemas.Billable );
+Billables.attachSchema(Schemas.Billable);
 
 Billables.columns =
     ["type", "operatedByUser", "billableToAccount", "billableToProject",
@@ -61,17 +61,17 @@ Billables.columns =
 
 /* Build dataTable*/
 function makeTable() {
-    return new Tabular.Table( {
+    return new Tabular.Table({
         name: "Billables",
         collection: Billables,
-        columns: _.map( Billables.columns, function (colSymbol) {
+        columns: _.map(Billables.columns, function (colSymbol) {
             return {
                 data: colSymbol,
-                title: TAPi18n.__( "Billables.column." + colSymbol ),
+                title: TAPi18n.__("Billables.column." + colSymbol),
                 defaultContent: "-",
                 tmpl: Meteor.isClient && Template["Billable$cell$" + colSymbol],
             };
-        } ),
+        }),
         language: Tabular.Translations.getCurrent(),
         //http://datatables.net/extensions/select/examples/initialisation/cells.html
         select: {
@@ -79,14 +79,14 @@ function makeTable() {
             items: "cell",
         },
         initComplete: function () {  // Client only
-            setupColumnFilterUI( Template.Billables$Edit.find().view, this );
+            setupColumnFilterUI(Template.Billables$Edit.find().view, this);
         },
         sPaginationType: 'meteor_template',
         paginationTemplate: Meteor.isClient && Template.Billable$Pagination,
         paginationUpdated: function () {
-            console.log( "Pagination updated" );
+            console.log("Pagination updated");
         }
-    } );
+    });
 }
 
 if (Meteor.isClient) {
@@ -95,7 +95,7 @@ if (Meteor.isClient) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent( "Template.Billables$Edit" );
+            return Template.instance().findParent("Template.Billables$Edit");
         }
     }
 }
@@ -103,18 +103,18 @@ if (Meteor.isClient) {
 function setupColumnFilterUI(parentView, dataTableElement) {
     var columns = dataTableElement.api().columns();
     // From https://datatables.net/examples/api/multi_filter_select.html
-    columns.every( function () {
+    columns.every(function () {
         var column = this;
 
         var translate = function (str) {
-            return String( str ).toUpperCase(); // XXX Just an example
+            return String(str).toUpperCase(); // XXX Just an example
         };
 
         var context = {
             index: column.index(),
             type: Billables.columns[column.index()],
             translateType: function (type) {
-                return TAPi18n.__( "Billables.column." + type )
+                return TAPi18n.__("Billables.column." + type)
             },
             sortedValues: [
                 {value: "usage_fee", translate: translate},
@@ -123,35 +123,35 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             ]
         };
 
-        $( column.header() ).empty();
+        $(column.header()).empty();
 
         var view = Template.Billable$columnHead.constructView();
         // Event handlers need access to the column object:
         view.templateInstance().dataTable = {
             column: column
         };
-        Blaze.renderWithData( view, context, column.header(), undefined, parentView );
-    } );
+        Blaze.renderWithData(view, context, column.header(), undefined, parentView);
+    });
 }
 
 if (Meteor.isClient) {
     // When selects in column headers change, filter values accordingly
-    Template.Billable$columnHead.events( {
+    Template.Billable$columnHead.events({
         'change select': function (event, template) {
             var val = $.fn.dataTable.util.escapeRegex(
-                $( event.target ).val()
+                $(event.target).val()
             );
             template.dataTable.column
-                .search( val ? '^' + val + '$' : '', true, false )
+                .search(val ? '^' + val + '$' : '', true, false)
                 .draw();
         }
-    } );
+    });
 }
 
 function allValuesInColumn(collection, columnName) {
-    return _.sortBy( _.uniq( _.pluck( collection.find( {} ).fetch(), columnName ) ), function (t) {
+    return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function (t) {
         return t
-    } )
+    })
 }
 
 var theTable = makeTable();
@@ -159,59 +159,59 @@ var theTable = makeTable();
 
 if (Meteor.isClient) {
     function getRowDataByTr(trElement) {
-        var dataTable = $( trElement ).closest( 'table' ).DataTable();
-        return dataTable.row( trElement ).data();
+        var dataTable = $(trElement).closest('table').DataTable();
+        return dataTable.row(trElement).data();
     }
 
     function getTrByRowData(tableElement, rowData) {
-        var dataTable = $( tableElement ).DataTable();
-        return dataTable.row( function (unused_idx, data) {
+        var dataTable = $(tableElement).DataTable();
+        return dataTable.row(function (unused_idx, data) {
             return data._id === rowData._id;
-        } ).node();
+        }).node();
     }
 
     /* Controller code for setting / changing the current line being edited */
-    Template.Billables$Edit.viewmodel( {
+    Template.Billables$Edit.viewmodel({
         editingRow: undefined,
         changeEditingRow: function (rowData_or_element_or_undefined) {
             var newEditingRow;
             if (rowData_or_element_or_undefined === undefined) {
                 newEditingRow = undefined;
             } else if (rowData_or_element_or_undefined instanceof jQuery) {
-                rowData_or_element_or_undefined.assertSizeEquals( 1 );
-                newEditingRow = getRowDataByTr( rowData_or_element_or_undefined );
+                rowData_or_element_or_undefined.assertSizeEquals(1);
+                newEditingRow = getRowDataByTr(rowData_or_element_or_undefined);
             } else {
                 // Otherwise, assume this is the result of the .row() API in DataTables.
                 newEditingRow = rowData_or_element_or_undefined;
             }
-            this.editingRow( newEditingRow );
+            this.editingRow(newEditingRow);
         },
 
         rowClicked: function (trElement) {
-            var rowData = getRowDataByTr( trElement );
+            var rowData = getRowDataByTr(trElement);
             if (!rowData) {
                 return;
             }
 
             // No need to use the submit button; clicking elsewhere means to validate
             var previousRowData = this._previousRowData();
-            if (previousRowData && _.isEqual( previousRowData._id, rowData._id )) {
+            if (previousRowData && _.isEqual(previousRowData._id, rowData._id)) {
                 // Don't save if clicking within the same line
                 event.stopPropagation();
                 return;
             }
-            this.saveEditingRow( trElement.closest( 'table' ) );
-            this.changeEditingRow( $( trElement ) );
+            this.saveEditingRow(trElement.closest('table'));
+            this.changeEditingRow($(trElement));
         },
 
         _previousRowData: function () {
             var self = this;
-            return Tracker.nonreactive( function () {
+            return Tracker.nonreactive(function () {
                 return self.editingRow();
-            } );
+            });
         },
         _tableElement: function () {
-            return this.templateInstance.$( 'table' ).assertSizeEquals( 1 )[0];
+            return this.templateInstance.$('table').assertSizeEquals(1)[0];
         },
 
         /**
@@ -225,10 +225,10 @@ if (Meteor.isClient) {
             }
 
             var tableElement = this._tableElement(),
-                tr = getTrByRowData( tableElement, currentRowData );
+                tr = getTrByRowData(tableElement, currentRowData);
 
             var editedItem = {
-                type: $( ".typeEdit option:selected", tr ).val(),
+                type: $(".typeEdit option:selected", tr).val(),
                 operatedByUser: this.childrenByTag().operatedByUser.value(),
                 billableToAccount: this.childrenByTag().billableToAccount.value(),
                 billableToProject: this.childrenByTag().billableToProject.value(),
@@ -237,9 +237,19 @@ if (Meteor.isClient) {
                 validationState: this.childrenByTag().validationState.value(),
             };
 
-            var dateTimePickerData = $( ".startTimeEdit", tr ).data( 'DateTimePicker' );
+            /*var dateTimePickerData = $(".startTimeEdit", tr).data('DateTimePicker');
+             if (dateTimePickerData) {
+             editedItem.startTime = dateTimePickerData.date().toDate();
+             }*/
+
+            // TODO: change this code for datetime and datepicker and return datetimepicker
+            var dateTimeData = $("#timepicker").val();
+            var datePickerData = $("#datepicker").val();
+
+            var dateTimePickerData = new Date(moment(datePickerData).format("YYYY-MM-DD") +"T"+ dateTimeData+"Z");
             if (dateTimePickerData) {
-                editedItem.startTime = dateTimePickerData.date().toDate();
+                editedItem.startTime = dateTimePickerData;
+
             }
 
             return editedItem;
@@ -250,63 +260,63 @@ if (Meteor.isClient) {
                 return;
             }
             var previousRowData = this._previousRowData();
-            if (_.isEqual( editItem, previousRowData )) {
-                debug( "No update needed" );
+            if (_.isEqual(editItem, previousRowData)) {
+                debug("No update needed");
                 return;
             }
-            Billables.update( previousRowData._id,
-                {$set: _.extend( editItem, {updatedAt: new Date()} )},
+            Billables.update(previousRowData._id,
+                {$set: _.extend(editItem, {updatedAt: new Date()})},
                 function (error, result) {
                     if (error) {
-                        return toast( Template.Billable$cell$toastEdited, error );
+                        return toast(Template.Billable$cell$toastEdited, error);
                     }
                     else {
-                        result = toast( Template.Billable$cell$toastEdited );
+                        result = toast(Template.Billable$cell$toastEdited);
                         return result;
                     }
-                } );
+                });
         },
-    } );
+    });
 
-    Template.Billables$Edit.helpers( {makeTable: theTable} );
+    Template.Billables$Edit.helpers({makeTable: theTable});
 
     /* To edit a table row, click on it
      * TODO: the viewmodel should handle that event and controller code */
-    Template.Billables$Edit.events( {
+    Template.Billables$Edit.events({
         'click tr': function (event, that) {
-            Template.Billables$Edit.find( that ).viewmodel.rowClicked( event.currentTarget );
+            Template.Billables$Edit.find(that).viewmodel.rowClicked(event.currentTarget);
         }
-    } );
+    });
 
-    Template.Billables$Edit.helpers( {
+    Template.Billables$Edit.helpers({
         editingRow: function () {
             var rowData = that.viewmodel.editingRow();
             return (rowData && rowData._id ? rowData._id : "nothing");
         },
-    } );
+    });
 
-    var allCellTemplates = Billables.columns.map( function (x) {
+    var allCellTemplates = Billables.columns.map(function (x) {
         return Template["Billable$cell$" + x]
-    } );
+    });
 
-    allCellTemplates.forEach( function (tmpl) {
+    allCellTemplates.forEach(function (tmpl) {
         if (!tmpl) return;
-        tmpl.helpers( {
+        tmpl.helpers({
             isEditing: function () {
                 var editingRow = Template.Billables$Edit.find().viewmodel.editingRow();
                 return (editingRow && editingRow._id && (editingRow._id === Template.currentData()._id));
             }
-        } );
-    } );
+        });
+    });
 
 // ===================== hide row with the cancel button ==============================
 // ====================================================================================
-    Template.Billable$cell$valSaveBtn$edit.events( {
+    Template.Billable$cell$valSaveBtn$edit.events({
         'click .cancelItem': function (event, that) {
-            Template.Billables$Edit.find( that ).viewmodel.changeEditingRow( undefined );
+            Template.Billables$Edit.find(that).viewmodel.changeEditingRow(undefined);
             event.stopPropagation();
         }
-    } );
+    });
 
 }
 
@@ -320,35 +330,25 @@ if (Meteor.isClient) {
  */
 function getDateFormat() {
     // TODO: specific to US locale.
-    return 'MM/DD/YYYY hh:mm A';
+    return 'MM/DD/YYYY';
 }
 
 if (Meteor.isClient) {
-    Template.Billable$cell$startTime.viewmodel( {
+    Template.Billable$cell$startTime.viewmodel({
         formattedDate: function () {
-            debugger;
-            return (moment( Template.currentData().startTime ).format( getDateFormat() ));
+            return (moment(new Date(Template.currentData().startTime)).format(getDateFormat()));
         }
-    } );
+    });
 
-    Template.Billable$cell$startTime$edit.helpers( {
-        asDatePickerTime: function (time) {
-            return moment( time ).format( getDateFormat() );
-        }
-    } );
-
-    Template.Billable$cell$startTime$edit.onRendered( function () {
-        this.$( '.startTimeEdit' ).assertSizeEquals( 1 ).datetimepicker();
-    } );
 }
 
 // ========================================================================================
 // ========================================================================================
 
 if (Meteor.isClient) {
-    Template.Billables$addButton.onRendered( function () {
-        this.$( '.modal-trigger' ).assertSizeEquals( 1 ).leanModal();
-    } );
+    Template.Billables$addButton.onRendered(function () {
+        this.$('.modal-trigger').assertSizeEquals(1).leanModal();
+    });
 }
 
 function getBillableToAccount() {
@@ -356,28 +356,28 @@ function getBillableToAccount() {
 }
 
 if (Meteor.isClient) {
-    Template.Billable$cell$billableToAccount.helpers( {
+    Template.Billable$cell$billableToAccount.helpers({
         toAccount: function () {
             return getBillableToAccount();
         }
-    } );
+    });
 
-    Template.Billable$cell$billableToAccount$edit.helpers( {
+    Template.Billable$cell$billableToAccount$edit.helpers({
         valueToAccount: function () {
             return getBillableToAccount();
         }
-    } );
+    });
 }
 
 
 if (Meteor.isServer) {
     // This code only runs on the server
-    Meteor.publish( 'Billables', function () {
-        return Billables.find( {} );
-    } );
+    Meteor.publish('Billables', function () {
+        return Billables.find({});
+    });
 }
 
-Billables.allow( {
+Billables.allow({
     insert: function () {
         return true;
     },
@@ -390,7 +390,7 @@ Billables.allow( {
         return true;
     }
 
-} );
+});
 
 
 // ======================================================================================================
@@ -398,32 +398,32 @@ Billables.allow( {
 // TODO: a lot of code for the cell widgets is to be moved here.
 
 if (Meteor.isClient) {
-    SelectWidget( "Billable$cell$type", Billables.simpleSchema() );
+    SelectWidget("Billable$cell$type", Billables.simpleSchema());
 }
 
 // ======================================================================================================
 // ================================ Users select drop-down ==============================================
 
 if (Meteor.isClient) {
-    Template.Billable$cell$operatedByUser.helpers( {
+    Template.Billable$cell$operatedByUser.helpers({
         users: () => {
-            var dbIdsFind = _.pluck( User.collection.find().fetch(), "_id" );
+            var dbIdsFind = _.pluck(User.collection.find().fetch(), "_id");
             return dbIdsFind;
 
         },
         userTranslate: () => {
             return {
                 translateKey: function (k) {
-                    var userId = User.collection.findOne( {_id: k} );
+                    var userId = User.collection.findOne({_id: k});
                     if (userId) {
-                        return TAPi18n.__( userId.fullName );
+                        return TAPi18n.__(userId.fullName);
                     } else {
                         return k;
                     }
                 },
             }
         },
-    } );
+    });
 }
 
 // ======================================================================================================
@@ -436,9 +436,9 @@ if (Meteor.isClient) {
  */
 
 if (Meteor.isClient) {
-    Template.Billable$cell$billableToProject.helpers( {
+    Template.Billable$cell$billableToProject.helpers({
         projects: () => ["Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6", "Project 7", "Project 8", "Project 9", "Project 10"],
-    } );
+    });
 }
 
 // ======================================================================================================
@@ -451,9 +451,9 @@ if (Meteor.isClient) {
  */
 
 if (Meteor.isClient) {
-    Template.Billable$cell$discount.helpers( {
+    Template.Billable$cell$discount.helpers({
         discounts: () => ["Rabais 1", "Rabais 2", "Rabais 3", "Rabais 4"],
-    } );
+    });
 }
 
 // ======================================================================================================
@@ -466,9 +466,9 @@ if (Meteor.isClient) {
  */
 
 if (Meteor.isClient) {
-    Template.Billable$cell$validationState.helpers( {
+    Template.Billable$cell$validationState.helpers({
         validationStates: () => ["Validation 1", "Validation 2", "Validation 3", "Validation 4"],
-    } );
+    });
 }
 
 // ======================================================================================================
@@ -479,22 +479,22 @@ function toast(template, err) {
     if (err) {
         toastTemplateArgs = {error: err};
     }
-    var $toastContent = Blaze.toHTMLWithData( template, toastTemplateArgs );
-    Materialize.toast( $toastContent, 5000 );
+    var $toastContent = Blaze.toHTMLWithData(template, toastTemplateArgs);
+    Materialize.toast($toastContent, 5000);
 }
 
 // ======================================================================================================
 // =================================== Pagination: app-specific code ====================================
 
 if (Meteor.isClient) {
-    Template.Billable$Pagination.events( {
+    Template.Billable$Pagination.events({
         "click button.previous": function (event, templateInstance) {
             templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
+        "click button.nexts": function (event, templateInstance) {
             templateInstance.paginate.next();
         }
-    } );
+    });
 }
 
 // ======================================================================================================
@@ -507,23 +507,23 @@ if (Meteor.isClient) {
  * @param allowedKeysOrSchema
  */
 function SelectWidget(templateName, allowedKeysOrSchema) {
-    var fieldName = templateName.substr( templateName.lastIndexOf( '$' ) + 1 ); // e.g. "type"
+    var fieldName = templateName.substr(templateName.lastIndexOf('$') + 1); // e.g. "type"
     var topLevelTranslationKey = "Billables";
 
     function translate(k) {
-        return TAPi18n.__( topLevelTranslationKey + "." + fieldName + "." + k );
+        return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
     }
 
     var allowedKeys;
     if (allowedKeysOrSchema instanceof SimpleSchema) {
-        allowedKeys = allowedKeysOrSchema.getDefinition( fieldName ).allowedValues;
+        allowedKeys = allowedKeysOrSchema.getDefinition(fieldName).allowedValues;
     } else if ("length" in allowedKeys) {
         allowedKeys = allowedKeysOrSchema;
     } else {
-        throw new Meteor.Error( "allowedKeys must be a SimpleSchema or an array" );
+        throw new Meteor.Error("allowedKeys must be a SimpleSchema or an array");
     }
 
-    Template[templateName].helpers( {
+    Template[templateName].helpers({
         translate: translate,
         SelectWidget$options: function () {
             return {
@@ -531,14 +531,14 @@ function SelectWidget(templateName, allowedKeysOrSchema) {
                 maybeSelected: function (currentValue, value) {
                     return (currentValue === value) ? {selected: '1'} : {};
                 },
-                values: _.map( allowedKeys, function (k) {
+                values: _.map(allowedKeys, function (k) {
                     return {
                         translate: translate,
                         value: k
                     };
-                } )
+                })
             }
         },
-    } );
+    });
 
 }
