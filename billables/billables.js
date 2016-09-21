@@ -237,6 +237,7 @@ if (Meteor.isClient) {
                 validationState: this.childrenByTag().validationState.value(),
             };
 
+            // TODO: change this code for datetime and datepicker and return datetimepicker
             var dateTimePickerData = $(".startTimeEdit", tr).data('DateTimePicker');
             if (dateTimePickerData) {
                 editedItem.startTime = dateTimePickerData.date().toDate();
