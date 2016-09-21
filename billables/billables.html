@@ -60,16 +60,6 @@
     {{> Widget$Date vmTag="startTime" value=formattedDate editable=isEditing helpers=asDatePickerTime}}
 </template>
 
-<template name="Billable$cell$startTime$edit">
-    <div class="row">
-        <div class="form-group col s12">
-            <div style="{position: relative;}">
-                <input type="date" class="datepicker" value="{{asDatePickerTime startTime}}">
-            </div>
-        </div>
-    </div>
-</template>
-
 <template name="Billable$cell$billingDetails">
     {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
 </template>

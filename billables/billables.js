@@ -333,27 +333,10 @@ function getDateFormat() {
 if (Meteor.isClient) {
     Template.Billable$cell$startTime.viewmodel({
         formattedDate: function () {
-            return (moment(Template.currentData().startTime).format(getDateFormat()));
+            return (moment(new Date(Template.currentData().startTime)).format(getDateFormat()));
         }
     });
 
-    Template.Billable$cell$startTime$edit.helpers({
-        asDatePickerTime: function (time) {
-            return moment(time).format(getDateFormat());
-        }
-    });
-
-    Template.Billable$cell$startTime$edit.onRendered(function () {
-        this.$('.datepicker').assertSizeEquals(1).pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year
-            format: getDateFormat(), // format
-            // Close on a user action
-            closeOnSelect: true,
-            closeOnClear: true
-        });
-
-    });
 }
 
 // ========================================================================================
