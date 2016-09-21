@@ -237,17 +237,20 @@ if (Meteor.isClient) {
                 validationState: this.childrenByTag().validationState.value(),
             };
 
-            var dateTimePickerData = $(".startTimeEdit", tr).data('DateTimePicker');
-            if (dateTimePickerData) {
-                editedItem.startTime = dateTimePickerData.date().toDate();
-            }
+            /*var dateTimePickerData = $(".startTimeEdit", tr).data('DateTimePicker');
+             if (dateTimePickerData) {
+             editedItem.startTime = dateTimePickerData.date().toDate();
+             }*/
 
             // TODO: change this code for datetime and datepicker and return datetimepicker
-           /* var dateTimeData = $("#timepicker").val();
+            var dateTimeData = $("#timepicker").val();
             var datePickerData = $("#datepicker").val();
-            if(dateTimeData && datePickerData) {
-                editedItem.startTime = (dateTimeData + datePickerData).date().val().toDate();
-            }*/
+
+            var dateTimePickerData = new Date(moment(datePickerData).format("YYYY-MM-DD") +"T"+ dateTimeData+"Z");
+            if (dateTimePickerData) {
+                editedItem.startTime = dateTimePickerData;
+
+            }
 
             return editedItem;
         },
