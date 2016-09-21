@@ -505,7 +505,7 @@ if (Meteor.isClient) {
         "click button.previous": function (event, templateInstance) {
             templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
+        "click button.nexts": function (event, templateInstance) {
             templateInstance.paginate.next();
         }
     });
