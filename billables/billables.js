@@ -110,17 +110,54 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             return String(str).toUpperCase(); // XXX Just an example
         };
 
+        var resTypeValue = "";
         var context = {
             index: column.index(),
             type: Billables.columns[column.index()],
             translateType: function (type) {
                 return TAPi18n.__("Billables.column." + type)
             },
-            sortedValues: [
-                {value: "usage_fee", translate: translate},
-                {value: "reservation_fee", translate: translate},
-                {value: "access_fee", translate: translate}
-            ]
+            sortedValues: function() {
+                for(var i = 0; i < column.index(); i++) {
+                    resTypeValue =  Billables.columns[i];
+                    //debugger;
+                }
+
+                switch(resTypeValue) {
+                    case "type":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "type"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "type")));
+                        break;
+                    case "operatedByUser":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "operatedByUser"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "operatedByUser")));
+                        break;
+                    case "billableToAccount":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToAccount"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToAccount")));
+                        break;
+                    case "billableToProject":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToProject"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToProject")));
+                        break;
+                    case "startTime":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "startTime"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "startTime")));
+                        break;
+                    case "billingDetails":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billingDetails"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billingDetails")));
+                        break;
+                    case "discount":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "discount"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "discount")));
+                        break;
+                    case "validationState":
+                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "validationState"))));
+                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "validationState")));
+                        break;
+                }
+            }
         };
 
         $(column.header()).empty();
@@ -153,13 +190,6 @@ function allValuesInColumn(collection, columnName) {
         return t
     })
 }
-// Test
-
-/*Billables.columns =
-    ["type", "operatedByUser", "billableToAccount", "billableToProject",
-        "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];*/
-
-console.log(allValuesInColumn(Billables,"billableToProject"));
 
 var theTable = makeTable();
 
