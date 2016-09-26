@@ -153,6 +153,13 @@ function allValuesInColumn(collection, columnName) {
         return t
     })
 }
+// Test
+
+/*Billables.columns =
+    ["type", "operatedByUser", "billableToAccount", "billableToProject",
+        "startTime", "billingDetails", "discount", "validationState", "valSaveBtn"];*/
+
+console.log(allValuesInColumn(Billables,"billableToProject"));
 
 var theTable = makeTable();
 

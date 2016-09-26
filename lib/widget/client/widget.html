@@ -73,11 +73,18 @@
                <input type="text" class="datepicker" value="{{asDatePickerTime widget.value }}">
             </div>
         </div>
-        <div class="row">
-            <h6>Heure:</h6>
-            <div class="form-group">
-                <input type="text" class="timepicker time_element"/>
-            </div>
+    </div>
+</template>
+
+<template name="Widget$Time$readonly">
+    {{timeToLocalizedString}}
+</template>
+
+<template name="Widget$Time$editable">
+    <div class="row">
+        <h6>Heure:</h6>
+        <div class="form-group">
+            <input type="text" class="timepicker time_element" value="{{asPickerTime}}"/>
         </div>
     </div>
 </template>
