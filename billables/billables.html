@@ -13,23 +13,9 @@
 </template>
 
 <template name="Billable$cell$type">
-    {{#if isEditing}}
-    {{! TODO: We should ideally have the exact same template body for all drop-down selectable cells.
-    Referencing "type" below defeats that. }}
-        {{> SelectWidget options=SelectWidget$options currentValue=type}}
-    {{else}}
-        {{translate type}}
-    {{/if}}
+    {{> Widget$Select vmTag="type" value=type values=values editable=isEditing helpers=translateKey}}
 </template>
 
-<template name="SelectWidget">
-    <select class="browser-default {{options.uniqueClass}}">
-        <option value="" disabled selected></option>
-        {{#each options.values}}
-            <option value="{{value}}" {{../options.maybeSelected ../currentValue value}}>{{translate value}}</option>
-        {{/each}}
-    </select>
-</template>
 
 <template name="Billable$cell$operatedByUser">
     {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate vmTag="operatedByUser"}}

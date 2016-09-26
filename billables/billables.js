@@ -117,46 +117,14 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             translateType: function (type) {
                 return TAPi18n.__("Billables.column." + type)
             },
-            sortedValues: function() {
-                for(var i = 0; i < column.index(); i++) {
-                    resTypeValue =  Billables.columns[i];
+            sortedValues: function () {
+                for (var i = 0; i < column.index(); i++) {
+                    resTypeValue = Billables.columns[i];
                     //debugger;
                 }
 
-                switch(resTypeValue) {
-                    case "type":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "type"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "type")));
-                        break;
-                    case "operatedByUser":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "operatedByUser"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "operatedByUser")));
-                        break;
-                    case "billableToAccount":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToAccount"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToAccount")));
-                        break;
-                    case "billableToProject":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToProject"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billableToProject")));
-                        break;
-                    case "startTime":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "startTime"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "startTime")));
-                        break;
-                    case "billingDetails":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billingDetails"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "billingDetails")));
-                        break;
-                    case "discount":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "discount"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "discount")));
-                        break;
-                    case "validationState":
-                        console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "validationState"))));
-                        return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), "validationState")));
-                        break;
-                }
+                console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue))));
+                return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue)));
             }
         };
 
@@ -168,7 +136,7 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             column: column
         };
         Blaze.renderWithData(view, context, column.header(), undefined, parentView);
-    });
+    });  // columns.every
 }
 
 if (Meteor.isClient) {
@@ -265,7 +233,7 @@ if (Meteor.isClient) {
                 tr = getTrByRowData(tableElement, currentRowData);
 
             var editedItem = {
-                type: $(".typeEdit option:selected", tr).val(),
+                type: this.childrenByTag().type.value(),
                 operatedByUser: this.childrenByTag().operatedByUser.value(),
                 billableToAccount: this.childrenByTag().billableToAccount.value(),
                 billableToProject: this.childrenByTag().billableToProject.value(),
@@ -277,7 +245,7 @@ if (Meteor.isClient) {
             var dateTimeData = $("#timepicker").val();
             var datePickerData = $("#datepicker").val();
 
-            var dateTimePickerData = new Date(moment(datePickerData).format("YYYY-MM-DD") +"T"+ dateTimeData+"Z");
+            var dateTimePickerData = new Date(moment(datePickerData).format("YYYY-MM-DD") + "T" + dateTimeData + "Z");
             if (dateTimePickerData) {
                 editedItem.startTime = dateTimePickerData;
 
@@ -426,10 +394,21 @@ Billables.allow({
 
 // ======================================================================================================
 // ==================================== Cell widgets ====================================================
-// TODO: a lot of code for the cell widgets is to be moved here.
 
 if (Meteor.isClient) {
-    SelectWidget("Billable$cell$type", Billables.simpleSchema());
+    Template.Billable$cell$type.helpers({
+        values: function(){
+            return Schemas.Billable .getDefinition("type").allowedValues;
+        },
+        translateKey: function () {
+            return {
+                translateKey: function (k) {
+                    return TAPi18n.__("Billables.type." + k);
+                },
+            }
+        }
+    });
+
 }
 
 // ======================================================================================================
@@ -526,50 +505,4 @@ if (Meteor.isClient) {
             templateInstance.paginate.next();
         }
     });
-}
-
-// ======================================================================================================
-// ======================================================================================================
-
-/**
- * Select widget for translatable, single-choice string values.
- *
- * @param templateName
- * @param allowedKeysOrSchema
- */
-function SelectWidget(templateName, allowedKeysOrSchema) {
-    var fieldName = templateName.substr(templateName.lastIndexOf('$') + 1); // e.g. "type"
-    var topLevelTranslationKey = "Billables";
-
-    function translate(k) {
-        return TAPi18n.__(topLevelTranslationKey + "." + fieldName + "." + k);
-    }
-
-    var allowedKeys;
-    if (allowedKeysOrSchema instanceof SimpleSchema) {
-        allowedKeys = allowedKeysOrSchema.getDefinition(fieldName).allowedValues;
-    } else if ("length" in allowedKeys) {
-        allowedKeys = allowedKeysOrSchema;
-    } else {
-        throw new Meteor.Error("allowedKeys must be a SimpleSchema or an array");
-    }
-
-    Template[templateName].helpers({
-        translate: translate,
-        SelectWidget$options: function () {
-            return {
-                uniqueClass: fieldName + "Edit",
-                maybeSelected: function (currentValue, value) {
-                    return (currentValue === value) ? {selected: '1'} : {};
-                },
-                values: _.map(allowedKeys, function (k) {
-                    return {
-                        translate: translate,
-                        value: k
-                    };
-                })
-            }
-        },
-    });
-
 }
