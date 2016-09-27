@@ -117,13 +117,11 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             translateType: function (type) {
                 return TAPi18n.__("Billables.column." + type)
             },
-            sortedValues: function () {
-                for (var i = 0; i < column.index(); i++) {
+            values: function () {
+                for (var i = 0; i <= column.index(); i++) {
                     resTypeValue = Billables.columns[i];
-                    //debugger;
                 }
-
-                console.log(_.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue))));
+                console.log("resTypeValue :" + resTypeValue);
                 return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue)));
             }
         };
