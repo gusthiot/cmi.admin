@@ -104,13 +104,10 @@ function setupColumnFilterUI(parentView, dataTableElement) {
     var columns = dataTableElement.api().columns();
     // From https://datatables.net/examples/api/multi_filter_select.html
     columns.every(function () {
+
         var column = this;
-
-        var translate = function (str) {
-            return String(str).toUpperCase(); // XXX Just an example
-        };
-
         var resTypeValue = "";
+
         var context = {
             index: column.index(),
             type: Billables.columns[column.index()],
@@ -121,7 +118,6 @@ function setupColumnFilterUI(parentView, dataTableElement) {
                 for (var i = 0; i <= column.index(); i++) {
                     resTypeValue = Billables.columns[i];
                 }
-                console.log("resTypeValue :" + resTypeValue);
                 return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue)));
             }
         };
@@ -133,9 +129,10 @@ function setupColumnFilterUI(parentView, dataTableElement) {
         view.templateInstance().dataTable = {
             column: column
         };
+
         Blaze.renderWithData(view, context, column.header(), undefined, parentView);
     });  // columns.every
-}
+} // setupColumnFilterUI
 
 if (Meteor.isClient) {
     // When selects in column headers change, filter values accordingly
