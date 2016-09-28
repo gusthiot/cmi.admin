@@ -79,14 +79,23 @@
 </template>
 
 <template name="Widget$Time$readonly">
-    {{timeToLocalizedString}}
+    {{toReadonlyString}}
 </template>
 
 <template name="Widget$Time$editable">
     <div class="row">
         <h6>Heure:</h6>
         <div class="form-group">
-            <input type="text" class="timepicker time_element" value="{{asPickerTime}}"/>
+            <input type="text" class="timepicker time_element" value="{{toTimepickerInputValue}}"/>
         </div>
     </div>
+</template>
+
+<template name="Widget$DateTime$readonly">
+    {{dateTimeToLocalizedString widget.value}}
+</template>
+
+<template name="Widget$DateTime$editable">
+    {{> Widget$Date vmTag="date" value=value editable=1}}
+    {{> Widget$Time vmTag="time" value=value editable=1}}
 </template>

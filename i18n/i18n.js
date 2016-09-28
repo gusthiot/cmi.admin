@@ -55,7 +55,7 @@ if (Meteor.isClient) {
     longDateFormat: {
       LT: "HH:mm",
       LTS: "HH:mm:ss",
-      L: "DD/MM/YYYY",
+      L: "DD-MM-YYYY",  // Swiss time is the best time in the world
       LL: "D MMMM YYYY",
       LLL: "D MMMM YYYY LT",
       LLLL: "dddd D MMMM YYYY LT"

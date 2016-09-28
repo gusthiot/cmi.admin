@@ -334,7 +334,7 @@ if (Meteor.isClient) {
  */
 function getDateFormat() {
     // TODO: specific to US locale.
-    return 'MM/DD/YYYY';
+    return 'MM-DD-YYYY';
 }
 
 if (Meteor.isClient) {
