@@ -16,7 +16,9 @@
     <select class="browser-default">
         <option {{attributesOfEmptyOption}}></option>
         {{#each choice in widget.values}}
-            <option value="{{choice}}" {{maybeSelected widget.value choice}}>{{widget.translateKey choice}}</option>
+            {{#if choice}}
+              <option value="{{choice}}" {{maybeSelected widget.value choice}}>{{widget.translateKey choice}}</option>
+            {{/if}}
         {{/each}}
     </select>
 </template>

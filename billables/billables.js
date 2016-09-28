@@ -105,20 +105,16 @@ function setupColumnFilterUI(parentView, dataTableElement) {
     // From https://datatables.net/examples/api/multi_filter_select.html
     columns.every(function () {
 
-        var column = this;
-        var resTypeValue = "";
+        var column = this,
+            type = Billables.columns[column.index()];
 
         var context = {
             index: column.index(),
-            type: Billables.columns[column.index()],
-            translateType: function (type) {
-                return TAPi18n.__("Billables.column." + type)
-            },
+            type: type,
             values: function () {
-                for (var i = 0; i <= column.index(); i++) {
-                    resTypeValue = Billables.columns[i];
-                }
-                return _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), resTypeValue)));
+                var values = _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), type)));
+                values.push(undefined); //  permit an empty choice
+                return values;
             }
         };
 
@@ -135,6 +131,20 @@ function setupColumnFilterUI(parentView, dataTableElement) {
 } // setupColumnFilterUI
 
 if (Meteor.isClient) {
+    Template.Billable$columnHead.helpers({
+        helpers: {
+            translateKey: function (what) {
+                var type = Template.currentData().value;
+                if (type == "operatedByUser") {
+                    return userTranslate(what);
+                } else if (type == "type") {
+                    return TAPi18n.__("Billables.type." + what);
+                } else {
+                    return what;
+                }
+            },
+        },
+    }),
     // When selects in column headers change, filter values accordingly
     Template.Billable$columnHead.events({
         'change select': function (event, template) {
@@ -392,8 +402,8 @@ Billables.allow({
 
 if (Meteor.isClient) {
     Template.Billable$cell$type.helpers({
-        values: function(){
-            return Schemas.Billable .getDefinition("type").allowedValues;
+        values: function () {
+            return Schemas.Billable.getDefinition("type").allowedValues;
         },
         translateKey: function () {
             return {
@@ -408,26 +418,24 @@ if (Meteor.isClient) {
 
 // ======================================================================================================
 // ================================ Users select drop-down ==============================================
+function userTranslate (k) {
+    var userId = User.collection.findOne({_id: k});
+    if (userId) {
+        return TAPi18n.__(userId.fullName);
+    } else {
+        return k;
+    }
+}
 
 if (Meteor.isClient) {
     Template.Billable$cell$operatedByUser.helpers({
         users: () => {
             var dbIdsFind = _.pluck(User.collection.find().fetch(), "_id");
             return dbIdsFind;
-
         },
-        userTranslate: () => {
-            return {
-                translateKey: function (k) {
-                    var userId = User.collection.findOne({_id: k});
-                    if (userId) {
-                        return TAPi18n.__(userId.fullName);
-                    } else {
-                        return k;
-                    }
-                },
-            }
-        },
+        helpers: {
+            translateKey: userTranslate
+        }
     });
 }
 

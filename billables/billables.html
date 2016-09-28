@@ -3,13 +3,7 @@
 </template>
 
 <template name="Billable$columnHead">
-    {{translateType type }}
-    <select class="browser-default">
-        <option value="" disable selected></option>
-        {{!each values}}
-            <option value="{{values}}">{{values}}</option>
-        {{!each}}
-    </select>
+    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
 </template>
 
 <template name="Billable$cell$type">
@@ -18,7 +12,7 @@
 
 
 <template name="Billable$cell$operatedByUser">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate vmTag="operatedByUser"}}
+    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=helpers vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
