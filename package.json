@@ -8,13 +8,16 @@
   "dependencies": {
     "datatables.net": "^1.10.12",
     "debug": "^2.2.0",
+    "dtrace-provider": "^0.6.0",
     "epfl-ldap": "^0.3.2",
-    "escape-string-regexp": "^1.0.4",
-    "fibers": "^1.0.13",
-    "kafka-node": "^0.3.2",
+    "escape-string-regexp": "^1.0.5",
+    "fibers": "^1.0.14",
+    "kafka-node": "^0.3.3",
     "ldapjs": "1.0.0",
-    "lodash": "^4.13.1",
-    "meteor-node-stubs": "^0.2.3"
+    "lodash": "^4.16.2",
+    "meteor-node-stubs": "^0.2.3",
+    "pooling": "^0.4.6",
+    "raleway-webfont": "^3.0.1"
   },
   "devDependencies": {},
   "repository": {
