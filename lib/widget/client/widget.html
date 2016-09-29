@@ -23,11 +23,11 @@
     </select>
 </template>
 
-<template name="Widget$InputBillableText$readonly">
+<template name="Widget$InputText$readonly">
     {{widget.value}}
 </template>
 
-<template name="Widget$InputBillableText$editable">
+<template name="Widget$InputText$editable">
     <input type="text" {{b "value: value" }}>
 </template>
 
@@ -50,11 +50,11 @@
     </div>
 </template>
 
-<template name="Widget$InputUserSearch$readonly">
+<template name="Widget$User$readonly">
     {{widget.value}}
 </template>
 
-<template name="Widget$InputUserSearch$editable">
+<template name="Widget$User$editable">
     <div class="input-field userInput">
         <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown"
                required placeholder="{{_ "User.search.search-here"}}" {{b "value: value"}}>
