@@ -36,7 +36,7 @@ __dbrestore:
 
 __dbpurge_table:
 	@echo "Purging $(COLLECTION)"
-	echo "db.$(COLLECTION).drop();"| meteor mongo
+	echo "db.$(COLLECTION).drop(); quit()"| meteor mongo
 
 __dbrestore_table:
 	@echo "Restoring $(COLLECTION)"
