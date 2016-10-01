@@ -80,7 +80,7 @@ User.collection.attachSchema( new SimpleSchema( {
     },
     "profile.lang": {
         type: String,
-        allowedValues: _.pluck( I18N.Languages, "code" )
+        allowedValues: _.pluck( _.values(I18N.Languages), "code" )
     }
 } ) );
 

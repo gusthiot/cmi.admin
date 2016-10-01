@@ -3,34 +3,35 @@
  */
 
 I18N = {
-  Languages: [
-    {code: 'en', language: "English"},
-    {code: 'fr', language: "Français"},
-    {code: 'de', language: "Deutsch"},
-    {code: 'it', language: "Italiano"}
-  ],
-  browserLanguage: function() {
-    // TODO: unstub
-    return "fr";
-  }
+  Languages: {
+    order: ["en", "fr", "de", "it"],
+    en: { name: "English" },
+    fr: { name: "Français" },
+    de: { name: "Deutsch" },
+    it: { name: "Italiano "}
+  },
 };
 
-var currentLanguage = function() {
+I18N.browserLanguage = function() {
+  // TODO: unstub
+  return "fr";
+};
+
+function currentLanguage() {
   var user = Meteor.user();
   return user ? user.lang() : undefined;
 };
-
 if (Meteor.isClient) {
-  Session.set("i18nLanguages", I18N.Languages);
-
-  Meteor.startup(function() {
-    Tracker.autorun(function() {
+  Meteor.startup(function () {
+    Tracker.autorun(function () {
       TAPi18n.setLanguage(currentLanguage());
     });
   });
+}
 
+if (Meteor.isClient) {
   Template.I18N$SelectLanguage.helpers({
-    languages: function() { return Session.get("i18nLanguages") },
+    languages: I18N.Languages,
     currentLanguage: currentLanguage
   });
   Template.I18N$SelectLanguage.onRendered(function () {
@@ -44,9 +45,11 @@ if (Meteor.isClient) {
   });
 }
 
-/* Moment i18n */
-if (Meteor.isClient) {
-  moment.locale('fr', {
+/* Date format (mostly moment, but not only)
+ * Authoritative info here: https://en.wikipedia.org/wiki/Date_format_by_country
+ */
+
+I18N.Languages.fr.moment = {
     months: "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
     monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
     weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
@@ -103,8 +106,16 @@ if (Meteor.isClient) {
       dow: 1, // Monday is the first day of the week.
       doy: 4  // The week that contains Jan 4th is the first week of the year.
     }
-  });
+};
 
+import mapKeys from 'lodash/mapKeys';
+
+if (Meteor.isClient) {
+  mapKeys(I18N.Languages, function(langConfig, langCode) {
+    if (langConfig.moment) {
+      moment.locale(langCode, langConfig.moment);
+    }
+  });
 
   Tracker.autorun(function () {
     moment.locale(TAPi18n.getLanguage());

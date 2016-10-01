@@ -2,8 +2,8 @@
     <div class="dropdown">
       <a class="dropdown-button" data-activates="flags-dropdown">{{> I18N$flag code=currentLanguage}}<i class="material-icons right">arrow_drop_down</i></a>
         <ul id="flags-dropdown" class="dropdown-content">
-            {{#each languages}}
-            {{> I18N$flag}}
+            {{#each lang in languages.order}}
+            {{> I18N$flag code=lang}}
             {{/each}}
         </ul>
     </div>
