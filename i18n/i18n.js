@@ -2,13 +2,23 @@
  * Multi-lingual support.
  */
 
+/**
+ * A supported language.
+ *
+ * @constructor
+ */
+function Language(fields) {
+  _.extend(this, fields);
+}
+
 I18N = {
+  Language: Language,
   Languages: {
     order: ["en", "fr", "de", "it"],
-    en: { name: "English" },
-    fr: { name: "Français" },
-    de: { name: "Deutsch" },
-    it: { name: "Italiano "}
+    en: new Language({ code: "en", name: "English" }),
+    fr: new Language({ code: "fr", name: "Français" }),
+    de: new Language({ code: "de", name: "Deutsch" }),
+    it: new Language({ code: "it", name: "Italiano "})
   },
 };
 
@@ -17,14 +27,22 @@ I18N.browserLanguage = function() {
   return "fr";
 };
 
-function currentLanguage() {
+/**
+ *
+ * @returns {undefined}
+ */
+var currentLanguage = I18N.Language.current = function() {
   var user = Meteor.user();
-  return user ? user.lang() : undefined;
+  return user ? I18N.Languages[user.lang()] : undefined;
 };
+
 if (Meteor.isClient) {
   Meteor.startup(function () {
     Tracker.autorun(function () {
-      TAPi18n.setLanguage(currentLanguage());
+      var lang = currentLanguage();
+      if (lang) {
+        TAPi18n.setLanguage(lang.code);
+      }
     });
   });
 }
@@ -46,78 +64,31 @@ if (Meteor.isClient) {
 }
 
 /* Date format (mostly moment, but not only)
+ * moment.js for the four supported languages are automagically
+ * loaded by the corresponding rzymek:moment-locale-XX package
  * Authoritative info here: https://en.wikipedia.org/wiki/Date_format_by_country
  */
-
-I18N.Languages.fr.moment = {
-    months: "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
-    monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
-    weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
-    weekdaysShort: "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
-    weekdaysMin: "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
-    longDateFormat: {
-      LT: "HH:mm",
-      LTS: "HH:mm:ss",
-      L: "DD-MM-YYYY",  // Swiss time is the best time in the world
-      LL: "D MMMM YYYY",
-      LLL: "D MMMM YYYY LT",
-      LLLL: "dddd D MMMM YYYY LT"
-    },
-    calendar: {
-      sameDay: "[Aujourd'hui à] LT",
-      nextDay: '[Demain à] LT',
-      nextWeek: 'dddd [à] LT',
-      lastDay: '[Hier à] LT',
-      lastWeek: 'dddd [dernier à] LT',
-      sameElse: 'L'
-    },
-    relativeTime: {
-      future: "dans %s",
-      past: "il y a %s",
-      s: "quelques secondes",
-      m: "une minute",
-      mm: "%d minutes",
-      h: "une heure",
-      hh: "%d heures",
-      d: "un jour",
-      dd: "%d jours",
-      M: "un mois",
-      MM: "%d mois",
-      y: "une année",
-      yy: "%d années"
-    },
-    ordinalParse: /\d{1,2}(er|ème)/,
-    ordinal: function (number) {
-      return number + (number === 1 ? 'er' : 'ème');
-    },
-    meridiemParse: /PD|MD/,
-    isPM: function (input) {
-      return input.charAt(0) === 'M';
-    },
-    // in case the meridiem units are not separated around 12, then implement
-    // this function (look at locale/id.js for an example)
-    // meridiemHour : function (hour, meridiem) {
-    //     return /* 0-23 hour, given meridiem token and hour 1-12 */
-    // },
-    meridiem: function (hours, minutes, isLower) {
-      return hours < 12 ? 'PD' : 'MD';
-    },
-    week: {
-      dow: 1, // Monday is the first day of the week.
-      doy: 4  // The week that contains Jan 4th is the first week of the year.
-    }
-};
 
 import mapKeys from 'lodash/mapKeys';
 
 if (Meteor.isClient) {
-  mapKeys(I18N.Languages, function(langConfig, langCode) {
-    if (langConfig.moment) {
-      moment.locale(langCode, langConfig.moment);
-    }
-  });
-
   Tracker.autorun(function () {
     moment.locale(TAPi18n.getLanguage());
   });
 }
+
+// Swiss-style dates for the "fr" locale
+var frenchDates = moment.localeData("fr")._longDateFormat;
+mapKeys(frenchDates, function(v, k) {
+  frenchDates[k] = v.replace(/[/-]/g, ".");
+});
+
+/**
+ * The date format for this Language, in moment.js notation.
+ * Intended to be called by non-moment date-aware code (e.g. DatePicker in Widget$Date)
+ * @returns {String} "DD.MM.YYYY" or "MM/DD/YYYY" etc.
+ */
+I18N.Language.prototype.momentDateFormat = function (code) {
+  var longDateFormat = moment.localeData(this.code)._longDateFormat;
+  return longDateFormat[code] || longDateFormat[code.toUpperCase()];
+};
