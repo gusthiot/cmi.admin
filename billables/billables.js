@@ -1,7 +1,5 @@
-var Widget;
-
 if (Meteor.isClient) {
-    Widget = require("../lib/widget/client/widget");
+    require("../lib/widget/client/widget");
     require("../lib/client/find-templates");
 }
 
@@ -319,28 +317,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event, that) {
             Template.Billables$Edit.find(that).viewmodel.changeEditingRow(undefined);
             event.stopPropagation();
-        }
-    });
-
-}
-
-// ========================= Date picker ================================================
-// ======================================================================================
-
-/**
- * Return the date format to use.
- *
- * Must be the same format that the DateTimePicker expects at parse time.
- */
-function getDateFormat() {
-    // TODO: specific to US locale.
-    return 'MM-DD-YYYY';
-}
-
-if (Meteor.isClient) {
-    Template.Billable$cell$startTime.viewmodel({
-        formattedDate: function () {
-            return (moment(new Date(Template.currentData().startTime)).format(getDateFormat()));
         }
     });
 
