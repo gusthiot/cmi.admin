@@ -31,6 +31,10 @@ standard-minifier-js@1.2.0
 gildaspk:autoform-materialize
 
 momentjs:moment
+rzymek:moment-locale-fr
+rzymek:moment-locale-de
+rzymek:moment-locale-it
+
 aldeed:simple-schema
 nerdmed:mediaqueries
 manuel:viewmodel
