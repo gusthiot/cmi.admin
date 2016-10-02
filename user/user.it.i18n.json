@@ -1,0 +1,11 @@
+{
+  "User": {
+    "search": {
+      "search-here": "Cerca utenti...",
+      "nosearchresults": "Nessun risultato",
+      "ldap": "Cerca utenti fuori CMi..."
+    },
+    "EditFormSelf": "Il tuo account",
+    "EditForm": "Modifica utente %s"
+  }
+}
