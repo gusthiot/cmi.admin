@@ -30,12 +30,12 @@ I18N.browserLanguage = function() {
 };
 
 /**
- *
- * @returns {undefined}
+ * Return the current user's language, as a reactive data source.
+ * @returns {Language} The user's Language, or if not known, the "en" Language
  */
 var currentLanguage = I18N.Language.current = function() {
   var user = Meteor.user();
-  return user ? I18N.Languages[user.lang()] : undefined;
+  return user ? I18N.Languages[user.lang()] : I18N.Languages.en;
 };
 
 if (Meteor.isClient) {
