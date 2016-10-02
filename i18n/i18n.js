@@ -22,6 +22,8 @@ I18N = {
   },
 };
 
+export default I18N;
+
 I18N.browserLanguage = function() {
   // TODO: unstub
   return "fr";

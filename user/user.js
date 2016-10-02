@@ -1,10 +1,10 @@
 /**
  * Model and controller for users
  */
-var Widget;
+
+import I18N from "../i18n/i18n.js";
 
 if (Meteor.isClient) {
-    Widget = require( "../lib/widget/client/widget" );
     require( "../lib/client/find-templates" );
 }
 
