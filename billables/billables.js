@@ -105,12 +105,16 @@ function setupColumnFilterUI(parentView, dataTableElement) {
 
         var column = this,
             type = Billables.columns[column.index()];
+        if (type === undefined) {
+            return;  // Extra column on right for buttons
+        }
 
         var context = {
             index: column.index(),
             type: type,
             values: function () {
-                var values = _.sortBy(_.uniq(_.pluck(Billables.find({}).fetch(), type)));
+                var values = _.uniq(_.pluck(_.sortBy(Billables.find({}).fetch(), type), type),
+                  true);  // invoke _.uniq variant for sorted list
                 values.push(undefined); //  permit an empty choice
                 return values;
             }
@@ -154,12 +158,6 @@ if (Meteor.isClient) {
                 .draw();
         }
     });
-}
-
-function allValuesInColumn(collection, columnName) {
-    return _.sortBy(_.uniq(_.pluck(collection.find({}).fetch(), columnName)), function (t) {
-        return t
-    })
 }
 
 var theTable = makeTable();
@@ -233,27 +231,19 @@ if (Meteor.isClient) {
             }
 
             var tableElement = this._tableElement(),
-                tr = getTrByRowData(tableElement, currentRowData);
+                tr = getTrByRowData(tableElement, currentRowData),
+                formData = this.childrenByTag();
 
             var editedItem = {
-                type: this.childrenByTag().type.value(),
-                operatedByUser: this.childrenByTag().operatedByUser.value(),
-                billableToAccount: this.childrenByTag().billableToAccount.value(),
-                billableToProject: this.childrenByTag().billableToProject.value(),
-                billingDetails: this.childrenByTag().billingDetails.value(),
-                discount: this.childrenByTag().discount.value(),
-                validationState: this.childrenByTag().validationState.value(),
+                type: formData.type.value(),
+                operatedByUser: formData.operatedByUser.value(),
+                billableToAccount: formData.billableToAccount.value(),
+                billableToProject: formData.billableToProject.value(),
+                startTime: formData.startTime.value().toDate(),
+                billingDetails: formData.billingDetails.value(),
+                discount: formData.discount.value(),
+                validationState: formData.validationState.value(),
             };
-            // add in BD dateTimePicker value
-            var dateTimeData = $("#timepicker").val();
-            var datePickerData = $("#datepicker").val();
-
-            var dateTimePickerData = new Date(moment(datePickerData).format("YYYY-MM-DD") + "T" + dateTimeData + "Z");
-            if (dateTimePickerData) {
-                editedItem.startTime = dateTimePickerData;
-
-            }
-
             return editedItem;
         },
         saveEditingRow: function () {
@@ -417,12 +407,6 @@ if (Meteor.isClient) {
 
 // ======================================================================================================
 // ================================ Projects select drop-down ===========================================
-/**
- * return all projects on database (future implementation)
- *
- *  var billableToProject = _.pluck(Billables.find().fetch(), "billableToProject");
- *  return billableToProject;
- */
 
 if (Meteor.isClient) {
     Template.Billable$cell$billableToProject.helpers({
@@ -432,12 +416,6 @@ if (Meteor.isClient) {
 
 // ======================================================================================================
 // ================================ Rabais select drop-down =============================================
-/**
- * return all discount on database (future implementation)
- *
- *  var discount = _.pluck(Billables.find().fetch(), "discount");
- *  return discount;
- */
 
 if (Meteor.isClient) {
     Template.Billable$cell$discount.helpers({
@@ -447,12 +425,6 @@ if (Meteor.isClient) {
 
 // ======================================================================================================
 // ================================ validationStates select drop-down ===================================
-/**
- * return all validation on database (future implementation)
- *
- *  var validationState = _.pluck(Billables.find().fetch(), "validationState");
- *  return validationState;
- */
 
 if (Meteor.isClient) {
     Template.Billable$cell$validationState.helpers({
