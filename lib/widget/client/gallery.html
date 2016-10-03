@@ -17,10 +17,7 @@
     <tr>
     <td>{{#if isLast}}<button class="moar">+</button>{{/if}}</td>
         <td><code>Widget.{{wid}}</code></td>
-    <td><select class="editability browser-default">
-        <option value="readonly"><code>"readonly"</code></option>
-        <option value="editable"><code>"editable"</code></option>
-    </select></td>
+    <td><select class="browser-default" {{b "options: editabilities, value: editability"}}></select></td>
     <td>{{> Template.dynamic (widgetHere wid)}}</td>
     <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
         {{> Template.dynamic (moreControls wid)}}
