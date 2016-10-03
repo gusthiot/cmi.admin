@@ -14,7 +14,7 @@ var debug = require("debug")("access-control.js");
 
 /******** Tequila *********/
 
-Tequila.options.bypass.push("/images/");
+Tequila.options.bypass.push("/images/**");
 if (Meteor.isClient) {
     Tequila.options.autoStart = false;
 }
