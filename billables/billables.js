@@ -239,7 +239,7 @@ if (Meteor.isClient) {
                 operatedByUser: formData.operatedByUser.value(),
                 billableToAccount: formData.billableToAccount.value(),
                 billableToProject: formData.billableToProject.value(),
-                startTime: formData.startTime.value().toDate(),
+                startTime: formData.startTime.value(),
                 billingDetails: formData.billingDetails.value(),
                 discount: formData.discount.value(),
                 validationState: formData.validationState.value(),
