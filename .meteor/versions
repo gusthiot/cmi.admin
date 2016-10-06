@@ -32,7 +32,7 @@ diff-sequence@1.0.6
 ecmascript@0.5.8
 ecmascript-runtime@0.3.14
 ejson@1.0.12
-epfl:accounts-tequila@0.1.0
+epfl:accounts-tequila@0.0.1
 epfl:become@0.0.1
 epfl:loginfirst@0.0.2
 es5-shim@4.6.14
