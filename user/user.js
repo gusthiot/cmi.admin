@@ -172,7 +172,7 @@ Template.User$Edit.helpers( {
 
 Template.User$Edit.events( {
     "submit form": function (event) {
-        console.log( this );
+        debug( this );
         event.preventDefault();
     }
 } );
@@ -189,7 +189,7 @@ Template.User$Edit.events( {
  */
 Template.User$Pick.onCreated( function () {
     var self = this;
-    console.log( "User$Pick onCreated: starting" );
+    debug( "User$Pick onCreated: starting" );
     User.template = this; // To access from the browser console
     self.search = User.Search.open();
 
@@ -198,10 +198,10 @@ Template.User$Pick.onCreated( function () {
     Tracker.autorun( function () {
         var query = self.query.get(),
             wantLDAP = self.wantLDAP.get();
-        console.log( "Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")" );
+        debug( "Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")" );
         if (query) self.search.search( query, wantLDAP );
     } );
-    console.log( "User$Pick onCreated: done" );
+    debug( "User$Pick onCreated: done" );
 } );
 
 function that() {
@@ -248,12 +248,12 @@ Template.User$Pick.viewmodel( {
 
 Template.User$Pick.events( {
     "keyup input.usersearch": function (event, that) {
-        console.log( "Search term is now " + event.currentTarget.value );
+        debug( "Search term is now " + event.currentTarget.value );
         that.query.set( event.currentTarget.value );
         openDropdown( that );  // If we arrived via keyboard
     },
     "click": function (event, that) {
-        console.log( "CLICK" );
+        debug( "CLICK" );
         event.preventDefault();
     },
     "click a.user": function (event, that) {

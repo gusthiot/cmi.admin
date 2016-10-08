@@ -82,7 +82,7 @@ function makeTable() {
         sPaginationType: 'meteor_template',
         paginationTemplate: Meteor.isClient && Template.Billable$Pagination,
         paginationUpdated: function () {
-            console.log("Pagination updated");
+            debug("Pagination updated");
         }
     });
 }
