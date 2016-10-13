@@ -1,8 +1,5 @@
 # https://github.com/meteorhacks/meteord
-#FROM meteorhacks/meteord:onbuild
-
-# https://github.com/chriswessels/meteor-tupperware
-FROM quay.io/chriswessels/meteor-tupperware
+FROM meteorhacks/meteord:onbuild
 
 # The maintainer of your app image
 MAINTAINER Dominique Quatravaux <dominique.quatravaux@epfl.ch>
