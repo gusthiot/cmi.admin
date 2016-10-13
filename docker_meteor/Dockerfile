@@ -1,5 +1,5 @@
 # https://github.com/meteorhacks/meteord
-FROM  kadirahq/meteord:onbuild
+FROM  abernix/meteord:onbuild
 
 # The maintainer of your app image
 MAINTAINER Dominique Quatravaux <dominique.quatravaux@epfl.ch>
