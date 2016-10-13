@@ -1,5 +1,5 @@
 # https://github.com/meteorhacks/meteord
-FROM meteorhacks/meteord:devbuild
+FROM meteorhacks/meteord:onbuild
 
 # The maintainer of your app image
 MAINTAINER Dominique Quatravaux <dominique.quatravaux@epfl.ch>
