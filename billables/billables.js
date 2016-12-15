@@ -504,12 +504,16 @@ if (Meteor.isServer) {
 
             var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
 
-            var res = fs.createReadStream(path + filename)
+            var stream = fs.createReadStream(path + filename)
                 .pipe(iconv.decodeStream('iso-8859-1'))
                 .pipe(csv.parse({delimiter: ";"}));
+
             console.log("csv created");
-            console.log(res);
-            return res;
+            console.log(stream);
+
+            return stream;
+
+
         }
     });
 
