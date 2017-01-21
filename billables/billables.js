@@ -6,14 +6,13 @@ if (Meteor.isClient) {
 var debug = require("debug")("billables.js");
 
 Billables = new Meteor.Collection("billables");
+import SimpleSchema from "simpl-schema";
 
 if (Meteor.isClient) {
     Meteor.subscribe('Billables');
 }
 
-var Schemas = {};
-
-Schemas.Billable = new SimpleSchema({
+Billables.attachSchema(new SimpleSchema({
     type: {
         type: String,
         allowedValues: ["USAGE_FEE", "RESERVATION_FEE", "ACCESS_FEE"]
@@ -48,9 +47,7 @@ Schemas.Billable = new SimpleSchema({
     updatedAt: {
         type: Date
     }
-});
-
-Billables.attachSchema(Schemas.Billable);
+}));
 
 Billables.columns =
     ["type", "operatedByUser", "billableToAccount", "billableToProject",

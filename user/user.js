@@ -3,6 +3,7 @@
  */
 
 import I18N from "../i18n/i18n.js";
+import SimpleSchema from "simpl-schema";
 
 if (Meteor.isClient) {
     require( "../lib/client/find-templates" );
