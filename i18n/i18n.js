@@ -2,35 +2,56 @@
  * Multi-lingual support.
  */
 
+/**
+ * A supported language.
+ *
+ * @constructor
+ */
+function Language(fields) {
+  _.extend(this, fields);
+}
+
 I18N = {
-  Languages: [
-    {code: 'en', language: "English"},
-    {code: 'fr', language: "Français"},
-    {code: 'de', language: "Deutsch"},
-    {code: 'it', language: "Italiano"}
-  ],
-  browserLanguage: function() {
-    // TODO: unstub
-    return "fr";
-  }
+  Language: Language,
+  Languages: {
+    order: ["en", "fr", "de", "it"],
+    en: new Language({ code: "en", name: "English" }),
+    fr: new Language({ code: "fr", name: "Français" }),
+    de: new Language({ code: "de", name: "Deutsch" }),
+    it: new Language({ code: "it", name: "Italiano "})
+  },
 };
 
-var currentLanguage = function() {
+export default I18N;
+
+I18N.browserLanguage = function() {
+  // TODO: unstub
+  return "fr";
+};
+
+/**
+ * Return the current user's language, as a reactive data source.
+ * @returns {Language} The user's Language, or if not known, the "en" Language
+ */
+var currentLanguage = I18N.Language.current = function() {
   var user = Meteor.user();
-  return user ? user.lang() : undefined;
+  return user ? I18N.Languages[user.lang()] : I18N.Languages.en;
 };
 
 if (Meteor.isClient) {
-  Session.set("i18nLanguages", I18N.Languages);
-
-  Meteor.startup(function() {
-    Tracker.autorun(function() {
-      TAPi18n.setLanguage(currentLanguage());
+  Meteor.startup(function () {
+    Tracker.autorun(function () {
+      var lang = currentLanguage();
+      if (lang) {
+        TAPi18n.setLanguage(lang.code);
+      }
     });
   });
+}
 
+if (Meteor.isClient) {
   Template.I18N$SelectLanguage.helpers({
-    languages: function() { return Session.get("i18nLanguages") },
+    languages: I18N.Languages,
     currentLanguage: currentLanguage
   });
   Template.I18N$SelectLanguage.onRendered(function () {
@@ -43,3 +64,33 @@ if (Meteor.isClient) {
     }
   });
 }
+
+/* Date format (mostly moment, but not only)
+ * moment.js for the four supported languages are automagically
+ * loaded by the corresponding rzymek:moment-locale-XX package
+ * Authoritative info here: https://en.wikipedia.org/wiki/Date_format_by_country
+ */
+
+import mapKeys from 'lodash/mapKeys';
+
+if (Meteor.isClient) {
+  Tracker.autorun(function () {
+    moment.locale(TAPi18n.getLanguage());
+  });
+}
+
+// Swiss-style dates for the "fr" locale
+var frenchDates = moment.localeData("fr")._longDateFormat;
+mapKeys(frenchDates, function(v, k) {
+  frenchDates[k] = v.replace(/[/-]/g, ".");
+});
+
+/**
+ * The date format for this Language, in moment.js notation.
+ * Intended to be called by non-moment date-aware code (e.g. DatePicker in Widget$Date)
+ * @returns {String} "DD.MM.YYYY" or "MM/DD/YYYY" etc.
+ */
+I18N.Language.prototype.momentDateFormat = function (code) {
+  var longDateFormat = moment.localeData(this.code)._longDateFormat;
+  return longDateFormat[code] || longDateFormat[code.toUpperCase()];
+};

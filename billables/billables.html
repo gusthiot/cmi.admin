@@ -1,43 +1,19 @@
 <template name="Billables$Edit">
-{{> tabular table=makeTable class="responsive-table striped"}}
-   <span style="color:red;">id :  {{editingRow}}</span>
+    {{> tabular table=makeTable class="responsive-table striped"}}
 </template>
-<!--
-<template name="Billable$LineActions">
-  <button>X</button>
-</template>-->
 
 <template name="Billable$columnHead">
-    {{translateType type }}
-    <select class="browser-default">
-        <option value="" disable selected></option>
-        {{#each sortedValues}}
-            <option value="{{value}}">{{translate value}}</option>
-        {{/each}}
-    </select>
+    text
+        {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
 </template>
 
 <template name="Billable$cell$type">
-    {{#if isEditing}}
-        {{! TODO: We should ideally have the exact same template body for all drop-down selectable cells.
-        Referencing "type" below defeats that. }}
-        {{> SelectWidget options=SelectWidget$options currentValue=type}}
-    {{else}}
-        {{translate type}}
-    {{/if}}
+    {{> Widget$Select vmTag="type" value=type values=values editable=isEditing helpers=translateKey}}
 </template>
 
-<template name="SelectWidget">
-    <select class="browser-default {{options.uniqueClass}}">
-        <option value="" disabled selected></option>
-        {{#each options.values}}
-            <option value="{{value}}" {{../options.maybeSelected ../currentValue value}}>{{translate value}}</option>
-        {{/each}}
-    </select>
-</template>
 
 <template name="Billable$cell$operatedByUser">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=userTranslate vmTag="operatedByUser"}}
+    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=helpers vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
@@ -54,27 +30,11 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-        {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
+    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
 </template>
-
 
 <template name="Billable$cell$startTime">
-    {{#if isEditing}}
-        {{> Billable$cell$startTime$edit}}
-    {{else}}
-        {{formattedDate}}
-    {{/if}}
-</template>
-
-<template name="Billable$cell$startTime$edit">
-    <div class="row">
-        <div class="form-group col s12" style="position: relative;">
-            <div class="input-group date" >
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                <input type="text" class="startTimeEdit set-due-date form-control"  value="{{asDatePickerTime startTime}}" />
-            </div>
-        </div>
-    </div>
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=isEditing}}
 </template>
 
 <template name="Billable$cell$billingDetails">
@@ -82,11 +42,11 @@
 </template>
 
 <template name="Billable$cell$discount">
-        {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
+    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
 </template>
 
 <template name="Billable$cell$validationState">
-        {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
+    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
 </template>
 
 <template name="Billable$cell$valSaveBtn">
@@ -96,14 +56,48 @@
 </template>
 
 <template name="Billable$cell$valSaveBtn$edit">
-    <button class="btn-floating waves-effect waves-light cancelItem" ><i class="material-icons">cancel</i></button>
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
 </template>
 
 <template name="Billables$addButton">
     <!-- Modal Trigger -->
-    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i class="material-icons">add</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddUser"><i
+            class="material-icons">add</i></a>
 
     {{> Billable$cell$modalUser}}
+</template>
+
+<template name="Billable$zipAsync">
+
+    <div class="row">
+        <form class="col s8 offset-s2">
+            <fieldset>
+                <legend> Generate a zip file </legend>
+                <div class="row">
+                    <div class="input-field col s6 offset-s3">
+                        <input id="username" type="text" class="validate">
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6 offset-s3">
+                        <input id="password" type="password" class="validate">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s6 offset-s4">
+                        <button class="send btn waves-effect waves-light" type="submit" name="action">Authentication
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
 </template>
 
 <template name="Billable$cell$modalUser">
@@ -142,7 +136,8 @@
             <div class="row">
                 <div class="col s6 center">
                     <div class="row">
-                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light green" href="#!"><i class="material-icons">done</i></a>
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light green"
+                           href="#!"><i class="material-icons">done</i></a>
                     </div>
                 </div>
             </div>
@@ -169,5 +164,8 @@
 </template>
 
 <template name="Billable$Pagination">
-    {{> Billables$addButton}}<button class="previous btn-large waves-effect waves-light">Previous</button> <span class="letSize">{{page}} of {{pages}}</span> <button class="next btn-large waves-effect waves-light">Next</button>
+    {{> Billables$addButton}}
+    <button class="previous btn-large waves-effect waves-light">Previous</button>
+    <span class="letSize">{{page}} of {{pages}}</span>
+    <button class="nexts btn-large waves-effect waves-light">Next</button>
 </template>

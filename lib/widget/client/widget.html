@@ -16,7 +16,9 @@
     <select class="browser-default">
         <option {{attributesOfEmptyOption}}></option>
         {{#each choice in widget.values}}
-            <option value="{{choice}}" {{maybeSelected widget.value choice}}>{{widget.translateKey choice}}</option>
+            {{#if choice}}
+              <option value="{{choice}}" {{maybeSelected widget.value choice}}>{{widget.translateKey choice}}</option>
+            {{/if}}
         {{/each}}
     </select>
 </template>
@@ -37,12 +39,63 @@
 <template name="Widget$Textarea$editable">
     <div class="row">
         <form class="col s12">
-            <div class="row" >
+            <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea" length="120" {{b "value: value" }}></textarea>
+                    <textarea id="icon_prefix2" class="materialize-textarea" length="120" {{b
+                            "value: value" }}></textarea>
                 </div>
             </div>
         </form>
     </div>
+</template>
+
+<template name="Widget$User$readonly">
+    {{widget.value}}
+</template>
+
+<template name="Widget$User$editable">
+    <div class="input-field userInput">
+        <input id="search" type="search" class="usersearch" data-activates="userSearchDrop" data-toggle="dropdown"
+               required placeholder="{{_ "User.search.search-here"}}" {{b "value: value"}}>
+        <label for="search"><i class="material-icons">search</i></label>
+        <i class="material-icons">close</i>
+    </div>
+</template>
+
+<template name="Widget$Date$readonly">
+    {{dateToLocalizedString widget.value}}
+</template>
+
+<template name="Widget$Date$editable">
+    <div class="input-field col s12">
+        <div class="row">
+            <h6>Date:</h6>
+            <div class="form-group">
+               <input type="text" class="datepicker">
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="Widget$Time$readonly">
+    {{timeToLocalizedString widget.value}}
+</template>
+
+<template name="Widget$Time$editable">
+    <div class="row">
+        <h6>Heure:</h6>
+        <div class="form-group">
+            <input type="text" class="timepicker time_element" value="{{toTimepickerInputValue}}"/>
+        </div>
+    </div>
+</template>
+
+<template name="Widget$DateTime$readonly">
+    {{dateTimeToLocalizedString widget.value}}
+</template>
+
+<template name="Widget$DateTime$editable">
+    {{> Widget$Date vmTag="date" value=widget.value editable=1}}
+    {{> Widget$Time vmTag="time" value=widget.value editable=1}}
 </template>

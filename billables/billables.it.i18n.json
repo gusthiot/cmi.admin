@@ -1,0 +1,21 @@
+{
+  "Billables": {
+    "title": "Articoli fatturabili",
+    "column": {
+      "type"             : "Categoria",
+      "operatedByUser"   : "Operatore",
+      "billableToAccount": "Fatturabile",
+      "billableToProject": "Progetto",
+      "startTime"        : "Data / ora",
+      "billingDetails"   : "Dettagli",
+      "discount"         : "Riduzione",
+      "validationState"  : "Validazione",
+      "valSaveBtn"       : ""
+    },
+    "type": {
+      "USAGE_FEE"        : "Tariffe di utilizzazione",
+      "RESERVATION_FEE"  : "Costi di prenotazione",
+      "ACCESS_FEE"       : "Tassa"
+    }
+  }
+}

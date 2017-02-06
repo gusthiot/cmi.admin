@@ -12,7 +12,7 @@
       "validationState"  : "Validation",
       "valSaveBtn"       : ""
     },
-    "category": {
+    "type": {
       "USAGE_FEE"        : "Frais d'utilisation",
       "RESERVATION_FEE"  : "Frais de réservation",
       "ACCESS_FEE"       : "Émolument"

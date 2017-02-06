@@ -9,21 +9,15 @@
 
 <template name="Widget$Gallery$moar">
 {{#each repeat in moar}}
-    {{> Template.dynamic (galleryItem wid repeat.isLast)}}
+    {{> Widget$Gallery$item wid=wid isLast=repeat.isLast}}
 {{/each}}
-
 </template>
 
-<!-- For each widget name, a template is created programmatically e.g.
-     Widget$Gallery$item$Select that invokes this one. -->
-<template name="Widget$Gallery$$genericItem">
+<template name="Widget$Gallery$item">
     <tr>
     <td>{{#if isLast}}<button class="moar">+</button>{{/if}}</td>
         <td><code>Widget.{{wid}}</code></td>
-    <td><select class="editability browser-default">
-        <option value="readonly"><code>"readonly"</code></option>
-        <option value="editable"><code>"editable"</code></option>
-    </select></td>
+    <td><select class="browser-default" {{b "options: editabilities, value: editability"}}></select></td>
     <td>{{> Template.dynamic (widgetHere wid)}}</td>
     <td>Current value is: <input type="text" class="external-value browser-default" {{widgetInitialValue wid}}></td>
         {{> Template.dynamic (moreControls wid)}}

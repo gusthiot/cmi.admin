@@ -1,11 +1,3 @@
-/*.sidebar.icon.burger {
-    float: left;
-}
-
-.sidebar.ui {
-    color: white;
-}
-*/
 input:not([type]):focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
 input[type=password]:focus:not([readonly]),

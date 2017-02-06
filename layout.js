@@ -14,10 +14,10 @@ Router.route('/', function () {
     this.render("Homepage");
 });
 
-renderUserSearchBoxInNavBar = function(thatRoute) {
+renderUserSearchBoxInNavBar = function (thatRoute) {
     thatRoute.render('User$Pick', {
         to: "searchbox",
-        data: function() {
+        data: function () {
             return {
                 withLDAP: true,
                 id: "LayoutUserSearch"
@@ -28,7 +28,7 @@ renderUserSearchBoxInNavBar = function(thatRoute) {
 
 if (Meteor.isClient) {
     Template.User$Pick.events({
-        'user:selected #LayoutUserSearch': function(event, that, id) {
+        'user:selected #LayoutUserSearch': function (event, that, id) {
             if (id === undefined) return;
             var url = '/user/' + id + '/edit';
             Router.go(url);
@@ -46,15 +46,22 @@ Router.route('/user/:sciper/edit', function () {
     if (!user) {
         this.render('AccessControl$PermissionDenied');
     } else {
-        this.render('User$Edit', {data: {
-            object: user
-        }});
+        this.render('User$Edit', {
+            data: {
+                object: user
+            }
+        });
     }
 });
 
 Router.route('/billables', function () {
     this.render("Billables$Edit");
 });
+
+Router.route('/zipAsync', function () {
+    this.render("Billable$zipAsync");
+});
+
 
 if (Devsupport.isActive()) {
     Router.route('/test', function () {
@@ -64,9 +71,11 @@ if (Devsupport.isActive()) {
     Router.route('/devsupport/kafka/(.*)', function () {
         var topic = this.params[0];
         Kafka.subscribe(topic);
-        this.render("Kafka", {data: {
-            topic: topic
-        }});
+        this.render("Kafka", {
+            data: {
+                topic: topic
+            }
+        });
     });
 }
 
@@ -78,7 +87,7 @@ Router.route("/packages/bootstrap-3/(.*)",
         });
         this.response.end();
     },
-    { where: "server" });
+    {where: "server"});
 
 if (Meteor.isClient) {
     Template.nav.onRendered(function () {
@@ -119,7 +128,7 @@ if (Meteor.isClient) {
         allModalTemplates: function () {
             return flatMap(_.keys(Template), function (k) {
                 if (k.match(/Modal$/)) {
-                    return [{ tmpl: k }];
+                    return [{tmpl: k}];
                 } else {
                     return [];
                 }
