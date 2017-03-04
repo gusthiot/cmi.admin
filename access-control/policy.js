@@ -32,7 +32,8 @@ Role.prototype.policy = function(user) {
 Role.SuperAdministrator = new Role("SuperAdministrator");
 Role.SuperAdministrator.isAssignedToUser = function(user) {
   return (user._id === "243371"       // Dominique Quatravaux
-          || user._id === "133333"  // Philippe Langlet
+  || user._id === "123456"  // Christophe Gusthiot
+  || user._id === "133333"  // Philippe Langlet
           || user._id === "275977");  // Mauricio Oporto
 };
 
