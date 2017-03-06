@@ -1,3 +1,16 @@
 <template name="CustomersCats$Edit">
-    Customers Categories
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+
+<template name="CustomersCats$columnHead">
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+</template>
+
+<template name="CustomersCats$Pagination">
+    <!--{{> Billables$addButton}}-->
+    <button class="previous btn-large waves-effect waves-light">Previous</button>
+    <span class="letSize">{{page}} of {{pages}}</span>
+    <button class="next btn-large waves-effect waves-light">Next</button>
 </template>
