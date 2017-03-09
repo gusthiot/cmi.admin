@@ -27,12 +27,14 @@ if (Meteor.isServer) {
     }
 
     Meteor.publish(CustomersCats.name, function () {
-        console.log("published : " + CustomersCats.find({}).count());
         return CustomersCats.find({});
     });
 }
 
-console.log("class " + CustomersCats.find({}).count());
+function makeTable() {
+    return shared.makeTable(CustomersCats);
+}
+let theTable = makeTable();
 
 if (Meteor.isClient) {
     require("../lib/widget/client/widget");
@@ -49,9 +51,7 @@ if (Meteor.isClient) {
         }
     };
 
-    Template.CustomersCats$Edit.helpers({makeTable: shared.makeTable(CustomersCats)});
-
-    console.log("is client : " + CustomersCats.find({}).count());
+    Template.CustomersCats$Edit.helpers({makeTable: theTable});
 
     Template.CustomersCats$columnHead.helpers({
         helpers: {
@@ -80,5 +80,20 @@ if (Meteor.isClient) {
             templateInstance.paginate.next();
         }
     });
-}
 
+    Template.CustomersCats$Pagination.helpers({
+        notnull: function (pages) {
+            return pages > 0;
+        },
+        notfirst: function (page) {
+            return page > 1;
+        },
+        notlast: function (page, pages) {
+            return page < pages;
+        }
+    });
+
+    Template.CustomersCats$addButton.onRendered(function () {
+        this.$('.modal-trigger').assertSizeEquals(1).leanModal();
+    });
+}

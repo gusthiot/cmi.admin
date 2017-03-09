@@ -2,7 +2,6 @@
 const debug = require("debug")("shared.js");
 
 export function makeTable(specific) {
-    console.log("make " + specific.find({}).count());
     return new Tabular.Table({
         name: specific.name,
         collection: specific,
@@ -32,7 +31,6 @@ export function makeTable(specific) {
 
 
 export function setupColumnFilterUI(parentView, dataTableElement, specific) {
-    console.log("setup " + specific.find({}).count());
     let columns = dataTableElement.api().columns();
     columns.every(function () {
 
@@ -42,7 +40,6 @@ export function setupColumnFilterUI(parentView, dataTableElement, specific) {
             return;
         }
 
-        console.log(specific.find({}).count());
         let context = {
             index: column.index(),
             type: type,
