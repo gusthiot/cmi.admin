@@ -2,22 +2,42 @@
 const debug = require("debug")("shared.js");
 
 export function makeTable(specific) {
+    specific.columns.push("_id", "remove");
     return new Tabular.Table({
         name: specific.name,
         collection: specific,
         columns: _.map(specific.columns, function (colSymbol) {
-            return {
-                data: colSymbol,
-                title: TAPi18n.__(specific.name + ".column." + colSymbol),
-                defaultContent: "-",
-                tmpl: Meteor.isClient && Template[specific.name + "$cell$" + colSymbol],
-            };
+            if(colSymbol == "remove") {
+                return {
+                    data: colSymbol,
+                    orderable: false,
+                    visible : true,
+                    tmpl: Meteor.isClient && Template[specific.name + "$cell$" + colSymbol]
+                };
+            }
+            else if(colSymbol == "_id") {
+                return {
+                    data: colSymbol,
+                    orderable: false,
+                    visible : false
+                };
+
+            }
+            else {
+                return {
+                    data: colSymbol,
+                    title: TAPi18n.__(specific.name + ".column." + colSymbol),
+                    defaultContent: "-",
+                    tmpl: Meteor.isClient && Template[specific.name + "$cell$" + colSymbol],
+                };
+
+            }
         }),
         language: Tabular.Translations.getCurrent(),
-        select: {
-            style: "os",
-            items: "cell",
-        },
+        // select: {
+        //     style: "os",
+        //     items: "cell",
+        // },
         initComplete: function () {
             setupColumnFilterUI(Template[specific.name + "$Edit"].find().view, this, specific);
         },
@@ -36,7 +56,7 @@ export function setupColumnFilterUI(parentView, dataTableElement, specific) {
 
         let column = this,
             type = specific.columns[column.index()];
-        if (type === undefined) {
+        if (type === undefined || type == "remove") {
             return;
         }
 

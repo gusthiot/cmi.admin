@@ -18,12 +18,27 @@ CustomersCats.schema = new SimpleSchema({
 CustomersCats.columns =
     ["entitled", "codeN"];
 
+CustomersCats.allow({
+    insert: function () {
+        return true;
+    },
+
+    remove: function () {
+        return true;
+    },
+
+    update: function () {
+        return true;
+    }
+
+});
+
 if (Meteor.isServer) {
     // CustomersCats.remove({});
     if (CustomersCats.find({}).count() == 0) {
-        CustomersCats.insert({entitled: "Internal", codeN:"I"});
-        CustomersCats.insert({entitled: "Academic External", codeN:"A"});
-        CustomersCats.insert({entitled: "Industrial External", codeN:"E"});
+        CustomersCats.insert({entitled: "Interne", codeN:"I"});
+        CustomersCats.insert({entitled: "Externe Académique", codeN:"A"});
+        CustomersCats.insert({entitled: "Externe Industriel", codeN:"E"});
     }
 
     Meteor.publish(CustomersCats.name, function () {
@@ -74,10 +89,10 @@ if (Meteor.isClient) {
 
     Template.CustomersCats$Pagination.events({
         "click button.previous": function (event, templateInstance) {
-            templateInstance.paginate.previous();
+            templateInstance.paginate().previous();
         },
         "click button.next": function (event, templateInstance) {
-            templateInstance.paginate.next();
+            templateInstance.paginate().next();
         }
     });
 
@@ -95,5 +110,22 @@ if (Meteor.isClient) {
 
     Template.CustomersCats$addButton.onRendered(function () {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
+    });
+
+    Template.CustomersCats$cell$modalCategory.events({
+        'click .modal-done': function (event, templ) {
+            event.preventDefault();
+            CustomersCats.insert({entitled: templ.$('#entitled').val(), codeN:templ.$('#code_n').val()});
+        }
+    });
+
+    Template.CustomersCats$cell$remove.events({
+        'click .cancelItem': function (event) {
+            event.preventDefault();
+            if(confirm("remove \"" + this.entitled + "\" ?")) {
+                console.log("remove " + this._id);
+                CustomersCats.remove({_id:this._id});
+            }
+        }
     });
 }
