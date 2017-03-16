@@ -2,18 +2,17 @@
     {{> tabular table=makeTable class="responsive-table striped"}}
 </template>
 
-
 <template name="CustomersCats$columnHead">
     {{type}}
-    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+    {{> Widget$Select value=type values=values editable=1}}
 </template>
 
 <template name="CustomersCats$cell$entitled">
-    {{> Widget$Select vmTag="entitled" value=entitled editable=0 helpers=translateKey}}
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=0}}
 </template>
 
 <template name="CustomersCats$cell$codeN">
-    {{> Widget$Select vmTag="codeN" value=codeN editable=0 helpers=translateKey}}
+    {{> Widget$InputText vmTag="codeN" value=codeN editable=0}}
 </template>
 
 <template name="CustomersCats$cell$remove">
@@ -21,15 +20,12 @@
 </template>
 
 <template name="CustomersCats$addButton">
-    <!-- Modal Trigger -->
     <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddCategory"><i
             class="material-icons">add</i></a>
-
     {{> CustomersCats$cell$modalCategory}}
 </template>
 
 <template name="CustomersCats$cell$modalCategory">
-    <!-- Modal Structure -->
     <div id="modalAddCategory" class="modal bottom-sheet">
         <div class="modal-content center">
             <h4>Add Customers Category</h4>
@@ -56,7 +52,7 @@
                     <div class="row">
                         <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
                             <i class="material-icons">cancel</i></a>
-                        <a class="modal-action modal-done btn-floating btn-large waves-effect waves-light green">
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
                             <i class="material-icons">done</i></a>
                     </div>
                 </div>
@@ -76,5 +72,4 @@
             <button class="next btn-large waves-effect waves-light">Next</button>
         {{/if}}
     {{/if}}
-
 </template>

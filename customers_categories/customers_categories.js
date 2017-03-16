@@ -1,6 +1,6 @@
 
 const shared = require("../shared");
-const debug = require("debug")("rules.js");
+const debug = require("debug")("customers_categories.js");
 
 CustomersCats = new Meteor.Collection("customers_categories");
 
@@ -62,19 +62,11 @@ if (Meteor.isClient) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template.CustomersCats$Edit");
+            return Template.instance().findParent("Template." + CustomersCats.name + "$Edit");
         }
     };
 
     Template.CustomersCats$Edit.helpers({makeTable: theTable});
-
-    Template.CustomersCats$columnHead.helpers({
-        helpers: {
-            translateKey: function (what) {
-                return what;
-            },
-        },
-    });
 
     Template.CustomersCats$columnHead.events({
         'change select': function (event, template) {

@@ -1,3 +1,88 @@
 <template name="AccountsCats$Edit">
-    Accounts Categories
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="AccountsCats$columnHead">
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1}}
+</template>
+
+<template name="AccountsCats$cell$entitled">
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=0}}
+</template>
+
+<template name="AccountsCats$cell$accountCode">
+    {{> Widget$InputText vmTag="accountCode" value=accountCode editable=0}}
+</template>
+
+<template name="AccountsCats$cell$multi">
+    {{> Widget$Select vmTag="multi" value=multi editable=0}}
+</template>
+
+<template name="AccountsCats$cell$remove">
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
+</template>
+
+<template name="AccountsCats$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddCategory"><i
+            class="material-icons">add</i></a>
+    {{> AccountsCats$cell$modalCategory}}
+</template>
+
+<template name="AccountsCats$cell$modalCategory">
+    <div id="modalAddCategory" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>Add Accounts Category</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="entitled" type="text" class="validate">
+                            <label for="entitled">Entitled</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="account_code" type="text" class="validate">
+                            <label for="account_code">Account Code</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label>Multi : </label>
+                            <input id="true" type="radio" class="validate" name="multi" value="VRAI">
+                            <label for="true">VRAI</label>
+                            <input id="false" type="radio" class="validate" name="multi" checked="checked" value="FAUX">
+                            <label for="false">FAUX</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="AccountsCats$Pagination">
+    {{> AccountsCats$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="next btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
 </template>
