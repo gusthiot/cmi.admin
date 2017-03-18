@@ -1,59 +1,160 @@
-if (Meteor.isClient) {
-    require("../lib/widget/client/widget");
-    require("../lib/client/find-templates");
-}
 
-var debug = require("debug")("rules.js");
+const shared = require("../shared");
+const debug = require("debug")("prices.js");
 
 Prices = new Meteor.Collection("prices");
 
-var Schemas = {};
+Prices.name = "Prices";
 
-Schemas.Price = new SimpleSchema({
+Prices.schema = new SimpleSchema({
     entitled: {
-        type: String //,
-        // allowedValues: ["EPFL", "Academic External", "Entreprise External"]
+        type: String
     },
-    nature: {
+    natureId: {
         type: String
     }
 });
 
-Prices.attachSchema(Schemas.Price);
-
 Prices.columns =
-    ["entitled", "nature"];
+    ["entitled", "natureId"];
 
-if (Meteor.isClient) {
-    Meteor.subscribe('Prices');
+Prices.allow({
+    insert: function () {
+        return true;
+    },
+
+    remove: function () {
+        return true;
+    },
+
+    update: function () {
+        return true;
+    }
+
+});
+
+function getNatureIdFromEntitled(entitled) {
+    return CustomersCats.findOne({entitled: entitled})._id;
 }
 
+function getNatures() {
+    return CustomersCats.find({});
+}
+
+if (Meteor.isServer) {
+    Prices.remove({});
+    if (Prices.find({}).count() == 0) {
+        Prices.insert({entitled: "EPFL", natureId: getNatureIdFromEntitled("Interne")});
+        Prices.insert({entitled: "Académique Externe", natureId: getNatureIdFromEntitled("Externe Académique")});
+        Prices.insert({entitled: "Entreprise Externe", natureId: getNatureIdFromEntitled("Externe Industriel")});
+    }
+
+    Meteor.publish(Prices.name, function () {
+        return Prices.find({});
+    });
+}
+
+function makeTable() {
+    return shared.makeTable(Prices);
+}
+let theTable = makeTable();
 
 if (Meteor.isClient) {
+    require("../lib/widget/client/widget");
+    require("../lib/client/find-templates");
+
+    Meteor.subscribe(Prices.name);
+
     Template.Prices$Edit.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template.Prices$Edit");
+            return Template.instance().findParent("Template." + Prices.name + "$Edit");
         }
-    }
-}
+    };
 
+    Template.Prices$Edit.helpers({makeTable: theTable});
 
-if (Meteor.isServer) {
-    // This code only runs on the server
-    Meteor.publish('Prices', function () {
-        return Prices.find({});
+    Template.Prices$columnHead.events({
+        'change select': function (event, template) {
+            let val = $.fn.dataTable.util.escapeRegex(
+                $(event.target).val()
+            );
+            template.dataTable.column
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        }
     });
-}
 
+    Template.Prices$columnHead.helpers({
+        helpers: {
+            translateKey: function (what) {
+                if(Template.currentData().value == "natureId")
+                    return CustomersCats.findOne({_id: what}).entitled;
+                else return what;
+            }
+        },
+    });
 
-function toast(template, err) {
-    var toastTemplateArgs;
-    if (err) {
-        toastTemplateArgs = {error: err};
-    }
-    var $toastContent = Blaze.toHTMLWithData(template, toastTemplateArgs);
-    Materialize.toast($toastContent, 5000);
+    Template.Prices$cell$natureId.helpers({
+        helpers: {
+            translateKey: function (natureId) {
+                return CustomersCats.findOne({_id: natureId}).entitled;
+            }
+        },
+    });
+
+    Template.Prices$Pagination.events({
+        "click button.previous": function (event, templateInstance) {
+            templateInstance.paginate().previous();
+        },
+        "click button.next": function (event, templateInstance) {
+            templateInstance.paginate().next();
+        }
+    });
+
+    Template.Prices$Pagination.helpers({
+        notnull: function (pages) {
+            return pages > 0;
+        },
+        notfirst: function (page) {
+            return page > 1;
+        },
+        notlast: function (page, pages) {
+            return page < pages;
+        }
+    });
+
+    Template.Prices$addButton.onRendered(function () {
+        this.$('.modal-trigger').assertSizeEquals(1).leanModal();
+    });
+
+    Template.Prices$cell$modalCategory.events({
+        'click .modal-done': function (event, templ) {
+            event.preventDefault();
+            Prices.insert({entitled: templ.$('#entitled').val(), natureId:templ.$('#nature').val()});
+        }
+    });
+
+    Template.Prices$cell$modalCategory.helpers({
+        natures: function () {
+            return getNatures();
+        }
+    });
+
+    Template.Prices$nature.onRendered(function(){
+        $('#nature').material_select();
+    });
+
+    Template.Prices$cell$remove.events({
+        'click .cancelItem': function (event) {
+            event.preventDefault();
+            if(confirm("remove \"" + this.entitled + "\" ?")) {
+                console.log("remove " + this._id);
+                Prices.remove({_id:this._id});
+            }
+        }
+    });
+
 }
