@@ -1,3 +1,184 @@
-<template name="CustomerAccounts$Edit">
-    Customer Accounts
+<template name="CustomerAccs$Edit">
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="CustomerAccs$columnHead">
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+</template>
+
+<template name="CustomerAccs$cell$accountId">
+    {{> Widget$InputText vmTag="accountId" value=accountId editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$number">
+    {{> Widget$InputText vmTag="number" value=number editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$entitled">
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$customerId">
+    {{> Widget$Select vmTag="customerId" value=customerId editable=0 helpers=helpers}}
+</template>
+
+<template name="CustomerAccs$cell$accountsCatId">
+    {{> Widget$Select vmTag="accountsCatId" value=accountsCatId editable=0 helpers=helpers}}
+</template>
+
+<template name="CustomerAccs$cell$startTime">
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$endTime">
+    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$state">
+    {{> Widget$Select vmTag="state" value=state editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$creation">
+    {{> Widget$InputText vmTag="creation" value=creation editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$changes">
+    {{> Widget$InputText vmTag="changes" value=changes editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$closing">
+    {{> Widget$InputText vmTag="closing" value=closing editable=0}}
+</template>
+
+<template name="CustomerAccs$cell$remove">
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
+</template>
+
+<template name="CustomerAccs$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> CustomerAccs$modalAdd}}
+</template>
+
+<template name="CustomerAccs$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>Add Customer Account</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="account_id" type="text" class="validate">
+                            <label for="account_id">Account Id</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="number" type="text" class="validate">
+                            <label for="number">Number</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="entitled" type="text" class="validate">
+                            <label for="entitled">Entitled</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="customer">Customer</label>
+                            <select class="form-control validate" id="customer">
+                                {{#each customers}}
+                                    {{> CustomerAccs$customer}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="accounts_cat">Account Category</label>
+                            <select class="form-control validate" id="accounts_cat">
+                                {{#each cats}}
+                                    {{> CustomerAccs$cat}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label for="start_time">Start Time</label>
+                            <input id="start_time" type="date" class="datepicker validate">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label for="end_time">End Time</label>
+                            <input id="end_time" type="date" class="datepicker validate">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label>State : </label>
+                            <input id="active" type="radio" class="validate" name="state" value="Actif">
+                            <label for="active">Actif</label>
+                            <input id="passive" type="radio" class="validate" name="state" checked="checked" value="Passif">
+                            <label for="passive">Passif</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="creation" type="text" class="validate">
+                            <label for="creation">Creation</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="changes" type="text" class="validate">
+                            <label for="changes">Changes</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="closing" type="text" class="validate">
+                            <label for="closing">Closing</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="CustomerAccs$customer">
+    <option value="{{_id}}">{{codeCMi}}</option>
+</template>
+
+<template name="CustomerAccs$cat">
+    <option value="{{_id}}">{{accountCode}}</option>
+</template>
+
+<template name="CustomerAccs$Pagination">
+    {{> CustomerAccs$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="next btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
 </template>

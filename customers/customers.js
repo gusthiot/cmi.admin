@@ -213,31 +213,30 @@ if (Meteor.isClient) {
     Template.Customers$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            // console.log(templ.$('#price').val());
-            // Customers.insert(
-            //     {entitled: templ.$('#entitled').val(),
-            //         codeSAP:templ.$('#code_sap').val(),
-            //         name:templ.$('#name').val(),
-            //         numAdd:templ.$('#num_add').val(),
-            //         address:templ.$('#address').val(),
-            //         postalBox:templ.$('#postal_box').val(),
-            //         npa:templ.$('#npa').val(),
-            //         city:templ.$('#city').val(),
-            //         country:templ.$('#country').val(),
-            //         countryCode:templ.$('#country_code').val(),
-            //         codeCMi:templ.$('#code_cmi').val(),
-            //         abbreviation:templ.$('#abbreviation').val(),
-            //         name2:templ.$('#name2').val(),
-            //         name3:templ.$('#name3').val(),
-            //         natureId:templ.$('#nature').val(),
-            //         priceId:templ.$('#price').val(),
-            //         ruleId:templ.$('#rule').val(),
-            //         baseFee:templ.$('#base_fee').val(),
-            //         fixedFee:templ.$('#fixed_fee').val(),
-            //         coefA:templ.$('#coef_a').val(),
-            //         creation:templ.$('#creation').val(),
-            //         changes:templ.$('#changes').val()
-            //     });
+            Customers.insert(
+                {entitled: templ.$('#entitled').val(),
+                    codeSAP:templ.$('#code_sap').val(),
+                    name:templ.$('#name').val(),
+                    numAdd:templ.$('#num_add').val(),
+                    address:templ.$('#address').val(),
+                    postalBox:templ.$('#postal_box').val(),
+                    npa:templ.$('#npa').val(),
+                    city:templ.$('#city').val(),
+                    country:templ.$('#country').val(),
+                    countryCode:templ.$('#country_code').val(),
+                    codeCMi:templ.$('#code_cmi').val(),
+                    abbreviation:templ.$('#abbreviation').val(),
+                    name2:templ.$('#name2').val(),
+                    name3:templ.$('#name3').val(),
+                    natureId:templ.$('#nature').val(),
+                    priceId:templ.$('#price').val(),
+                    ruleId:templ.$('#rule').val(),
+                    baseFee:templ.$('#base_fee').val(),
+                    fixedFee:templ.$('#fixed_fee').val(),
+                    coefA:templ.$('#coef_a').val(),
+                    creation:templ.$('#creation').val(),
+                    changes:templ.$('#changes').val()
+                });
         },
         "change #nature": function(evt) {
             let newNature = $(evt.target).val();

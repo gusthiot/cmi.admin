@@ -56,7 +56,7 @@ Router.route('/billables', function () {
 });
 
 Router.route('/customer_accounts', function () {
-  this.render("CustomerAccounts$Edit");
+  this.render("CustomerAccs$Edit");
 });
 Router.route('/accounts_categories', function () {
   this.render("AccountsCats$Edit");
