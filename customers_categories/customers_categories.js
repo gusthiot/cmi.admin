@@ -104,7 +104,7 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    Template.CustomersCats$cell$modalCategory.events({
+    Template.CustomersCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             CustomersCats.insert({entitled: templ.$('#entitled').val(), codeN:templ.$('#code_n').val()});

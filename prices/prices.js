@@ -37,12 +37,8 @@ function getNatureIdFromEntitled(entitled) {
     return CustomersCats.findOne({entitled: entitled})._id;
 }
 
-function getNatures() {
-    return CustomersCats.find({});
-}
-
 if (Meteor.isServer) {
-    Prices.remove({});
+    // Prices.remove({});
     if (Prices.find({}).count() == 0) {
         Prices.insert({entitled: "EPFL", natureId: getNatureIdFromEntitled("Interne")});
         Prices.insert({entitled: "Académique Externe", natureId: getNatureIdFromEntitled("Externe Académique")});
@@ -130,16 +126,16 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    Template.Prices$cell$modalCategory.events({
+    Template.Prices$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             Prices.insert({entitled: templ.$('#entitled').val(), natureId:templ.$('#nature').val()});
         }
     });
 
-    Template.Prices$cell$modalCategory.helpers({
+    Template.Prices$modalAdd.helpers({
         natures: function () {
-            return getNatures();
+            return CustomersCats.find({});
         }
     });
 

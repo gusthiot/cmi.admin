@@ -1,15 +1,11 @@
-if (Meteor.isClient) {
-    require("../lib/widget/client/widget");
-    require("../lib/client/find-templates");
-}
-
-var debug = require("debug")("consumers.js");
+const shared = require("../shared");
+const debug = require("debug")("customers.js");
 
 Customers = new Meteor.Collection("customers");
 
-var Schemas = {};
+Customers.name = "Customers";
 
-Schemas.Customer = new SimpleSchema({
+Customers.schema = new SimpleSchema({
     codeSAP: {
         type: SimpleSchema.Integer,
         min: 1
@@ -52,13 +48,13 @@ Schemas.Customer = new SimpleSchema({
     name3: {
         type: String
     },
-    nature: {
+    natureId: {
         type: String
     },
-    price: {
+    priceId: {
         type: String
     },
-    rule: {
+    ruleId: {
         type: String
     },
     baseFee: {
@@ -81,43 +77,214 @@ Schemas.Customer = new SimpleSchema({
     }
 });
 
-Customers.attachSchema(Schemas.Customer);
 
 Customers.columns =
     ["codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode", "codeCMi",
-        "abbrevation", "name2", "name3", "nature", "price", "rule", "basefee", "fixedFee", "coefA", "creation",
+        "abbreviation", "name2", "name3", "natureId", "priceId", "ruleId", "baseFee", "fixedFee", "coefA", "creation",
         "changes"];
 
-if (Meteor.isClient) {
-    Meteor.subscribe('Customers');
+Customers.allow({
+    insert: function () {
+        return true;
+    },
+
+    remove: function () {
+        return true;
+    },
+
+    update: function () {
+        return true;
+    }
+
+});
+
+if (Meteor.isServer) {
+    Meteor.publish(Customers.name, function () {
+        return Customers.find({});
+    });
 }
 
+function makeTable() {
+    return shared.makeTable(Customers);
+}
+let theTable = makeTable();
 
 if (Meteor.isClient) {
+    require("../lib/widget/client/widget");
+    require("../lib/client/find-templates");
+
+    Meteor.subscribe(Customers.name);
+
     Template.Customers$Edit.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template.Customers$Edit");
+            return Template.instance().findParent("Template." + Customers.name + "$Edit");
         }
-    }
-}
+    };
 
+    Template.Customers$Edit.helpers({makeTable: theTable});
 
-if (Meteor.isServer) {
-    // This code only runs on the server
-    Meteor.publish('Customers', function () {
-        return Customers.find({});
+    Template.Customers$columnHead.events({
+        'change select': function (event, template) {
+            let val = $.fn.dataTable.util.escapeRegex(
+                $(event.target).val()
+            );
+            template.dataTable.column
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        }
     });
-}
 
+    Template.Customers$columnHead.helpers({
+        helpers: {
+            translateKey: function (what) {
+                if(what) {
+                    if (Template.currentData().value == "natureId")
+                        return CustomersCats.findOne({_id: what}).entitled;
+                    else if (Template.currentData().value == "priceId")
+                        return Prices.findOne({_id: what}).entitled;
+                    else if (Template.currentData().value == "ruleId")
+                        return Rules.findOne({_id: what}).entitled;
+                    else return what;
+                }
+                else return what;
+            }
+        },
+    });
 
-function toast(template, err) {
-    var toastTemplateArgs;
-    if (err) {
-        toastTemplateArgs = {error: err};
-    }
-    var $toastContent = Blaze.toHTMLWithData(template, toastTemplateArgs);
-    Materialize.toast($toastContent, 5000);
+    Template.Customers$cell$natureId.helpers({
+        helpers: {
+            translateKey: function (natureId) {
+                if(natureId)
+                    return CustomersCats.findOne({_id: natureId}).entitled;
+                else return natureId;
+            }
+        },
+    });
+
+    Template.Customers$cell$priceId.helpers({
+        helpers: {
+            translateKey: function (priceId) {
+                if(priceId)
+                    return Prices.findOne({_id: priceId}).entitled;
+                else return priceId;
+            }
+        },
+    });
+
+    Template.Customers$cell$ruleId.helpers({
+        helpers: {
+            translateKey: function (ruleId) {
+                if(ruleId)
+                    return Rules.findOne({_id: ruleId}).entitled;
+                else return ruleId;
+            }
+        },
+    });
+
+    Template.Customers$Pagination.events({
+        "click button.previous": function (event, templateInstance) {
+            templateInstance.paginate().previous();
+        },
+        "click button.next": function (event, templateInstance) {
+            templateInstance.paginate().next();
+        }
+    });
+
+    Template.Customers$Pagination.helpers({
+        notnull: function (pages) {
+            return pages > 0;
+        },
+        notfirst: function (page) {
+            return page > 1;
+        },
+        notlast: function (page, pages) {
+            return page < pages;
+        }
+    });
+
+    Template.Customers$addButton.onRendered(function () {
+        this.$('.modal-trigger').assertSizeEquals(1).leanModal();
+    });
+    Session.set('nature', 'undefined');
+
+    Template.Customers$modalAdd.events({
+        'click .modal-done': function (event, templ) {
+            event.preventDefault();
+            // console.log(templ.$('#price').val());
+            // Customers.insert(
+            //     {entitled: templ.$('#entitled').val(),
+            //         codeSAP:templ.$('#code_sap').val(),
+            //         name:templ.$('#name').val(),
+            //         numAdd:templ.$('#num_add').val(),
+            //         address:templ.$('#address').val(),
+            //         postalBox:templ.$('#postal_box').val(),
+            //         npa:templ.$('#npa').val(),
+            //         city:templ.$('#city').val(),
+            //         country:templ.$('#country').val(),
+            //         countryCode:templ.$('#country_code').val(),
+            //         codeCMi:templ.$('#code_cmi').val(),
+            //         abbreviation:templ.$('#abbreviation').val(),
+            //         name2:templ.$('#name2').val(),
+            //         name3:templ.$('#name3').val(),
+            //         natureId:templ.$('#nature').val(),
+            //         priceId:templ.$('#price').val(),
+            //         ruleId:templ.$('#rule').val(),
+            //         baseFee:templ.$('#base_fee').val(),
+            //         fixedFee:templ.$('#fixed_fee').val(),
+            //         coefA:templ.$('#coef_a').val(),
+            //         creation:templ.$('#creation').val(),
+            //         changes:templ.$('#changes').val()
+            //     });
+        },
+        "change #nature": function(evt) {
+            let newNature = $(evt.target).val();
+            if (newNature != nature)
+                Session.set('nature', newNature);
+        }
+    });
+
+    Template.Customers$modalAdd.helpers({
+        natures: function () {
+            return CustomersCats.find({});
+        },
+        rules: function () {
+            return Rules.find({});
+        },
+        prices: function () {
+            if(Session.get("nature") == "undefined") {
+                let one = CustomersCats.findOne({});
+                if(one)
+                    Session.set('nature', one._id);
+            }
+            if(Session.get("nature"))
+                return Prices.find({natureId: Session.get("nature")});
+            else
+                return Prices.find({});
+        }
+    });
+
+    Template.Customers$nature.onRendered(function(){
+        $('#nature').material_select();
+    });
+
+    Template.Customers$price.onRendered(function(){
+        $('#price').material_select();
+    });
+
+    Template.Customers$rule.onRendered(function(){
+        $('#rule').material_select();
+    });
+
+    Template.Customers$cell$remove.events({
+        'click .cancelItem': function (event) {
+            event.preventDefault();
+            if(confirm("remove \"" + this.entitled + "\" ?")) {
+                console.log("remove " + this._id);
+                Customers.remove({_id:this._id});
+            }
+        }
+    });
 }

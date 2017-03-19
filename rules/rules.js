@@ -104,7 +104,7 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    Template.Rules$cell$modalCategory.events({
+    Template.Rules$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             Rules.insert({entitled: templ.$('#entitled').val(), rule:templ.$('#rule').val()});

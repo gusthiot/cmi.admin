@@ -20,13 +20,13 @@
 </template>
 
 <template name="Rules$addButton">
-    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddCategory"><i
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
             class="material-icons">add</i></a>
-    {{> Rules$cell$modalCategory}}
+    {{> Rules$modalAdd}}
 </template>
 
-<template name="Rules$cell$modalCategory">
-    <div id="modalAddCategory" class="modal bottom-sheet">
+<template name="Rules$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
             <h4>Add Rule</h4>
             <div class="row">

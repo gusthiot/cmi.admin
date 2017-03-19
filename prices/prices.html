@@ -19,13 +19,13 @@
     <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
 </template>
 <template name="Prices$addButton">
-    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAddCategory"><i
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
             class="material-icons">add</i></a>
-    {{> Prices$cell$modalCategory}}
+    {{> Prices$modalAdd}}
 </template>
 
-<template name="Prices$cell$modalCategory">
-    <div id="modalAddCategory" class="modal bottom-sheet">
+<template name="Prices$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
             <h4>Add Price</h4>
             <div class="row">

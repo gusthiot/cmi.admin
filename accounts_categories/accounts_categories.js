@@ -108,7 +108,7 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    Template.AccountsCats$cell$modalCategory.events({
+    Template.AccountsCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             AccountsCats.insert(

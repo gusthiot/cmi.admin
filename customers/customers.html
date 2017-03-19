@@ -1,3 +1,283 @@
 <template name="Customers$Edit">
-    Customers
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="Customers$columnHead">
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1}}
+</template>
+
+<template name="Customers$cell$codeSAP">
+    {{> Widget$InputText vmTag="codeSAP" value=codeSAP editable=0}}
+</template>
+
+<template name="Customers$cell$name">
+    {{> Widget$InputText vmTag="name" value=name editable=0}}
+</template>
+
+<template name="Customers$cell$numAdd">
+    {{> Widget$InputText vmTag="numAdd" value=numAdd editable=0}}
+</template>
+
+<template name="Customers$cell$address">
+    {{> Widget$InputText vmTag="address" value=address editable=0}}
+</template>
+
+<template name="Customers$cell$postalBox">
+    {{> Widget$InputText vmTag="postalBox" value=postalBox editable=0}}
+</template>
+
+<template name="Customers$cell$npa">
+    {{> Widget$InputText vmTag="npa" value=npa editable=0}}
+</template>
+
+<template name="Customers$cell$city">
+    {{> Widget$InputText vmTag="city" value=city editable=0}}
+</template>
+
+<template name="Customers$cell$country">
+    {{> Widget$InputText vmTag="country" value=country editable=0}}
+</template>
+
+<template name="Customers$cell$countryCode">
+    {{> Widget$InputText vmTag="countryCode" value=countryCode editable=0}}
+</template>
+
+<template name="Customers$cell$codeCMi">
+    {{> Widget$InputText vmTag="codeCMi" value=codeCMi editable=0}}
+</template>
+
+<template name="Customers$cell$abbreviation">
+    {{> Widget$InputText vmTag="abbreviation" value=abbreviation editable=0}}
+</template>
+
+<template name="Customers$cell$name2">
+    {{> Widget$InputText vmTag="name2" value=name2 editable=0}}
+</template>
+
+<template name="Customers$cell$name3">
+    {{> Widget$InputText vmTag="name3" value=name3 editable=0}}
+</template>
+
+<template name="Customers$cell$natureId">
+    {{> Widget$Select vmTag="natureId" value=natureId editable=0 helpers=helpers}}
+</template>
+
+<template name="Customers$cell$priceId">
+    {{> Widget$Select vmTag="priceId" value=priceId editable=0 helpers=helpers}}
+</template>
+
+<template name="Customers$cell$ruleId">
+    {{> Widget$Select vmTag="ruleId" value=ruleId editable=0 helpers=helpers}}
+</template>
+
+<template name="Customers$cell$baseFee">
+    {{> Widget$InputText vmTag="baseFee" value=baseFee editable=0}}
+</template>
+
+<template name="Customers$cell$fixedFee">
+    {{> Widget$InputText vmTag="fixedFee" value=fixedFee editable=0}}
+</template>
+
+<template name="Customers$cell$coefA">
+    {{> Widget$InputText vmTag="coefA" value=coefA editable=0}}
+</template>
+
+<template name="Customers$cell$creation">
+    {{> Widget$InputText vmTag="creation" value=creation editable=0}}
+</template>
+
+<template name="Customers$cell$changes">
+    {{> Widget$InputText vmTag="changes" value=changes editable=0}}
+</template>
+
+<template name="Customers$cell$remove">
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
+</template>
+
+<template name="Customers$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> Customers$modalAdd}}
+</template>
+
+<template name="Customers$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>Add Client</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="code_sap" type="text" class="validate">
+                            <label for="code_sap">Code SAP</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name" type="text" class="validate">
+                            <label for="name">Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="num_add" type="text" class="validate">
+                            <label for="num_add">Address Number</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="address" type="text" class="validate">
+                            <label for="address">Address</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="postal_box" type="text" class="validate">
+                            <label for="postal_box">Postal Box</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="npa" type="text" class="validate">
+                            <label for="npa">NPA</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="city" type="text" class="validate">
+                            <label for="city">City</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="country" type="text" class="validate">
+                            <label for="country">Country</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="country_code" type="text" class="validate">
+                            <label for="country_code">Country Code</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="code_cmi" type="text" class="validate">
+                            <label for="code_cmi">Code CMi</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="abbreviation" type="text" class="validate">
+                            <label for="abbreviation">Abbreviation</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name2" type="text" class="validate">
+                            <label for="name2">Name 2</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name3" type="text" class="validate">
+                            <label for="name3">Name 3</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="nature">Nature</label>
+                            <select class="form-control validate" id="nature">
+                                {{#each natures}}
+                                    {{> Customers$nature}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="price">Price</label>
+                            <select class="form-control validate" id="price">
+                                {{#each prices}}
+                                    {{> Customers$price}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="rule">Rule</label>
+                            <select class="form-control validate" id="rule">
+                                {{#each rules}}
+                                    {{> Customers$rule}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="base_fee" type="text" class="validate">
+                            <label for="base_fee">Base Fee</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="fixed_fee" type="text" class="validate">
+                            <label for="fixed_fee">Fixed Fee</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="coef_a" type="text" class="validate">
+                            <label for="coef_a">Coefficient A</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="creation" type="text" class="validate">
+                            <label for="creation">Creation</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="changes" type="text" class="validate">
+                            <label for="changes">Changes</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="Customers$nature">
+    <option value="{{_id}}">{{entitled}}</option>
+</template>
+
+<template name="Customers$rule">
+    <option value="{{_id}}">{{entitled}}</option>
+</template>
+
+<template name="Customers$price">
+    <option value="{{_id}}">{{entitled}}</option>
+</template>
+
+<template name="Customers$Pagination">
+    {{> Customers$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="next btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
 </template>
