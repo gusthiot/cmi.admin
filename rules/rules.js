@@ -35,7 +35,7 @@ Rules.allow({
 
 if (Meteor.isServer) {
     // Rules.remove({});
-    if (Rules.find({}).count() == 0) {
+    if (Rules.find({}).count() === 0) {
         Rules.insert({entitled: "Pas d’émolument si pas d’activité en salle blanche", rule:"NON"});
         Rules.insert({entitled: "Émolument à payer tous les mois", rule:"OUI"});
         Rules.insert({entitled: "Pas d’émolument si zéro article", rule:"ZERO"});
@@ -47,7 +47,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Rules);
+    return shared.makeTable(Rules, false);
 }
 let theTable = makeTable();
 
@@ -108,6 +108,7 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             Rules.insert({entitled: templ.$('#entitled').val(), rule:templ.$('#rule').val()});
+            templ.find("form").reset();
         }
     });
 
@@ -115,7 +116,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event) {
             event.preventDefault();
             if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
                 Rules.remove({_id:this._id});
             }
         }

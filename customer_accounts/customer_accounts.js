@@ -6,7 +6,8 @@ CustomerAccs = new Meteor.Collection("customer_accounts");
 CustomerAccs.name = "CustomerAccs";
 
 CustomerAccs.schema = new SimpleSchema({
-    accountId: {
+    _id: {
+        label: "ID Compte",
         type: SimpleSchema.Integer,
         min: 1
     },
@@ -43,7 +44,7 @@ CustomerAccs.schema = new SimpleSchema({
 });
 
 CustomerAccs.columns =
-    ["accountId", "number", "entitled", "customerId", "accountsCatId", "startTime", "endTime", "state", "creation", "changes",
+    ["number", "entitled", "customerId", "accountsCatId", "startTime", "endTime", "state", "creation", "changes",
         "closing"];
 
 CustomerAccs.allow({
@@ -68,7 +69,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(CustomerAccs);
+    return shared.makeTable(CustomerAccs, true);
 }
 let theTable = makeTable();
 
@@ -104,23 +105,11 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    if (Template.currentData().value == "customerId")
-                        return Customers.findOne({_id: what}).codeCMi;
-                    else if (Template.currentData().value == "accountsCatId")
+                    if (Template.currentData().value === "accountsCatId")
                         return AccountsCats.findOne({_id: what}).accountCode;
                     else return what;
                 }
                 else return what;
-            }
-        },
-    });
-
-    Template.CustomerAccs$cell$customerId.helpers({
-        helpers: {
-            translateKey: function (customerId) {
-                if(customerId)
-                    return Customers.findOne({_id: customerId}).codeCMi;
-                else return customerId;
             }
         },
     });
@@ -164,7 +153,7 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             CustomerAccs.insert(
-                {accountId: templ.$('#account_id').val(),
+                {_id: templ.$('#account_id').val(),
                     number:templ.$('#number').val(),
                     entitled: templ.$('#entitled').val(),
                     customerId:templ.$('#customer').val(),
@@ -176,6 +165,7 @@ if (Meteor.isClient) {
                     changes: templ.$('#changes').val(),
                     closing: templ.$('#closing').val()
                 });
+            templ.find("form").reset();
         }
     });
 
@@ -207,7 +197,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event) {
             event.preventDefault();
             if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
                 CustomerAccs.remove({_id:this._id});
             }
         }

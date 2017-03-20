@@ -37,7 +37,7 @@ AccountsCats.allow({
 
 if (Meteor.isServer) {
     // AccountsCats.remove({});
-    if (AccountsCats.find({}).count() == 0) {
+    if (AccountsCats.find({}).count() === 0) {
         AccountsCats.insert({entitled: "Compte standard", accountCode:"STD", multi:"VRAI"});
         AccountsCats.insert({entitled: "Compte projet de développement de procédés avec subsides", accountCode:"DEV", multi:"VRAI"});
         AccountsCats.insert({entitled: "Compte étudiant EPFL projet semestre Bachelor", accountCode:"BSP", multi:"FAUX"});
@@ -51,7 +51,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(AccountsCats);
+    return shared.makeTable(AccountsCats, false);
 }
 let theTable = makeTable();
 
@@ -116,6 +116,7 @@ if (Meteor.isClient) {
                     accountCode:templ.$('#account_code').val(),
                     multi:$(templ.find('input:radio[name=multi]:checked')).val()
                 });
+            templ.find("form").reset();
         }
     });
 
@@ -123,7 +124,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event) {
             event.preventDefault();
             if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
                 AccountsCats.remove({_id:this._id});
             }
         }

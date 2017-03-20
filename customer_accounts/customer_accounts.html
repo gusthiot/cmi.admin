@@ -20,7 +20,7 @@
 </template>
 
 <template name="CustomerAccs$cell$customerId">
-    {{> Widget$Select vmTag="customerId" value=customerId editable=0 helpers=helpers}}
+    {{> Widget$Select vmTag="customerId" value=customerId editable=0}}
 </template>
 
 <template name="CustomerAccs$cell$accountsCatId">
@@ -107,14 +107,14 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <label for="start_time">Start Time</label>
                             <input id="start_time" type="date" class="datepicker validate">
+                            <label for="start_time" class="active">Start Time</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <label for="end_time">End Time</label>
                             <input id="end_time" type="date" class="datepicker validate">
+                            <label for="end_time" class="active">End Time</label>
                         </div>
                     </div>
                     <div class="row">
@@ -163,7 +163,7 @@
 </template>
 
 <template name="CustomerAccs$customer">
-    <option value="{{_id}}">{{codeCMi}}</option>
+    <option value="{{_id}}">{{_id}}</option>
 </template>
 
 <template name="CustomerAccs$cat">

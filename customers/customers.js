@@ -6,6 +6,11 @@ Customers = new Meteor.Collection("customers");
 Customers.name = "Customers";
 
 Customers.schema = new SimpleSchema({
+    _id: {
+        label: "Code CMi",
+        type: SimpleSchema.Integer,
+        min: 1
+    },
     codeSAP: {
         type: SimpleSchema.Integer,
         min: 1
@@ -34,9 +39,6 @@ Customers.schema = new SimpleSchema({
         type: String
     },
     countryCode: {
-        type: String
-    },
-    codeCMi: {
         type: String
     },
     abbreviation: {
@@ -79,7 +81,7 @@ Customers.schema = new SimpleSchema({
 
 
 Customers.columns =
-    ["codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode", "codeCMi",
+    ["codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode",
         "abbreviation", "name2", "name3", "natureId", "priceId", "ruleId", "baseFee", "fixedFee", "coefA", "creation",
         "changes"];
 
@@ -105,7 +107,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Customers);
+    return shared.makeTable(Customers, true);
 }
 let theTable = makeTable();
 
@@ -141,11 +143,11 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    if (Template.currentData().value == "natureId")
+                    if (Template.currentData().value === "natureId")
                         return CustomersCats.findOne({_id: what}).entitled;
-                    else if (Template.currentData().value == "priceId")
+                    else if (Template.currentData().value === "priceId")
                         return Prices.findOne({_id: what}).entitled;
-                    else if (Template.currentData().value == "ruleId")
+                    else if (Template.currentData().value === "ruleId")
                         return Rules.findOne({_id: what}).entitled;
                     else return what;
                 }
@@ -224,7 +226,7 @@ if (Meteor.isClient) {
                     city:templ.$('#city').val(),
                     country:templ.$('#country').val(),
                     countryCode:templ.$('#country_code').val(),
-                    codeCMi:templ.$('#code_cmi').val(),
+                    _id:templ.$('#code_cmi').val(),
                     abbreviation:templ.$('#abbreviation').val(),
                     name2:templ.$('#name2').val(),
                     name3:templ.$('#name3').val(),
@@ -237,10 +239,11 @@ if (Meteor.isClient) {
                     creation:templ.$('#creation').val(),
                     changes:templ.$('#changes').val()
                 });
+            templ.find("form").reset();
         },
         "change #nature": function(evt) {
             let newNature = $(evt.target).val();
-            if (newNature != nature)
+            if (newNature !== Session.get("nature"))
                 Session.set('nature', newNature);
         }
     });
@@ -253,7 +256,7 @@ if (Meteor.isClient) {
             return Rules.find({});
         },
         prices: function () {
-            if(Session.get("nature") == "undefined") {
+            if(Session.get("nature") === "undefined") {
                 let one = CustomersCats.findOne({});
                 if(one)
                     Session.set('nature', one._id);
@@ -280,8 +283,7 @@ if (Meteor.isClient) {
     Template.Customers$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
+            if(confirm("remove \"" + this.name + "\" ?")) {
                 Customers.remove({_id:this._id});
             }
         }

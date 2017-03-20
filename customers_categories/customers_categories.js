@@ -35,7 +35,7 @@ CustomersCats.allow({
 
 if (Meteor.isServer) {
     // CustomersCats.remove({});
-    if (CustomersCats.find({}).count() == 0) {
+    if (CustomersCats.find({}).count() === 0) {
         CustomersCats.insert({entitled: "Interne", codeN:"I"});
         CustomersCats.insert({entitled: "Externe Académique", codeN:"A"});
         CustomersCats.insert({entitled: "Externe Industriel", codeN:"E"});
@@ -47,7 +47,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(CustomersCats);
+    return shared.makeTable(CustomersCats, false);
 }
 let theTable = makeTable();
 
@@ -108,6 +108,7 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             CustomersCats.insert({entitled: templ.$('#entitled').val(), codeN:templ.$('#code_n').val()});
+            templ.find("form").reset();
         }
     });
 
@@ -115,7 +116,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event) {
             event.preventDefault();
             if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
                 CustomersCats.remove({_id:this._id});
             }
         }

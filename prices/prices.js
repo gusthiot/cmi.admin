@@ -39,7 +39,7 @@ function getNatureIdFromEntitled(entitled) {
 
 if (Meteor.isServer) {
     // Prices.remove({});
-    if (Prices.find({}).count() == 0) {
+    if (Prices.find({}).count() === 0) {
         Prices.insert({entitled: "EPFL", natureId: getNatureIdFromEntitled("Interne")});
         Prices.insert({entitled: "Académique Externe", natureId: getNatureIdFromEntitled("Externe Académique")});
         Prices.insert({entitled: "Entreprise Externe", natureId: getNatureIdFromEntitled("Externe Industriel")});
@@ -86,7 +86,7 @@ if (Meteor.isClient) {
     Template.Prices$columnHead.helpers({
         helpers: {
             translateKey: function (what) {
-                if(Template.currentData().value == "natureId")
+                if(Template.currentData().value === "natureId")
                     return CustomersCats.findOne({_id: what}).entitled;
                 else return what;
             }
@@ -130,6 +130,7 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             Prices.insert({entitled: templ.$('#entitled').val(), natureId:templ.$('#nature').val()});
+            templ.find("form").reset();
         }
     });
 
@@ -147,7 +148,6 @@ if (Meteor.isClient) {
         'click .cancelItem': function (event) {
             event.preventDefault();
             if(confirm("remove \"" + this.entitled + "\" ?")) {
-                console.log("remove " + this._id);
                 Prices.remove({_id:this._id});
             }
         }

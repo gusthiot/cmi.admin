@@ -1,3 +1,111 @@
 <template name="Rights$Edit">
-    Rights
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="Rights$columnHead">
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+</template>
+
+<template name="Rights$cell$consumerId">
+    {{> Widget$Select vmTag="consumerId" value=consumerId editable=0 helpers=helpers}}
+</template>
+
+<template name="Rights$cell$accountId">
+    {{> Widget$Select vmTag="accountId" value=accountId editable=0}}
+</template>
+
+<template name="Rights$cell$startTime">
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+</template>
+
+<template name="Rights$cell$endTime">
+    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+</template>
+
+<template name="Rights$cell$remove">
+    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
+</template>
+
+<template name="Rights$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> Rights$modalAdd}}
+</template>
+
+<template name="Rights$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>Add Right</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="consumer">Consumer</label>
+                            <select class="form-control validate" id="consumer">
+                                {{#each consumers}}
+                                    {{> Rights$consumer}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="account">Account</label>
+                            <select class="form-control validate" id="account">
+                                {{#each accounts}}
+                                    {{> Rights$account}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="start_time" type="date" class="datepicker validate">
+                            <label for="start_time" class="active">Start Time</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="end_time" type="date" class="datepicker validate">
+                            <label for="end_time" class="active">End Time</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="Rights$consumer">
+    <option value="{{_id}}">{{_id}}</option>
+</template>
+
+<template name="Rights$account">
+    <option value="{{_id}}">{{_id}}</option>
+</template>
+
+<template name="Rights$Pagination">
+    {{> Rights$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="next btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
 </template>
