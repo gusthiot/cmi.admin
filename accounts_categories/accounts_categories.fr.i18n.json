@@ -1,5 +1,10 @@
 {
   "AccountsCats": {
-    "title": "Catégories de comptes"
+    "title": "Catégories Comptes",
+    "column": {
+      "entitled"    : "Intitulé",
+      "accountCode" : "Code Type Compte",
+      "multi"       : "Compte Multi-utilisateurs"
+    }
   }
 }

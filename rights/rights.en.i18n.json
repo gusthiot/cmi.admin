@@ -1,5 +1,11 @@
 {
   "Rights": {
-    "title": "Rights"
+    "title": "Rights",
+    "column": {
+      "consumerId"  : "User",
+      "accountId"   : "Account Id",
+      "startTime"   : "Start Time",
+      "endTime"     : "End Time"
+    }
   }
 }

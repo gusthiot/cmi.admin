@@ -154,6 +154,9 @@ if (Meteor.isClient) {
                 else return what;
             }
         },
+        translate: function (what) {
+            return TAPi18n.__("Customers.column." + what);
+        }
     });
 
     Template.Customers$cell$natureId.helpers({

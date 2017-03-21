@@ -79,6 +79,12 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.Rules$columnHead.helpers({
+        translate: function (what) {
+            return TAPi18n.__("Rules.column." + what);
+        }
+    });
+
     Template.Rules$Pagination.events({
         "click button.previous": function (event, templateInstance) {
             templateInstance.paginate().previous();

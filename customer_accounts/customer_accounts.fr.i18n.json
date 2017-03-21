@@ -1,5 +1,18 @@
 {
-  "CustomerAccounts": {
-    "title": "Comptes"
+  "CustomerAccs": {
+    "title" : "Comptes",
+    "column": {
+      "_id"           : "Id Compte",
+      "number"        : "Numéro",
+      "entitled"      : "Intitulé",
+      "customerId"    : "Code Client",
+      "accountsCatId" : "Code Type Compte",
+      "startTime"     : "Date Début",
+      "endTime"       : "Date Fin",
+      "state"         : "Etat",
+      "creation"      : "Création",
+      "changes"       : "Modifications",
+      "closing"       : "Fermeture"
+    }
   }
 }

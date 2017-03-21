@@ -1,5 +1,9 @@
 {
   "Rules": {
-    "title": "Rules"
+    "title": "Rules",
+    "column": {
+      "entitled"  : "Entitled",
+      "rule"      : "Rule"
+    }
   }
 }

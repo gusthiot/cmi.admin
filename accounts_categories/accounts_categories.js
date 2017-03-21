@@ -83,6 +83,12 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.AccountsCats$columnHead.helpers({
+        translate: function (what) {
+            return TAPi18n.__("AccountsCats.column." + what);
+        }
+    });
+
     Template.AccountsCats$Pagination.events({
         "click button.previous": function (event, templateInstance) {
             templateInstance.paginate().previous();

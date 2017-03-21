@@ -1,5 +1,18 @@
 {
-  "CustomerAccounts": {
-    "title": "Accounts"
+  "CustomerAccs": {
+    "title": "Accounts",
+    "column": {
+      "_id"           : "Account Id",
+      "number"        : "Number",
+      "entitled"      : "Entitled",
+      "customerId"    : "Client Code",
+      "accountsCatId" : "Account Type Code",
+      "startTime"     : "Start Time",
+      "endTime"       : "End Time",
+      "state"         : "State",
+      "creation"      : "Creation",
+      "changes"       : "Changes",
+      "closing"       : "Closing"
+    }
   }
 }

@@ -1,5 +1,9 @@
 {
   "CustomersCats": {
-    "title": "Catégories Clients"
+    "title": "Catégories Clients",
+    "column": {
+      "entitled"  : "Intitulé",
+      "codeN"     : "Code N"
+    }
   }
 }

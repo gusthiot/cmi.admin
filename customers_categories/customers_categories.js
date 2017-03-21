@@ -51,6 +51,7 @@ function makeTable() {
 }
 let theTable = makeTable();
 
+
 if (Meteor.isClient) {
     require("../lib/widget/client/widget");
     require("../lib/client/find-templates");
@@ -77,6 +78,12 @@ if (Meteor.isClient) {
                 .search(val ? '^' + val + '$' : '', true, false)
                 .draw();
         }
+    });
+
+    Template.CustomersCats$columnHead.helpers({
+       translate: function (what) {
+           return TAPi18n.__("CustomersCats.column." + what);
+       }
     });
 
     Template.CustomersCats$Pagination.events({

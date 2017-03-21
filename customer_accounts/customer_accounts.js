@@ -112,6 +112,9 @@ if (Meteor.isClient) {
                 else return what;
             }
         },
+        translate: function (what) {
+            return TAPi18n.__("CustomerAccs.column." + what);
+        }
     });
 
     Template.CustomerAccs$cell$accountsCatId.helpers({

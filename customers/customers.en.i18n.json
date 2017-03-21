@@ -1,5 +1,28 @@
 {
   "Customers": {
-    "title": "Customers"
+    "title": "Customers",
+    "column": {
+      "_id"           : "CMi Code",
+      "codeSAP"       : "SAP Code",
+      "name"          : "Client Name",
+      "numAdd"        : "Address Number",
+      "address"       : "Address",
+      "postalBox"     : "Postal Box",
+      "npa"           : "NPA",
+      "city"          : "City",
+      "country"       : "Country",
+      "countryCode"   : "Country Code",
+      "abbreviation"  : "Client Abbreviation",
+      "name2"         : "Name 2",
+      "name3"         : "Name 3",
+      "natureId"      : "Nature Client",
+      "priceId"       : "Price Class",
+      "ruleId"        : "Emolument Rule",
+      "baseFee"       : "Monthly Base Emolument",
+      "fixedFee"      : "Fixed Emolument",
+      "coefA"         : "Coefficient A",
+      "creation"      : "Creation",
+      "changes"       : "Changes"
+    }
   }
 }

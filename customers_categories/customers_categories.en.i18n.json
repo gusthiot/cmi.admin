@@ -1,5 +1,9 @@
 {
   "CustomersCats": {
-    "title": "Customers Categories"
+    "title": "Customers Categories",
+    "column": {
+      "entitled"  : "Entitled",
+      "codeN"     : "Code N"
+    }
   }
 }

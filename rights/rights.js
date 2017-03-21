@@ -89,6 +89,9 @@ if (Meteor.isClient) {
                 else return what;
             }
         },
+        translate: function (what) {
+            return TAPi18n.__("Rights.column." + what);
+        }
     });
 
     Template.Rights$cell$consumerId.helpers({
@@ -167,7 +170,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.entitled + "\" ?")) {
+            if(confirm("remove \"" + this.customerId + " - " + this.accountId + "\" ?")) {
                 Rights.remove({_id:this._id});
             }
         }

@@ -1,5 +1,9 @@
 {
   "Prices": {
-    "title": "Prix"
+    "title": "Prix",
+    "column": {
+      "entitled" : "Intitulé",
+      "natureId" : "Nature Client"
+    }
   }
 }
