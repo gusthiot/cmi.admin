@@ -28,19 +28,19 @@
 <template name="CustomersCats$modalAdd">
     <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
-            <h4>Add Customers Category</h4>
+            <h4>{{modalAdd}}</h4>
             <div class="row">
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="entitled" type="text" class="validate">
-                            <label for="entitled">Entitled</label>
+                            <label for="entitled">{{translate 'entitled'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="code_n" type="text" class="validate">
-                            <label for="code_n">Code N</label>
+                            <label for="code_n">{{translate 'codeN'}}</label>
                         </div>
                     </div>
                 </form>

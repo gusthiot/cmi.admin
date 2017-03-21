@@ -23,6 +23,9 @@
       "coefA"         : "Coefficient A",
       "creation"      : "Création",
       "changes"       : "Modifications"
+    },
+    "modal": {
+      "add" : "Ajouter Client"
     }
   }
 }

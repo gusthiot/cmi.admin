@@ -64,30 +64,30 @@
 <template name="CustomerAccs$modalAdd">
     <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
-            <h4>Add Customer Account</h4>
+            <h4>{{modalAdd}}</h4>
             <div class="row">
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="account_id" type="text" class="validate">
-                            <label for="account_id">Account Id</label>
+                            <label for="account_id">{{translate '_id'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="number" type="text" class="validate">
-                            <label for="number">Number</label>
+                            <label for="number">{{translate 'number'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="entitled" type="text" class="validate">
-                            <label for="entitled">Entitled</label>
+                            <label for="entitled">{{translate 'entitled'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="customer">Customer</label>
+                            <label for="customer">{{translate 'customerId'}}</label>
                             <select class="form-control validate" id="customer">
                                 {{#each customers}}
                                     {{> CustomerAccs$customer}}
@@ -97,7 +97,7 @@
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="accounts_cat">Account Category</label>
+                            <label for="accounts_cat">{{translate 'accountsCatId'}}</label>
                             <select class="form-control validate" id="accounts_cat">
                                 {{#each cats}}
                                     {{> CustomerAccs$cat}}
@@ -108,18 +108,18 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="start_time" type="date" class="datepicker validate">
-                            <label for="start_time" class="active">Start Time</label>
+                            <label for="start_time" class="active">{{translate 'startTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="end_time" type="date" class="datepicker validate">
-                            <label for="end_time" class="active">End Time</label>
+                            <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <label>State : </label>
+                            <label>{{translate 'state'}} : </label>
                             <input id="active" type="radio" class="validate" name="state" value="Actif">
                             <label for="active">Actif</label>
                             <input id="passive" type="radio" class="validate" name="state" checked="checked" value="Passif">
@@ -129,19 +129,19 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="creation" type="text" class="validate">
-                            <label for="creation">Creation</label>
+                            <label for="creation">{{translate 'creation'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="changes" type="text" class="validate">
-                            <label for="changes">Changes</label>
+                            <label for="changes">{{translate 'changes'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="closing" type="text" class="validate">
-                            <label for="closing">Closing</label>
+                            <label for="closing">{{translate 'closing'}}</label>
                         </div>
                     </div>
                 </form>

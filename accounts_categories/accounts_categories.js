@@ -126,6 +126,15 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.AccountsCats$modalAdd.helpers({
+        translate: function (what) {
+            return TAPi18n.__("AccountsCats.column." + what);
+        },
+        modalAdd: function () {
+            return TAPi18n.__("AccountsCats.modal.add");
+        }
+    });
+
     Template.AccountsCats$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();

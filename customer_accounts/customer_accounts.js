@@ -178,6 +178,12 @@ if (Meteor.isClient) {
         },
         cats: function () {
             return AccountsCats.find({});
+        },
+        translate: function (what) {
+            return TAPi18n.__("CustomerAccs.column." + what);
+        },
+        modalAdd: function () {
+            return TAPi18n.__("CustomerAccs.modal.add");
         }
     });
 

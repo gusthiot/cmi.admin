@@ -4,6 +4,9 @@
     "column": {
       "entitled"  : "Entitled",
       "rule"      : "Rule"
+    },
+    "modal": {
+      "add" : "Add Rule"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "Customers": {
-    "title": "Customers",
+    "title": "Clients",
     "column": {
       "_id"           : "CMi Code",
       "codeSAP"       : "SAP Code",
@@ -23,6 +23,9 @@
       "coefA"         : "Coefficient A",
       "creation"      : "Creation",
       "changes"       : "Changes"
+    },
+    "modal": {
+      "add" : "Add Client"
     }
   }
 }

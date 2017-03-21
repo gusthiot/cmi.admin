@@ -104,84 +104,84 @@
 <template name="Customers$modalAdd">
     <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
-            <h4>Add Client</h4>
+            <h4>{{modalAdd}}</h4>
             <div class="row">
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
+                            <input id="code_cmi" type="text" class="validate">
+                            <label for="code_cmi">{{translate '_id'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
                             <input id="code_sap" type="text" class="validate">
-                            <label for="code_sap">Code SAP</label>
+                            <label for="code_sap">{{translate 'codeSAP'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="name" type="text" class="validate">
-                            <label for="name">Name</label>
+                            <label for="name">{{translate 'name'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="num_add" type="text" class="validate">
-                            <label for="num_add">Address Number</label>
+                            <label for="num_add">{{translate 'numAdd'}}</label>
                         </div>
                         <div class="input-field col s6">
                             <input id="address" type="text" class="validate">
-                            <label for="address">Address</label>
+                            <label for="address">{{translate 'address'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="postal_box" type="text" class="validate">
-                            <label for="postal_box">Postal Box</label>
+                            <label for="postal_box">{{translate 'postalBox'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="npa" type="text" class="validate">
-                            <label for="npa">NPA</label>
+                            <label for="npa">{{translate 'npa'}}</label>
                         </div>
                         <div class="input-field col s6">
                             <input id="city" type="text" class="validate">
-                            <label for="city">City</label>
+                            <label for="city">{{translate 'city'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="country" type="text" class="validate">
-                            <label for="country">Country</label>
+                            <label for="country">{{translate 'country'}}</label>
                         </div>
                         <div class="input-field col s6">
                             <input id="country_code" type="text" class="validate">
-                            <label for="country_code">Country Code</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="code_cmi" type="text" class="validate">
-                            <label for="code_cmi">Code CMi</label>
+                            <label for="country_code">{{translate 'countryCode'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="abbreviation" type="text" class="validate">
-                            <label for="abbreviation">Abbreviation</label>
+                            <label for="abbreviation">{{translate 'abbreviation'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="name2" type="text" class="validate">
-                            <label for="name2">Name 2</label>
+                            <label for="name2">{{translate 'name2'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="name3" type="text" class="validate">
-                            <label for="name3">Name 3</label>
+                            <label for="name3">{{translate 'name3'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="nature">Nature</label>
+                            <label for="nature">{{translate 'natureId'}}</label>
                             <select class="form-control validate" id="nature">
                                 {{#each natures}}
                                     {{> Customers$nature}}
@@ -191,7 +191,7 @@
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="price">Price</label>
+                            <label for="price">{{translate 'priceId'}}</label>
                             <select class="form-control validate" id="price">
                                 {{#each prices}}
                                     {{> Customers$price}}
@@ -201,7 +201,7 @@
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="rule">Rule</label>
+                            <label for="rule">{{translate 'ruleId'}}</label>
                             <select class="form-control validate" id="rule">
                                 {{#each rules}}
                                     {{> Customers$rule}}
@@ -212,31 +212,31 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="base_fee" type="text" class="validate">
-                            <label for="base_fee">Base Fee</label>
+                            <label for="base_fee">{{translate 'baseFee'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="fixed_fee" type="text" class="validate">
-                            <label for="fixed_fee">Fixed Fee</label>
+                            <label for="fixed_fee">{{translate 'fixedFee'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="coef_a" type="text" class="validate">
-                            <label for="coef_a">Coefficient A</label>
+                            <label for="coef_a">{{translate 'coefA'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="creation" type="text" class="validate">
-                            <label for="creation">Creation</label>
+                            <label for="creation">{{translate 'creation'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="changes" type="text" class="validate">
-                            <label for="changes">Changes</label>
+                            <label for="changes">{{translate 'changes'}}</label>
                         </div>
                     </div>
                 </form>

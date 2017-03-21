@@ -1,9 +1,12 @@
 {
   "Prices": {
-    "title": "Prix",
+    "title": "Tarifs",
     "column": {
       "entitled" : "Intitulé",
       "natureId" : "Nature Client"
+    },
+    "modal": {
+      "add" : "Ajouter Tarif"
     }
   }
 }

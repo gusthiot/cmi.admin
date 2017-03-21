@@ -118,6 +118,15 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.Rules$modalAdd.helpers({
+        translate: function (what) {
+            return TAPi18n.__("Rules.column." + what);
+        },
+        modalAdd: function () {
+            return TAPi18n.__("Rules.modal.add");
+        }
+    });
+
     Template.Rules$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();

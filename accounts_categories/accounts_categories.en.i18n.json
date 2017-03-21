@@ -5,6 +5,9 @@
       "entitled"    : "Entitled",
       "accountCode" : "Account Type Code",
       "multi"       : "Multi-Users Account"
+    },
+    "modal": {
+      "add" : "Add Accounts Category"
     }
   }
 }

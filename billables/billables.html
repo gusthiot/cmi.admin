@@ -8,16 +8,16 @@
 </template>
 
 <template name="Billable$cell$type">
-    {{> Widget$Select vmTag="type" value=type values=values editable=isEditing helpers=translateKey}}
+    {{> Widget$Select vmTag="type" value=type values=values editable=0 helpers=translateKey}}
 </template>
 
 
 <template name="Billable$cell$operatedByUser">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=helpers vmTag="operatedByUser"}}
+    {{> Widget$Select value=operatedByUser values=users editable=0 helpers=helpers vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
-    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
+    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=0}}
 </template>
 
 <template name="Billable$cell$billableToAccount$edit">
@@ -30,27 +30,27 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
+    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=0}}
 </template>
 
 <template name="Billable$cell$startTime">
-    {{> Widget$DateTime vmTag="startTime" value=startTime editable=isEditing}}
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
 </template>
 
 <template name="Billable$cell$billingDetails">
-    {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
+    {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=0}}
 </template>
 
 <template name="Billable$cell$discount">
-    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
+    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=0}}
 </template>
 
 <template name="Billable$cell$validationState">
-    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
+    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=0}}
 </template>
 
 <template name="Billable$cell$valSaveBtn">
-    {{#if isEditing}}
+    {{#if 1}}
         {{> Billable$cell$valSaveBtn$edit}}
     {{/if}}
 </template>

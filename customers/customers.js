@@ -268,6 +268,12 @@ if (Meteor.isClient) {
                 return Prices.find({natureId: Session.get("nature")});
             else
                 return Prices.find({});
+        },
+        translate: function (what) {
+            return TAPi18n.__("Customers.column." + what);
+        },
+        modalAdd: function () {
+            return TAPi18n.__("Customers.modal.add");
         }
     });
 

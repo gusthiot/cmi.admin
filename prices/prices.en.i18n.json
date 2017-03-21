@@ -5,5 +5,8 @@
       "entitled" : "Entitled",
       "natureId" : "Nature Client"
     }
+  },
+  "modal": {
+    "add" : "Add Price"
   }
 }

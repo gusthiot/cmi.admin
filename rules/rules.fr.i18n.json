@@ -4,6 +4,9 @@
     "column": {
       "entitled"  : "Intitulé",
       "rule"      : "Règle"
+    },
+    "modal": {
+      "add" : "Ajouter Règle"
     }
   }
 }

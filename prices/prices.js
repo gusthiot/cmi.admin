@@ -140,6 +140,12 @@ if (Meteor.isClient) {
     Template.Prices$modalAdd.helpers({
         natures: function () {
             return CustomersCats.find({});
+        },
+        translate: function (what) {
+            return TAPi18n.__("Prices.column." + what);
+        },
+        modalAdd: function () {
+            return TAPi18n.__("Prices.modal.add");
         }
     });
 

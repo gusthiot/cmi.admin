@@ -1,6 +1,6 @@
 {
   "CustomerAccs": {
-    "title": "Accounts",
+    "title": "Client Accounts",
     "column": {
       "_id"           : "Account Id",
       "number"        : "Number",
@@ -13,6 +13,9 @@
       "creation"      : "Creation",
       "changes"       : "Changes",
       "closing"       : "Closing"
+    },
+    "modal": {
+      "add" : "Add Client Account"
     }
   }
 }

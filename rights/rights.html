@@ -36,12 +36,12 @@
 <template name="Rights$modalAdd">
     <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
-            <h4>Add Right</h4>
+            <h4>{{modalAdd}}</h4>
             <div class="row">
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="consumer">Consumer</label>
+                            <label for="consumer">{{translate 'consumerId'}}</label>
                             <select class="form-control validate" id="consumer">
                                 {{#each consumers}}
                                     {{> Rights$consumer}}
@@ -51,7 +51,7 @@
                     </div>
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="account">Account</label>
+                            <label for="account">{{translate 'accountId'}}</label>
                             <select class="form-control validate" id="account">
                                 {{#each accounts}}
                                     {{> Rights$account}}
@@ -62,13 +62,13 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="start_time" type="date" class="datepicker validate">
-                            <label for="start_time" class="active">Start Time</label>
+                            <label for="start_time" class="active">{{translate 'startTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="end_time" type="date" class="datepicker validate">
-                            <label for="end_time" class="active">End Time</label>
+                            <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
                 </form>

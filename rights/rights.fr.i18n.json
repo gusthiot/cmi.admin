@@ -6,6 +6,9 @@
       "accountId"   : "Id Compte",
       "startTime"   : "Date Début",
       "endTime"     : "Date Fin"
+    },
+    "modal": {
+      "add" : "Ajouter Droit"
     }
   }
 }
