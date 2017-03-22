@@ -53,6 +53,7 @@ let theTable = makeTable();
 
 
 if (Meteor.isClient) {
+
     require("../lib/widget/client/widget");
     require("../lib/client/find-templates");
 
@@ -108,6 +109,7 @@ if (Meteor.isClient) {
     });
 
     Template.CustomersCats$addButton.onRendered(function () {
+
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
@@ -131,8 +133,22 @@ if (Meteor.isClient) {
     Template.CustomersCats$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.entitled + "\" ?")) {
-                CustomersCats.remove({_id:this._id});
+            let count = Customers.find({natureId: this._id}).count();
+            if (count > 0) {
+                Materialize.toast("Suppression impossible, article utilisé " + count
+                    + " fois dans la base de données ‘Clients‘", 5000);
+            }
+            else {
+                let count = Prices.find({natureId: this._id}).count();
+                if (count > 0) {
+                    Materialize.toast("Suppression impossible, article utilisé " + count
+                        + " fois dans la base de données ‘Tarifs‘", 5000);
+                }
+                else {
+                    if (confirm("Supprimer \"" + this.entitled + "\" ?")) {
+                        CustomersCats.remove({_id: this._id});
+                    }
+                }
             }
         }
     });

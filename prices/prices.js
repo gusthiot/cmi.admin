@@ -156,8 +156,15 @@ if (Meteor.isClient) {
     Template.Prices$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.entitled + "\" ?")) {
-                Prices.remove({_id:this._id});
+            let count = Customers.find({priceId: this._id}).count();
+            if (count > 0) {
+                Materialize.toast("Suppression impossible, article utilisé " + count
+                    + " fois dans la base de données ‘Clients‘", 5000);
+            }
+            else {
+                if (confirm("Supprimer \"" + this.entitled + "\" ?")) {
+                    Prices.remove({_id: this._id});
+                }
             }
         }
     });

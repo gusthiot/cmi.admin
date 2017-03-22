@@ -130,8 +130,15 @@ if (Meteor.isClient) {
     Template.Rules$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.entitled + "\" ?")) {
-                Rules.remove({_id:this._id});
+            let count = Customers.find({ruleId: this._id}).count();
+            if (count > 0) {
+                Materialize.toast("Suppression impossible, article utilisé " + count
+                    + " fois dans la base de données ‘Clients‘", 5000);
+            }
+            else {
+                if (confirm("Supprimer \"" + this.entitled + "\" ?")) {
+                    Rules.remove({_id: this._id});
+                }
             }
         }
     });
