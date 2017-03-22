@@ -133,13 +133,31 @@ if (Meteor.isClient) {
     Template.Rights$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            Rights.insert(
-                {consumerId:templ.$('#consumer').val(),
-                    accountId:templ.$('#account').val(),
-                    startTime: templ.$('#start_time').val(),
-                    endTime: templ.$('#end_time').val()
-                });
-            templ.find("form").reset();
+            if(templ.$('#start_time').val() === "") {
+                Materialize.toast("Date de début invalide !", 5000);
+            }
+            else if(templ.$('#end_time').val() === "") {
+                Materialize.toast("Date de fin invalide !", 5000);
+            }
+            else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
+                Materialize.toast("Date de fin doit être après date de début !", 5000);
+            }
+            else if(!shared.isOlderThanOrEgal(CustomerAccs.findOne({_id: templ.$('#account').val()}).startTime, templ.$('#start_time').val())) {
+                Materialize.toast("Date de début ne peut être avant début compte !", 5000);
+            }
+            else if(!shared.isOlderThanOrEgal(templ.$('#end_time').val(),CustomerAccs.findOne({_id: templ.$('#account').val()}).endTime)) {
+                Materialize.toast("Date de fin ne peut être après fin compte !", 5000);
+            }
+            else {
+                Rights.insert(
+                    {
+                        consumerId: templ.$('#consumer').val(),
+                        accountId: templ.$('#account').val(),
+                        startTime: templ.$('#start_time').val(),
+                        endTime: templ.$('#end_time').val()
+                    });
+                templ.find("form").reset();
+            }
         }
     });
 
@@ -176,7 +194,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.customerId + " - " + this.accountId + "\" ?")) {
+            if(confirm("remove \"" + this.consumerId + " - " + this.accountId + "\" ?")) {
                 Rights.remove({_id:this._id});
             }
         }

@@ -7,20 +7,16 @@ Customers.name = "Customers";
 
 Customers.schema = new SimpleSchema({
     _id: {
-        label: "Code CMi",
-        type: SimpleSchema.Integer,
-        min: 1
+        type: SimpleSchema.Integer
     },
     codeSAP: {
-        type: SimpleSchema.Integer,
-        min: 1
+        type: SimpleSchema.Integer
     },
     name: {
         type: String
     },
     numAdd: {
-        type: SimpleSchema.Integer,
-        min: 1
+        type: SimpleSchema.Integer
     },
     address: {
         type: String
@@ -68,8 +64,7 @@ Customers.schema = new SimpleSchema({
         min: 0
     },
     coefA: {
-        type: SimpleSchema.Integer,
-        min: 1
+        type: SimpleSchema.Integer
     },
     creation: {
         type: String
@@ -218,31 +213,64 @@ if (Meteor.isClient) {
     Template.Customers$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            Customers.insert(
-                {entitled: templ.$('#entitled').val(),
-                    codeSAP:templ.$('#code_sap').val(),
-                    name:templ.$('#name').val(),
-                    numAdd:templ.$('#num_add').val(),
-                    address:templ.$('#address').val(),
-                    postalBox:templ.$('#postal_box').val(),
-                    npa:templ.$('#npa').val(),
-                    city:templ.$('#city').val(),
-                    country:templ.$('#country').val(),
-                    countryCode:templ.$('#country_code').val(),
-                    _id:templ.$('#code_cmi').val(),
-                    abbreviation:templ.$('#abbreviation').val(),
-                    name2:templ.$('#name2').val(),
-                    name3:templ.$('#name3').val(),
-                    natureId:templ.$('#nature').val(),
-                    priceId:templ.$('#price').val(),
-                    ruleId:templ.$('#rule').val(),
-                    baseFee:templ.$('#base_fee').val(),
-                    fixedFee:templ.$('#fixed_fee').val(),
-                    coefA:templ.$('#coef_a').val(),
-                    creation:templ.$('#creation').val(),
-                    changes:templ.$('#changes').val()
-                });
-            templ.find("form").reset();
+            if(templ.$('#code_sap').val() === "" || !shared.isPositiveInteger(templ.$('#code_sap').val())) {
+                Materialize.toast("Code SAP invalide !", 5000);
+            }
+            else if(templ.$('#code_cmi').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#code_cmi').val())) {
+                Materialize.toast("Code CMi invalide !", 5000);
+            }
+            else if(Customers.find({_id: templ.$('#code_cmi').val()}).count() > 0) {
+                Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
+            }
+            else if(templ.$('#abbreviation').val() === "" || /\s/.test(templ.$('#abbreviation').val())) {
+                Materialize.toast("Abréviation invalide !", 5000);
+            }
+            else if(Customers.find({abbreviation: templ.$('#abbreviation').val()}).count() > 0) {
+                Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
+            }
+            else if(templ.$('#num_add').val() !== "" && !shared.isPositiveInteger(templ.$('#num_add').val())) {
+                Materialize.toast("Numéro d'adresse invalide !", 5000);
+            }
+            else if(templ.$('#npa').val() !== "" && !shared.isPositiveInteger(templ.$('#npa').val())) {
+                Materialize.toast("NPA invalide !", 5000);
+            }
+            else if(templ.$('#base_fee').val() !== "" && !shared.isPositiveOrNullFloat2(templ.$('#base_fee').val())) {
+                Materialize.toast("Emolument de base invalide !", 5000);
+            }
+            else if(templ.$('#fixed_fee').val() !== "" && !shared.isPositiveOrNullFloat2(templ.$('#fixed_fee').val())) {
+                Materialize.toast("Emolument fixe invalide !", 5000);
+            }
+            else if(templ.$('#coef_a').val() !== "" && !shared.isPositiveInteger(templ.$('#coef_a').val())) {
+                Materialize.toast("Coefficient A invalide !", 5000);
+            }
+            else {
+                Customers.insert(
+                    {
+                        entitled: templ.$('#entitled').val(),
+                        codeSAP: templ.$('#code_sap').val(),
+                        name: templ.$('#name').val(),
+                        numAdd: templ.$('#num_add').val(),
+                        address: templ.$('#address').val(),
+                        postalBox: templ.$('#postal_box').val(),
+                        npa: templ.$('#npa').val(),
+                        city: templ.$('#city').val(),
+                        country: templ.$('#country').val(),
+                        countryCode: templ.$('#country_code').val(),
+                        _id: templ.$('#code_cmi').val(),
+                        abbreviation: templ.$('#abbreviation').val(),
+                        name2: templ.$('#name2').val(),
+                        name3: templ.$('#name3').val(),
+                        natureId: templ.$('#nature').val(),
+                        priceId: templ.$('#price').val(),
+                        ruleId: templ.$('#rule').val(),
+                        baseFee: templ.$('#base_fee').val(),
+                        fixedFee: templ.$('#fixed_fee').val(),
+                        coefA: templ.$('#coef_a').val(),
+                        creation: templ.$('#creation').val(),
+                        changes: templ.$('#changes').val()
+                    });
+                templ.find("form").reset();
+            }
         },
         "change #nature": function(evt) {
             let newNature = $(evt.target).val();
@@ -298,7 +326,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Comptes‘", 5000);
             }
             else {
-                if (confirm("Supprimer \"" + this.name + "\" ?")) {
+                if (confirm("Supprimer \"" + this._id + "\" ?")) {
                     Customers.remove({_id: this._id});
                 }
             }

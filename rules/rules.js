@@ -113,8 +113,18 @@ if (Meteor.isClient) {
     Template.Rules$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            Rules.insert({entitled: templ.$('#entitled').val(), rule:templ.$('#rule').val()});
-            templ.find("form").reset();
+            if(templ.$('#entitled').val() === "") {
+                Materialize.toast("Intitulé vide !", 5000);
+            }
+            else if(templ.$('#rule').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#rule').val())) {
+                Materialize.toast("Règle invalide !", 5000);
+            }
+            else {
+                Rules.insert(
+                    {entitled: templ.$('#entitled').val(), rule: templ.$('#rule').val()}
+                );
+                templ.find("form").reset();
+            }
         }
     });
 

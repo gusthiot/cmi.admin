@@ -116,8 +116,18 @@ if (Meteor.isClient) {
     Template.CustomersCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            CustomersCats.insert({entitled: templ.$('#entitled').val(), codeN:templ.$('#code_n').val()});
-            templ.find("form").reset();
+            if(templ.$('#entitled').val() === "") {
+                Materialize.toast("Intitulé vide !", 5000);
+            }
+            else if(templ.$('#code_n').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#code_n').val())) {
+                Materialize.toast("Code N invalide !", 5000);
+            }
+            else {
+                CustomersCats.insert(
+                    {entitled: templ.$('#entitled').val(), codeN: templ.$('#code_n').val()}
+                    );
+                templ.find("form").reset();
+            }
         }
     });
 

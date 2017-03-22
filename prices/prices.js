@@ -132,8 +132,15 @@ if (Meteor.isClient) {
     Template.Prices$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            Prices.insert({entitled: templ.$('#entitled').val(), natureId:templ.$('#nature').val()});
-            templ.find("form").reset();
+            if(templ.$('#entitled').val() === "") {
+                Materialize.toast("Intitulé vide !", 5000);
+            }
+            else {
+                Prices.insert(
+                    {entitled: templ.$('#entitled').val(), natureId: templ.$('#nature').val()}
+                );
+                templ.find("form").reset();
+            }
         }
     });
 

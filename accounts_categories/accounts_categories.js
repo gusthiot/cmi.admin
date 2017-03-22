@@ -117,12 +117,21 @@ if (Meteor.isClient) {
     Template.AccountsCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            AccountsCats.insert(
-                   {entitled: templ.$('#entitled').val(),
-                    accountCode:templ.$('#account_code').val(),
-                    multi:$(templ.find('input:radio[name=multi]:checked')).val()
-                });
-            templ.find("form").reset();
+            if(templ.$('#entitled').val() === "") {
+                Materialize.toast("Intitulé vide !", 5000);
+            }
+            else if(templ.$('#account_code').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#account_code').val())) {
+                Materialize.toast("Code type compte invalide !", 5000);
+            }
+            else {
+                AccountsCats.insert(
+                    {
+                        entitled: templ.$('#entitled').val(),
+                        accountCode: templ.$('#account_code').val(),
+                        multi: $(templ.find('input:radio[name=multi]:checked')).val()
+                    });
+                templ.find("form").reset();
+            }
         }
     });
 

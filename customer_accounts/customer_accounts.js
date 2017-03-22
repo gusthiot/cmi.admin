@@ -7,9 +7,7 @@ CustomerAccs.name = "CustomerAccs";
 
 CustomerAccs.schema = new SimpleSchema({
     _id: {
-        label: "ID Compte",
-        type: SimpleSchema.Integer,
-        min: 1
+        type: SimpleSchema.Integer
     },
     number: {
         type: String
@@ -155,20 +153,41 @@ if (Meteor.isClient) {
     Template.CustomerAccs$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            CustomerAccs.insert(
-                {_id: templ.$('#account_id').val(),
-                    number:templ.$('#number').val(),
-                    entitled: templ.$('#entitled').val(),
-                    customerId:templ.$('#customer').val(),
-                    accountsCatId:templ.$('#accounts_cat').val(),
-                    startTime: templ.$('#start_time').val(),
-                    endTime: templ.$('#end_time').val(),
-                    state:$(templ.find('input:radio[name=state]:checked')).val(),
-                    creation: templ.$('#creation').val(),
-                    changes: templ.$('#changes').val(),
-                    closing: templ.$('#closing').val()
-                });
-            templ.find("form").reset();
+            if(templ.$('#account_id').val() === "" || !shared.isPositiveInteger(templ.$('#account_id').val())) {
+                Materialize.toast("Id compte invalide !", 5000);
+            }
+            else if(CustomerAccs.find({_id: templ.$('#account_id').val()}).count() > 0) {
+                Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
+            }
+            else if(templ.$('#number').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#number').val())) {
+                Materialize.toast("Numéro de compte invalide !", 5000);
+            }
+            else if(templ.$('#start_time').val() === "") {
+                Materialize.toast("Date de début invalide !", 5000);
+            }
+            else if(templ.$('#end_time').val() === "") {
+                Materialize.toast("Date de fin invalide !", 5000);
+            }
+            else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
+                Materialize.toast("Date de fin doit être après date de début !", 5000);
+            }
+            else {
+                CustomerAccs.insert(
+                    {
+                        _id: templ.$('#account_id').val(),
+                        number: templ.$('#number').val(),
+                        entitled: templ.$('#entitled').val(),
+                        customerId: templ.$('#customer').val(),
+                        accountsCatId: templ.$('#accounts_cat').val(),
+                        startTime: templ.$('#start_time').val(),
+                        endTime: templ.$('#end_time').val(),
+                        state: $(templ.find('input:radio[name=state]:checked')).val(),
+                        creation: templ.$('#creation').val(),
+                        changes: templ.$('#changes').val(),
+                        closing: templ.$('#closing').val()
+                    });
+                templ.find("form").reset();
+            }
         }
     });
 
@@ -211,7 +230,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Droits‘", 5000);
             }
             else {
-                if (confirm("Supprimer \"" + this.entitled + "\" ?")) {
+                if (confirm("Supprimer \"" + this._id + "\" ?")) {
                     CustomerAccs.remove({_id: this._id});
                 }
             }

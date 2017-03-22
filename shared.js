@@ -82,3 +82,21 @@ export function setupColumnFilterUI(parentView, dataTableElement, specific) {
         Blaze.renderWithData(view, context, column.header(), undefined, parentView);
     });
 }
+
+export function isPositiveInteger(str) {
+    let n = Math.floor(Number(str));
+    return String(n) === str && n > 0;
+}
+
+export function isPositiveOrNullFloat2(str) {
+    let n = Math.floor(100*Number(str))/100;
+    return String(n) === str && n >= 0;
+}
+
+export function isOlderThan(oldTime,newTime) {
+    return new Date(oldTime) < new Date(newTime);
+}
+
+export function isOlderThanOrEgal(oldTime,newTime) {
+    return new Date(oldTime) <= new Date(newTime);
+}
