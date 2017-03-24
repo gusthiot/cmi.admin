@@ -230,9 +230,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Droits‘", 5000);
             }
             else {
-                if (confirm("Supprimer \"" + this._id + "\" ?")) {
-                    CustomerAccs.remove({_id: this._id});
-                }
+                shared.confirmRemove(this._id, this._id, CustomerAccs);
             }
         }
     });

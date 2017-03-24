@@ -169,9 +169,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Clients‘", 5000);
             }
             else {
-                if (confirm("Supprimer \"" + this.entitled + "\" ?")) {
-                    Prices.remove({_id: this._id});
-                }
+                shared.confirmRemove(this.entitled, this._id, Prices);
             }
         }
     });

@@ -56,6 +56,7 @@ iron:url@1.0.11
 jquery@1.11.10
 jquery-history@1.0.2
 json@1.0.3
+kevohagan:sweetalert@1.0.0
 launch-screen@1.1.1
 livedata@1.0.18
 localstorage@1.0.12

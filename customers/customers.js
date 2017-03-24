@@ -326,9 +326,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Comptes‘", 5000);
             }
             else {
-                if (confirm("Supprimer \"" + this._id + "\" ?")) {
-                    Customers.remove({_id: this._id});
-                }
+                shared.confirmRemove(this._id, this._id, Customers);
             }
         }
     });

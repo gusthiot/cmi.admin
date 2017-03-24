@@ -100,3 +100,19 @@ export function isOlderThan(oldTime,newTime) {
 export function isOlderThanOrEgal(oldTime,newTime) {
     return new Date(oldTime) <= new Date(newTime);
 }
+
+export function confirmRemove(name, id, collection) {
+    sweetAlert({
+            text: "Supprimer \"" + name + "\" ?",
+            title: "",
+            showCancelButton: true,
+            confirmButtonColor: "#14dd4b",
+            cancelButtonText: "Non",
+            confirmButtonText: "Oui",
+            closeOnConfirm: true
+        },
+        function(){
+            collection.remove({_id: id});
+        });
+
+}

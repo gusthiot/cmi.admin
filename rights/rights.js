@@ -203,9 +203,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            if(confirm("remove \"" + this.consumerId + " - " + this.accountId + "\" ?")) {
-                Rights.remove({_id:this._id});
-            }
+            shared.confirmRemove(this.consumerId + " - " + this.accountId, this._id, Rights);
         }
     });
 }

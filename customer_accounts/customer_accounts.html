@@ -52,7 +52,7 @@
 </template>
 
 <template name="CustomerAccs$cell$remove">
-    <button class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></button>
+    <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
 </template>
 
 <template name="CustomerAccs$addButton">
@@ -174,11 +174,11 @@
     {{> CustomerAccs$addButton}}
     {{#if notnull pages}}
         {{#if notfirst page}}
-            <button class="previous btn-large waves-effect waves-light">Previous</button>
+            <a class="previous btn-large waves-effect waves-light">Previous</a>
         {{/if}}
         <span class="letSize">{{page}} of {{pages}}</span>
         {{#if notlast page pages}}
-            <button class="next btn-large waves-effect waves-light">Next</button>
+            <a class="next btn-large waves-effect waves-light">Next</a>
         {{/if}}
     {{/if}}
 </template>
