@@ -130,6 +130,12 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
+    function isMulti(accountId) {
+        let catId = CustomerAccs.findOne({_id: accountId}).accountsCatId;
+        let multi = AccountsCats.findOne({_id: catId}).multi;
+        return multi === "VRAI";
+    }
+
     Template.Rights$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
@@ -138,6 +144,9 @@ if (Meteor.isClient) {
             }
             else if(templ.$('#end_time').val() === "") {
                 Materialize.toast("Date de fin invalide !", 5000);
+            }
+            else if(!isMulti(templ.$('#account').val()) && Rights.find({accountId: templ.$('#account').val()}).count() > 0) {
+                Materialize.toast("Ce Compte n'est pas multi-utilisateurs et est déjà utilisé !", 5000);
             }
             else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
                 Materialize.toast("Date de fin doit être après date de début !", 5000);
