@@ -29,7 +29,7 @@ if (Meteor.isClient) {
     Template.User$Pick.events({
         'user:selected #LayoutUserSearch': function(event, that, id) {
             if (id === undefined) return;
-            var url = '/user/' + id + '/edit';
+            let url = '/user/' + id + '/edit';
             Router.go(url);
         }
     });
@@ -41,7 +41,7 @@ Router.route('/user', function () {
 
 Router.route('/user/:sciper/edit', function () {
     renderUserSearchBoxInNavBar(this);
-    var user = User.bySciper(this.params.sciper);
+    let user = User.bySciper(this.params.sciper);
     if (!user) {
         this.render('AccessControl$PermissionDenied');
     } else {
@@ -86,7 +86,7 @@ if (Devsupport.isActive()) {
     });
 
     Router.route('/devsupport/kafka/(.*)', function () {
-        var topic = this.params[0];
+        let topic = this.params[0];
         Kafka.subscribe(topic);
         this.render("Kafka", {data: {
             topic: topic
@@ -106,7 +106,7 @@ Router.route("/packages/bootstrap-3/(.*)",
 
 if (Meteor.isClient) {
     Template.nav.onRendered(function () {
-        var $ = this.$.bind(this);
+        let $ = this.$.bind(this);
         $(".button-collapse").assertSizeAtLeast(1).sideNav();
         Tracker.autorun(function () {
             if (IsScreenFullSize.get()) {
@@ -116,7 +116,7 @@ if (Meteor.isClient) {
         });
     });
     Template.nav$Menu.onRendered(function () {
-        var $ = this.$.bind(this);
+        let $ = this.$.bind(this);
         $(".dropdown-button").assertSizeAtLeast(1).dropdown({
             belowOrigin: true, // Displays dropdown below the button
         });

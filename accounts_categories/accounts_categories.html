@@ -15,6 +15,22 @@
     {{> Widget$InputText vmTag="accountCode" value=accountCode editable=0}}
 </template>
 
+<template name="AccountsCats$cell$dateVar">
+    {{> Widget$Select vmTag="dateVar" value=dateVar editable=0}}
+</template>
+
+<template name="AccountsCats$cell$monthsMax">
+    {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=0}}
+</template>
+
+<template name="AccountsCats$cell$startTime">
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+</template>
+
+<template name="AccountsCats$cell$endTime">
+    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+</template>
+
 <template name="AccountsCats$cell$multi">
     {{> Widget$Select vmTag="multi" value=multi editable=0}}
 </template>
@@ -45,6 +61,33 @@
                         <div class="input-field col s6">
                             <input id="account_code" type="text" class="validate">
                             <label for="account_code">{{translate 'accountCode'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label>Dates : </label>
+                            <input id="true" type="radio" class="validate" name="date_var" value="VAR">
+                            <label for="true">VAR</label>
+                            <input id="false" type="radio" class="validate" name="date_var" checked="checked" value="FIX">
+                            <label for="false">FIX</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="months_max" type="text" class="validate">
+                            <label for="months_max">{{translate 'monthsMax'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="start_time" type="date" class="datepicker validate">
+                            <label for="start_time" class="active">{{translate 'startTime'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="end_time" type="date" class="datepicker validate">
+                            <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
                     <div class="row">

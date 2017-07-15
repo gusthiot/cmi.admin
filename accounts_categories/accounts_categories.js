@@ -12,13 +12,25 @@ AccountsCats.schema = new SimpleSchema({
     accountCode: {
         type: String
     },
+    dateVar: {
+        type: String
+    },
+    monthsMax: {
+        type: SimpleSchema.Integer
+    },
+    startTime: {
+        type: Date
+    },
+    endTime: {
+        type: Date
+    },
     multi: {
         type: String
     }
 });
 
 AccountsCats.columns =
-    ["entitled", "accountCode", "multi"];
+    ["entitled", "accountCode", "dateVar", "monthsMax", "startTime", "endTime", "multi"];
 
 AccountsCats.allow({
     insert: function () {
@@ -36,13 +48,20 @@ AccountsCats.allow({
 });
 
 if (Meteor.isServer) {
-    // AccountsCats.remove({});
+    AccountsCats.remove({});
     if (AccountsCats.find({}).count() === 0) {
-        AccountsCats.insert({entitled: "Compte standard", accountCode:"STD", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Compte projet de développement de procédés avec subsides", accountCode:"DEV", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Compte étudiant EPFL projet semestre Bachelor", accountCode:"BSP", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Compte étudiant EPFL projet semestre Master", accountCode:"MSP", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Compte étudiant EPFL projet de diplôme Master", accountCode:"MTP", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Standard", accountCode:"STD", dateVar: "VAR", monthsMax: 60, startTime: "", endTime: "", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 3 mois", accountCode:"DEVT16.17", dateVar: "VAR", monthsMax: 3, startTime: "", endTime: "", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 6 mois", accountCode:"DEVS16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 12 mois", accountCode:"DEVA16.17", dateVar: "VAR", monthsMax: 12, startTime: "", endTime: "", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Semestre Automne Bachelor", accountCode:"BSA16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Printemps Bachelor", accountCode:"BSP16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Automne Master", accountCode:"MSA16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Printemps Master", accountCode:"MSP16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master", accountCode:"PDM16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master (finit après 31/08)", accountCode:"PDM16.17+", dateVar: "VAR", monthsMax: 60, startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange", accountCode:"ECH16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange (finit après 31/08)", accountCode:"ECH16.17+", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
     }
 
     Meteor.publish(AccountsCats.name, function () {
@@ -123,11 +142,18 @@ if (Meteor.isClient) {
             else if(templ.$('#account_code').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#account_code').val())) {
                 Materialize.toast("Code type compte invalide !", 5000);
             }
+            else if(templ.$('#months_max').val() === !shared.isPositiveInteger(templ.$('#months_max').val())) {
+                Materialize.toast("Nombre de mois invalide !", 5000);
+            }
             else {
                 AccountsCats.insert(
                     {
                         entitled: templ.$('#entitled').val(),
                         accountCode: templ.$('#account_code').val(),
+                        dateVar: $(templ.find('input:radio[name=date_var]:checked')).val(),
+                        monthsMax: templ.$('#months_max').val(),
+                        startTime: templ.$('#start_time').val(),
+                        endTime: templ.$('#end_time').val(),
                         multi: $(templ.find('input:radio[name=multi]:checked')).val()
                     });
                 templ.find("form").reset();
