@@ -55,29 +55,29 @@ Router.route('/billables', function () {
     this.render("Billables$Edit");
 });
 
+Router.route('/customer_accounts/:cmi', function () {
+    console.log("good route : " + this.params.cmi);
+    Session.set('cmi', this.params.cmi);
+    this.render("CustomerAccs$Edit");
+});
+
 Router.route('/customer_accounts', function () {
-  this.render("CustomerAccs$Edit");
+    this.render("CustomerAccs$Edit");
 });
 Router.route('/accounts_categories', function () {
-  this.render("AccountsCats$Edit");
+    this.render("AccountsCats$Edit");
 });
 Router.route('/customers', function () {
-  this.render("Customers$Edit");
+    this.render("Customers$Edit");
 });
 Router.route('/customers_categories', function () {
-  this.render("CustomersCats$Edit");
+    this.render("CustomersCats$Edit");
 });
 Router.route('/consumers', function () {
-  this.render("Consumers$Edit");
-});
-Router.route('/prices', function () {
-  this.render("Prices$Edit");
+    this.render("Consumers$Edit");
 });
 Router.route('/rights', function () {
-  this.render("Rights$Edit");
-});
-Router.route('/rules', function () {
-  this.render("Rules$Edit");
+    this.render("Rights$Edit");
 });
 
 if (Devsupport.isActive()) {
