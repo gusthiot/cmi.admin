@@ -49,23 +49,6 @@ Customers.schema = new SimpleSchema({
     natureId: {
         type: String
     },
-    priceId: {
-        type: String
-    },
-    ruleId: {
-        type: String
-    },
-    baseFee: {
-        type: Number,
-        min: 0
-    },
-    fixedFee: {
-        type: Number,
-        min: 0
-    },
-    coefA: {
-        type: SimpleSchema.Integer
-    },
     creation: {
         type: String
     },
@@ -77,7 +60,7 @@ Customers.schema = new SimpleSchema({
 
 Customers.columns =
     ["codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode",
-        "abbreviation", "name2", "name3", "natureId", "priceId", "ruleId", "baseFee", "fixedFee", "coefA", "creation",
+        "abbreviation", "name2", "name3", "natureId", "creation",
         "changes"];
 
 Customers.allow({
@@ -140,10 +123,6 @@ if (Meteor.isClient) {
                 if(what) {
                     if (Template.currentData().value === "natureId")
                         return CustomersCats.findOne({_id: what}).entitled;
-                    else if (Template.currentData().value === "priceId")
-                        return Prices.findOne({_id: what}).entitled;
-                    else if (Template.currentData().value === "ruleId")
-                        return Rules.findOne({_id: what}).entitled;
                     else return what;
                 }
                 else return what;
@@ -160,26 +139,6 @@ if (Meteor.isClient) {
                 if(natureId)
                     return CustomersCats.findOne({_id: natureId}).entitled;
                 else return natureId;
-            }
-        },
-    });
-
-    Template.Customers$cell$priceId.helpers({
-        helpers: {
-            translateKey: function (priceId) {
-                if(priceId)
-                    return Prices.findOne({_id: priceId}).entitled;
-                else return priceId;
-            }
-        },
-    });
-
-    Template.Customers$cell$ruleId.helpers({
-        helpers: {
-            translateKey: function (ruleId) {
-                if(ruleId)
-                    return Rules.findOne({_id: ruleId}).entitled;
-                else return ruleId;
             }
         },
     });
@@ -234,15 +193,6 @@ if (Meteor.isClient) {
             else if(templ.$('#npa').val() !== "" && !shared.isPositiveInteger(templ.$('#npa').val())) {
                 Materialize.toast("NPA invalide !", 5000);
             }
-            else if(templ.$('#base_fee').val() !== "" && !shared.isPositiveOrNullFloat2(templ.$('#base_fee').val())) {
-                Materialize.toast("Emolument de base invalide !", 5000);
-            }
-            else if(templ.$('#fixed_fee').val() !== "" && !shared.isPositiveOrNullFloat2(templ.$('#fixed_fee').val())) {
-                Materialize.toast("Emolument fixe invalide !", 5000);
-            }
-            else if(templ.$('#coef_a').val() !== "" && !shared.isPositiveInteger(templ.$('#coef_a').val())) {
-                Materialize.toast("Coefficient A invalide !", 5000);
-            }
             else {
                 Customers.insert(
                     {
@@ -260,12 +210,12 @@ if (Meteor.isClient) {
                         abbreviation: templ.$('#abbreviation').val(),
                         name2: templ.$('#name2').val(),
                         name3: templ.$('#name3').val(),
-                        natureId: templ.$('#nature').val(),
+                        natureId: templ.$('#nature').val(),/**/
                         priceId: templ.$('#price').val(),
                         ruleId: templ.$('#rule').val(),
                         baseFee: templ.$('#base_fee').val(),
                         fixedFee: templ.$('#fixed_fee').val(),
-                        coefA: templ.$('#coef_a').val(),
+                        coefA: templ.$('#coef_a').val(),/**/
                         creation: templ.$('#creation').val(),
                         changes: templ.$('#changes').val()
                     });
@@ -283,20 +233,6 @@ if (Meteor.isClient) {
         natures: function () {
             return CustomersCats.find({});
         },
-        rules: function () {
-            return Rules.find({});
-        },
-        prices: function () {
-            if(Session.get("nature") === "undefined") {
-                let one = CustomersCats.findOne({});
-                if(one)
-                    Session.set('nature', one._id);
-            }
-            if(Session.get("nature"))
-                return Prices.find({natureId: Session.get("nature")});
-            else
-                return Prices.find({});
-        },
         translate: function (what) {
             return TAPi18n.__("Customers.column." + what);
         },
@@ -307,14 +243,6 @@ if (Meteor.isClient) {
 
     Template.Customers$nature.onRendered(function(){
         $('#nature').material_select();
-    });
-
-    Template.Customers$price.onRendered(function(){
-        $('#price').material_select();
-    });
-
-    Template.Customers$rule.onRendered(function(){
-        $('#rule').material_select();
     });
 
     Template.Customers$cell$remove.events({

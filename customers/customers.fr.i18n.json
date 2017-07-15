@@ -16,11 +16,6 @@
       "name2"         : "Nom 2",
       "name3"         : "Nom 3",
       "natureId"      : "Nature Client",
-      "priceId"       : "Classe Tarif",
-      "ruleId"        : "Règle Emolument",
-      "baseFee"       : "Emolument Mensuel Base",
-      "fixedFee"      : "Emolument Fixe",
-      "coefA"         : "Coefficient A",
       "creation"      : "Création",
       "changes"       : "Modifications"
     },

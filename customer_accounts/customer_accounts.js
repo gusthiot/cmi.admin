@@ -62,6 +62,7 @@ CustomerAccs.allow({
 
 if (Meteor.isServer) {
     Meteor.publish(CustomerAccs.name, function () {
+        console.log("s cmi : " + Session.get('cmi)'));
         return CustomerAccs.find({});
     });
 }
@@ -76,6 +77,9 @@ if (Meteor.isClient) {
     require("../lib/client/find-templates");
 
     Meteor.subscribe(CustomerAccs.name);
+
+    Session.set('cmi', 'undefined');
+    console.log("c cmi : " + Session.get('cmi)'));
 
     Template.CustomerAccs$Edit.find = function (that) {
         if (that === undefined) {

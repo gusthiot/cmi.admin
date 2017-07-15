@@ -63,26 +63,6 @@
     {{> Widget$Select vmTag="natureId" value=natureId editable=0 helpers=helpers}}
 </template>
 
-<template name="Customers$cell$priceId">
-    {{> Widget$Select vmTag="priceId" value=priceId editable=0 helpers=helpers}}
-</template>
-
-<template name="Customers$cell$ruleId">
-    {{> Widget$Select vmTag="ruleId" value=ruleId editable=0 helpers=helpers}}
-</template>
-
-<template name="Customers$cell$baseFee">
-    {{> Widget$InputText vmTag="baseFee" value=baseFee editable=0}}
-</template>
-
-<template name="Customers$cell$fixedFee">
-    {{> Widget$InputText vmTag="fixedFee" value=fixedFee editable=0}}
-</template>
-
-<template name="Customers$cell$coefA">
-    {{> Widget$InputText vmTag="coefA" value=coefA editable=0}}
-</template>
-
 <template name="Customers$cell$creation">
     {{> Widget$InputText vmTag="creation" value=creation editable=0}}
 </template>
@@ -190,44 +170,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="select-wrapper col s6">
-                            <label for="price">{{translate 'priceId'}}</label>
-                            <select class="form-control validate" id="price">
-                                {{#each prices}}
-                                    {{> Customers$price}}
-                                {{/each}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="select-wrapper col s6">
-                            <label for="rule">{{translate 'ruleId'}}</label>
-                            <select class="form-control validate" id="rule">
-                                {{#each rules}}
-                                    {{> Customers$rule}}
-                                {{/each}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="base_fee" type="text" class="validate">
-                            <label for="base_fee">{{translate 'baseFee'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="fixed_fee" type="text" class="validate">
-                            <label for="fixed_fee">{{translate 'fixedFee'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="coef_a" type="text" class="validate">
-                            <label for="coef_a">{{translate 'coefA'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="input-field col s6">
                             <input id="creation" type="text" class="validate">
                             <label for="creation">{{translate 'creation'}}</label>
@@ -258,14 +200,6 @@
 </template>
 
 <template name="Customers$nature">
-    <option value="{{_id}}">{{entitled}}</option>
-</template>
-
-<template name="Customers$rule">
-    <option value="{{_id}}">{{entitled}}</option>
-</template>
-
-<template name="Customers$price">
     <option value="{{_id}}">{{entitled}}</option>
 </template>
 
