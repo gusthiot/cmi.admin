@@ -207,11 +207,11 @@
     {{> Customers$addButton}}
     {{#if notnull pages}}
         {{#if notfirst page}}
-            <a class="previous btn-large waves-effect waves-light">Previous</a>
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
         {{/if}}
         <span class="letSize">{{page}} of {{pages}}</span>
         {{#if notlast page pages}}
-            <a class="next btn-large waves-effect waves-light">Next</a>
+            <button class="nexts btn-large waves-effect waves-light">Next</button>
         {{/if}}
     {{/if}}
 </template>

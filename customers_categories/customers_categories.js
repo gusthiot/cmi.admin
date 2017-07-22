@@ -89,10 +89,10 @@ if (Meteor.isClient) {
 
     Template.CustomersCats$Pagination.events({
         "click button.previous": function (event, templateInstance) {
-            templateInstance.paginate().previous();
+            templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
-            templateInstance.paginate().next();
+        "click button.nexts": function (event, templateInstance) {
+            templateInstance.paginate.next();
         }
     });
 

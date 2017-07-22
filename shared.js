@@ -116,3 +116,13 @@ export function confirmRemove(name, id, collection) {
         });
 
 }
+
+export function monthDiff(time1, time2) {
+    let months;
+    let d1 = new Date(time1);
+    let d2 = new Date(time2);
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth() + 1;
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}

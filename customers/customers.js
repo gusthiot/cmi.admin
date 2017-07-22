@@ -145,10 +145,10 @@ if (Meteor.isClient) {
 
     Template.Customers$Pagination.events({
         "click button.previous": function (event, templateInstance) {
-            templateInstance.paginate().previous();
+            templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
-            templateInstance.paginate().next();
+        "click button.nexts": function (event, templateInstance) {
+            templateInstance.paginate.next();
         }
     });
 
@@ -167,7 +167,6 @@ if (Meteor.isClient) {
     Template.Customers$addButton.onRendered(function () {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
-    Session.set('nature', 'undefined');
 
     Template.Customers$modalAdd.events({
         'click .modal-done': function (event, templ) {
@@ -210,22 +209,12 @@ if (Meteor.isClient) {
                         abbreviation: templ.$('#abbreviation').val(),
                         name2: templ.$('#name2').val(),
                         name3: templ.$('#name3').val(),
-                        natureId: templ.$('#nature').val(),/**/
-                        priceId: templ.$('#price').val(),
-                        ruleId: templ.$('#rule').val(),
-                        baseFee: templ.$('#base_fee').val(),
-                        fixedFee: templ.$('#fixed_fee').val(),
-                        coefA: templ.$('#coef_a').val(),/**/
+                        natureId: templ.$('#nature').val(),
                         creation: templ.$('#creation').val(),
                         changes: templ.$('#changes').val()
                     });
                 templ.find("form").reset();
             }
-        },
-        "change #nature": function(evt) {
-            let newNature = $(evt.target).val();
-            if (newNature !== Session.get("nature"))
-                Session.set('nature', newNature);
         }
     });
 

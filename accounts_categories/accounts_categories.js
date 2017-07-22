@@ -48,20 +48,20 @@ AccountsCats.allow({
 });
 
 if (Meteor.isServer) {
-    AccountsCats.remove({});
+    //AccountsCats.remove({});
     if (AccountsCats.find({}).count() === 0) {
-        AccountsCats.insert({entitled: "Standard", accountCode:"STD", dateVar: "VAR", monthsMax: 60, startTime: "", endTime: "", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 3 mois", accountCode:"DEVT16.17", dateVar: "VAR", monthsMax: 3, startTime: "", endTime: "", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 6 mois", accountCode:"DEVS16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 12 mois", accountCode:"DEVA16.17", dateVar: "VAR", monthsMax: 12, startTime: "", endTime: "", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Semestre Automne Bachelor", accountCode:"BSA16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Semestre Printemps Bachelor", accountCode:"BSP16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Semestre Automne Master", accountCode:"MSA16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Semestre Printemps Master", accountCode:"MSP16.17", dateVar: "FIX", startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Master", accountCode:"PDM16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Master (finit après 31/08)", accountCode:"PDM16.17+", dateVar: "VAR", monthsMax: 60, startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet en Echange", accountCode:"ECH16.17", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet en Echange (finit après 31/08)", accountCode:"ECH16.17+", dateVar: "VAR", monthsMax: 6, startTime: "", endTime: "", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Standard", accountCode:"STD", dateVar: "VAR", monthsMax: 60, startTime: "1 January, 2016", endTime: "31 December, 2099", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 3 mois", accountCode:"DEVT16.17", dateVar: "VAR", monthsMax: 3, startTime: "1 September, 2016", endTime: "31 August, 2017", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 6 mois", accountCode:"DEVS16.17", dateVar: "VAR", monthsMax: 6, startTime: "1 September, 2016", endTime: "31 August, 2017", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 12 mois", accountCode:"DEVA16.17", dateVar: "VAR", monthsMax: 12, startTime: "1 September, 2016", endTime: "31 August, 2017", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Semestre Automne Bachelor", accountCode:"BSA16.17", dateVar: "FIX", startTime: "20 September, 2016", endTime: "27 January, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Printemps Bachelor", accountCode:"BSP16.17", dateVar: "FIX", startTime: "20 February, 2017", endTime: "23 June, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Automne Master", accountCode:"MSA16.17", dateVar: "FIX", startTime: "20 September, 2016", endTime: "27 January, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Semestre Printemps Master", accountCode:"MSP16.17", dateVar: "FIX", startTime: "20 February, 2017", endTime: "23 June, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master", accountCode:"PDM16.17", dateVar: "VAR", monthsMax: 6, startTime: "1 September, 2016", endTime: "31 August, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master (finit après 31/08)", accountCode:"PDM16.17+", dateVar: "VAR", monthsMax: 60, startTime: "1 April, 2016", endTime: "31 January, 2018", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange", accountCode:"ECH16.17", dateVar: "VAR", monthsMax: 6, startTime: "1 September, 2016", endTime: "31 August, 2017", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange (finit après 31/08)", accountCode:"ECH16.17+", dateVar: "VAR", monthsMax: 6, startTime: "1 September, 2016", endTime: "31 January, 2018", multi:"FAUX"});
     }
 
     Meteor.publish(AccountsCats.name, function () {
@@ -110,10 +110,10 @@ if (Meteor.isClient) {
 
     Template.AccountsCats$Pagination.events({
         "click button.previous": function (event, templateInstance) {
-            templateInstance.paginate().previous();
+            templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
-            templateInstance.paginate().next();
+        "click button.nexts": function (event, templateInstance) {
+            templateInstance.paginate.next();
         }
     });
 
@@ -158,6 +158,13 @@ if (Meteor.isClient) {
                     });
                 templ.find("form").reset();
             }
+        },
+        "change input:radio[name=date_var]": function(evt) {
+            let newVar = $(evt.target).val();
+            if (newVar === "FIX")
+                $('#months_max').val("").prop('disabled', true);
+            else
+                $('#months_max').prop('disabled', false);
         }
     });
 
@@ -168,6 +175,13 @@ if (Meteor.isClient) {
         modalAdd: function () {
             return TAPi18n.__("AccountsCats.modal.add");
         }
+    });
+
+    Template.AccountsCats$modalAdd.onRendered(function(){
+        $('.datepicker').pickadate({
+            selectMonths: true,
+            selectYears: 40
+        });
     });
 
     Template.AccountsCats$cell$remove.events({

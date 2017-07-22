@@ -62,7 +62,7 @@ CustomerAccs.allow({
 
 if (Meteor.isServer) {
     Meteor.publish(CustomerAccs.name, function () {
-        console.log("s cmi : " + Session.get('cmi)'));
+        //console.log("s cmi : " + Session.get('cmi)'));
         return CustomerAccs.find({});
     });
 }
@@ -78,8 +78,8 @@ if (Meteor.isClient) {
 
     Meteor.subscribe(CustomerAccs.name);
 
-    Session.set('cmi', 'undefined');
-    console.log("c cmi : " + Session.get('cmi)'));
+    //Session.set('cmi', 'undefined');
+    //console.log("c cmi : " + Session.get('cmi)'));
 
     Template.CustomerAccs$Edit.find = function (that) {
         if (that === undefined) {
@@ -131,10 +131,10 @@ if (Meteor.isClient) {
 
     Template.CustomerAccs$Pagination.events({
         "click button.previous": function (event, templateInstance) {
-            templateInstance.paginate().previous();
+            templateInstance.paginate.previous();
         },
-        "click button.next": function (event, templateInstance) {
-            templateInstance.paginate().next();
+        "click button.nexts": function (event, templateInstance) {
+            templateInstance.paginate.next();
         }
     });
 
@@ -153,10 +153,12 @@ if (Meteor.isClient) {
     Template.CustomerAccs$addButton.onRendered(function () {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
+    Session.set('account_cat', 'undefined');
 
     Template.CustomerAccs$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
+            let one = AccountsCats.findOne({_id: templ.$('#accounts_cat').val()});
             if(templ.$('#account_id').val() === "" || !shared.isPositiveInteger(templ.$('#account_id').val())) {
                 Materialize.toast("Id compte invalide !", 5000);
             }
@@ -166,14 +168,19 @@ if (Meteor.isClient) {
             else if(templ.$('#number').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#number').val())) {
                 Materialize.toast("Numéro de compte invalide !", 5000);
             }
-            else if(templ.$('#start_time').val() === "") {
+            else if(templ.$('#start_time').val() === "" || shared.isOlderThan(templ.$('#start_time').val(), one.startTime)) {
+                console.log(one.startTime,templ.$('#start_time').val());
                 Materialize.toast("Date de début invalide !", 5000);
             }
-            else if(templ.$('#end_time').val() === "") {
+            else if(templ.$('#end_time').val() === ""|| shared.isOlderThan(one.endTime, templ.$('#end_time').val())) {
+                console.log(templ.$('#end_time').val(),one.endTime);
                 Materialize.toast("Date de fin invalide !", 5000);
             }
             else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
                 Materialize.toast("Date de fin doit être après date de début !", 5000);
+            }
+            else if(one.dateVar === "VAR" && shared.monthDiff(templ.$('#start_time').val(), templ.$('#end_time').val()) > one.monthsMax) {
+                Materialize.toast("Période trop longue pour cette catégorie !", 5000);
             }
             else {
                 CustomerAccs.insert(
@@ -191,6 +198,13 @@ if (Meteor.isClient) {
                         closing: templ.$('#closing').val()
                     });
                 templ.find("form").reset();
+            }
+        },
+        "change #accounts_cat": function(evt) {
+            let newCat = $(evt.target).val();
+            if (newCat !== Session.get("account_cat")) {
+                Session.set('account_cat', newCat);
+                checkDates();
             }
         }
     });
@@ -210,6 +224,36 @@ if (Meteor.isClient) {
         }
     });
 
+    function checkDates() {
+        let one = null;
+        if (Session.get("account_cat") === "undefined") {
+            one = AccountsCats.findOne({});
+            if (one)
+                Session.set('account_cat', one._id);
+        }
+        else
+            one = AccountsCats.findOne({_id: Session.get("account_cat")});
+        let dateVar = null;
+        if (one) {
+            dateVar = one.dateVar;
+        }
+        let start = $('#start_time');
+        let end = $('#end_time');
+
+        if (dateVar && dateVar === "FIX") {
+            start.prop('disabled', true);
+            start.pickadate().pickadate('picker').set('select', one.startTime);
+            end.prop('disabled', true);
+            end.pickadate().pickadate('picker').set('select', one.endTime);
+        }
+        else{
+            start.prop('disabled', false);
+            start.pickadate().pickadate('picker').set('clear');
+            end.prop('disabled', false);
+            end.pickadate().pickadate('picker').set('clear');
+        }
+    }
+
     Template.CustomerAccs$modalAdd.onRendered(function(){
         $('.datepicker').pickadate({
             selectMonths: true,
@@ -223,7 +267,9 @@ if (Meteor.isClient) {
 
     Template.CustomerAccs$cat.onRendered(function(){
         $('#accounts_cat').material_select();
+        checkDates();
     });
+
 
     Template.CustomerAccs$cell$remove.events({
         'click .cancelItem': function (event) {
