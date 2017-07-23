@@ -45,7 +45,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Rights, false);
+    return shared.makeTable(Rights, false, false);
 }
 let theTable = makeTable();
 

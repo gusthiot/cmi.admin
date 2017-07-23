@@ -1,5 +1,5 @@
 <template name="CustomerAccs$Edit">
-    {{> tabular table=makeTable class="responsive-table striped"}}
+    {{> tabular table=makeTable selector=selector class="responsive-table striped"}}
 </template>
 
 <template name="CustomerAccs$columnHead">
@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="select-wrapper col s6">
                             <label for="customer">{{translate 'customerId'}}</label>
-                            <select class="form-control validate" id="customer">
+                            <select class="form-control validate" id="customer" disabled="disabled">
                                 {{#each customers}}
                                     {{> CustomerAccs$customer}}
                                 {{/each}}

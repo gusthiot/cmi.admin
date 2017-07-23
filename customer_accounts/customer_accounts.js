@@ -62,13 +62,12 @@ CustomerAccs.allow({
 
 if (Meteor.isServer) {
     Meteor.publish(CustomerAccs.name, function () {
-        //console.log("s cmi : " + Session.get('cmi)'));
         return CustomerAccs.find({});
     });
 }
 
 function makeTable() {
-    return shared.makeTable(CustomerAccs, true);
+    return shared.makeTable(CustomerAccs, true, false);
 }
 let theTable = makeTable();
 
@@ -77,9 +76,6 @@ if (Meteor.isClient) {
     require("../lib/client/find-templates");
 
     Meteor.subscribe(CustomerAccs.name);
-
-    //Session.set('cmi', 'undefined');
-    //console.log("c cmi : " + Session.get('cmi)'));
 
     Template.CustomerAccs$Edit.find = function (that) {
         if (that === undefined) {
@@ -90,7 +86,21 @@ if (Meteor.isClient) {
         }
     };
 
-    Template.CustomerAccs$Edit.helpers({makeTable: theTable});
+    let code = "undefined";
+
+    Template.CustomerAccs$Edit.helpers({
+        makeTable: theTable,
+        selector: function() {
+            if(code && code !== "undefined")
+                return {customerId: code};
+            else
+                return {};
+        }
+    });
+
+    Template.CustomerAccs$Edit.onCreated(function(){
+        code = this.data;
+    });
 
     Template.CustomerAccs$columnHead.events({
         'change select': function (event, template) {
@@ -211,7 +221,10 @@ if (Meteor.isClient) {
 
     Template.CustomerAccs$modalAdd.helpers({
         customers: function () {
-            return Customers.find({});
+            if (code && code !== "undefined")
+                return Customers.find({_id: code});
+            else
+                return Customers.find({});
         },
         cats: function () {
             return AccountsCats.find({});

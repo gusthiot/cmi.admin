@@ -56,14 +56,16 @@ Router.route('/billables', function () {
 });
 
 Router.route('/customer_accounts/:cmi', function () {
-    console.log("good route : " + this.params.cmi);
-    Session.set('cmi', this.params.cmi);
-    this.render("CustomerAccs$Edit");
+    this.render("CustomerAccs$Edit", {
+        data: function () {
+            return this.params.cmi;
+        }
+    });
 });
 
-Router.route('/customer_accounts', function () {
-    this.render("CustomerAccs$Edit");
-});
+// Router.route('/customer_accounts', function () {
+//     this.render("CustomerAccs$Edit");
+// });
 Router.route('/accounts_categories', function () {
     this.render("AccountsCats$Edit");
 });

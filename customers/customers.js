@@ -85,7 +85,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Customers, true);
+    return shared.makeTable(Customers, true, true);
 }
 let theTable = makeTable();
 
@@ -232,6 +232,13 @@ if (Meteor.isClient) {
 
     Template.Customers$nature.onRendered(function(){
         $('#nature').material_select();
+    });
+
+    Template.Customers$cell$accounts.events({
+        'click .accounts': function (event) {
+            event.preventDefault();
+            Router.go('/customer_accounts/' + this._id);
+        }
     });
 
     Template.Customers$cell$remove.events({
