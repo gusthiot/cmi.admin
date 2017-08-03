@@ -46,10 +46,10 @@ export function makeTable(specific, displayId, accountCol) {
             }
         }),
         language: Tabular.Translations.getCurrent(),
-        // select: {
-        //     style: "os",
-        //     items: "cell",
-        // },
+        select: {
+            style: "os",
+            items: "cell",
+        },
         initComplete: function () {
             setupColumnFilterUI(Template[specific.name + "$Edit"].find().view, this, specific);
         },

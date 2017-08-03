@@ -219,6 +219,12 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.CustomerAccs$modalAdd.onRendered(function(){
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+
     Template.CustomerAccs$modalAdd.helpers({
         customers: function () {
             if (code && code !== "undefined")
@@ -255,24 +261,17 @@ if (Meteor.isClient) {
 
         if (dateVar && dateVar === "FIX") {
             start.prop('disabled', true);
-            start.pickadate().pickadate('picker').set('select', one.startTime);
+            start.datepicker("setDate", new Date(one.startTime));
             end.prop('disabled', true);
-            end.pickadate().pickadate('picker').set('select', one.endTime);
+            end.datepicker("setDate", new Date(one.endTime));
         }
         else{
             start.prop('disabled', false);
-            start.pickadate().pickadate('picker').set('clear');
+            start.datepicker("setDate", null);
             end.prop('disabled', false);
-            end.pickadate().pickadate('picker').set('clear');
+            end.datepicker("setDate", null);
         }
     }
-
-    Template.CustomerAccs$modalAdd.onRendered(function(){
-        $('.datepicker').pickadate({
-            selectMonths: true,
-            selectYears: 40
-        });
-    });
 
     Template.CustomerAccs$customer.onRendered(function(){
         $('#customer').material_select();

@@ -342,6 +342,12 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
     // This code only runs on the server
+    //Billables.remove({});
+    if (Billables.find({}).count() === 0) {
+        Billables.insert({type: "USAGE_FEE", operatedByUser: "Christophe Gusthiot", billableToAccount: "5", billableToProject: "6", startTime: "2017-01-02", updatedAt: "2017-07-21"});
+        Billables.insert({type: "USAGE_FEE", operatedByUser: "Christophe Gusthiot", billableToAccount: "1", billableToProject: "2", startTime: "2017-02-02", updatedAt: "2017-08-20"});
+    }
+
     Meteor.publish('Billables', function () {
         return Billables.find({});
     });

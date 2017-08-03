@@ -6,6 +6,7 @@
 <template name="Widget$Select"></template>
 <template name="Widget$InputText"></template>
 <template name="Widget$Textarea"></template>
+<template name="Widget$Date"></template>
 
 <!-- Widget templates -->
 <template name="Widget$Select$readonly">
@@ -28,7 +29,7 @@
 </template>
 
 <template name="Widget$InputText$editable">
-    <input type="text" {{b "value: value" }}>
+    <input type="text" value="{{widget.value}}">
 </template>
 
 
@@ -64,18 +65,11 @@
 </template>
 
 <template name="Widget$Date$readonly">
-    {{dateToLocalizedString widget.value}}
+    {{widget.value}}
 </template>
 
 <template name="Widget$Date$editable">
-    <div class="input-field col s12">
-        <div class="row">
-            <h6>Date:</h6>
-            <div class="form-group">
-               <input type="text" class="datepicker">
-            </div>
-        </div>
-    </div>
+    <input title="date" class="datepicker validate">
 </template>
 
 <template name="Widget$Time$readonly">
@@ -86,7 +80,7 @@
     <div class="row">
         <h6>Heure:</h6>
         <div class="form-group">
-            <input type="text" class="timepicker time_element" value="{{toTimepickerInputValue}}"/>
+            <input class="timepicker time_element" value="{{toTimepickerInputValue widget.value}}"/>
         </div>
     </div>
 </template>

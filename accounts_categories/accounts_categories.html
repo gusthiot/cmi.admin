@@ -8,31 +8,31 @@
 </template>
 
 <template name="AccountsCats$cell$entitled">
-    {{> Widget$InputText vmTag="entitled" value=entitled editable=0}}
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$accountCode">
-    {{> Widget$InputText vmTag="accountCode" value=accountCode editable=0}}
+    {{> Widget$InputText vmTag="accountCode" value=accountCode editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$dateVar">
-    {{> Widget$Select vmTag="dateVar" value=dateVar editable=0}}
+    {{> Widget$Select vmTag="dateVar" value=dateVar values=vars editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$monthsMax">
-    {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=0}}
+    {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$startTime">
-    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+    {{> Widget$Date vmTag="startTime" value=startTime editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$endTime">
-    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+    {{> Widget$Date vmTag="endTime" value=endTime editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$multi">
-    {{> Widget$Select vmTag="multi" value=multi editable=0}}
+    {{> Widget$Select vmTag="multi" value=multi values=multis editable=isEditing}}
 </template>
 
 <template name="AccountsCats$cell$remove">
@@ -66,10 +66,10 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <label>Dates : </label>
-                            <input id="true" type="radio" class="validate" name="date_var" value="VAR">
-                            <label for="true">VAR</label>
-                            <input id="false" type="radio" class="validate" name="date_var" checked="checked" value="FIX">
-                            <label for="false">FIX</label>
+                            <input id="var" type="radio" class="validate" name="date_var" value="VAR">
+                            <label for="var">VAR</label>
+                            <input id="fix" type="radio" class="validate" name="date_var" checked="checked" value="FIX">
+                            <label for="fix">FIX</label>
                         </div>
                     </div>
                     <div class="row">
@@ -80,23 +80,23 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="start_time" type="date" class="datepicker validate">
+                            <input id="start_time" class="datepicker validate">
                             <label for="start_time" class="active">{{translate 'startTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="end_time" type="date" class="datepicker validate">
+                            <input id="end_time" class="datepicker validate">
                             <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <label>Multi : </label>
-                            <input id="true" type="radio" class="validate" name="multi" value="VRAI">
-                            <label for="true">VRAI</label>
-                            <input id="false" type="radio" class="validate" name="multi" checked="checked" value="FAUX">
-                            <label for="false">FAUX</label>
+                            <input id="vrai" type="radio" class="validate" name="multi" value="VRAI">
+                            <label for="vrai">VRAI</label>
+                            <input id="faux" type="radio" class="validate" name="multi" checked="checked" value="FAUX">
+                            <label for="faux">FAUX</label>
                         </div>
                     </div>
                 </form>

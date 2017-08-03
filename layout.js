@@ -56,11 +56,13 @@ Router.route('/billables', function () {
 });
 
 Router.route('/customer_accounts/:cmi', function () {
-    this.render("CustomerAccs$Edit", {
+    this.render("CustomerAccs$Edit"
+        , {
         data: function () {
             return this.params.cmi;
         }
-    });
+    }
+    );
 });
 
 // Router.route('/customer_accounts', function () {

@@ -28,11 +28,11 @@
 </template>
 
 <template name="CustomerAccs$cell$startTime">
-    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+    {{> Widget$Date vmTag="startTime" value=startTime editable=0}}
 </template>
 
 <template name="CustomerAccs$cell$endTime">
-    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+    {{> Widget$Date vmTag="endTime" value=endTime editable=0}}
 </template>
 
 <template name="CustomerAccs$cell$state">
@@ -107,13 +107,13 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="start_time" type="date" class="datepicker validate">
+                            <input id="start_time" class="datepicker validate">
                             <label for="start_time" class="active">{{translate 'startTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="end_time" type="date" class="datepicker validate">
+                            <input id="end_time" class="datepicker validate">
                             <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
