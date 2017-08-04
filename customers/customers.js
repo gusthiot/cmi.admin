@@ -6,7 +6,7 @@ Customers = new Meteor.Collection("customers");
 Customers.name = "Customers";
 
 Customers.schema = new SimpleSchema({
-    _id: {
+    codeCMi: {
         type: SimpleSchema.Integer
     },
     codeSAP: {
@@ -59,7 +59,7 @@ Customers.schema = new SimpleSchema({
 
 
 Customers.columns =
-    ["codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode",
+    ["codeCMi", "codeSAP", "name", "numAdd", "address", "postalBox", "npa", "city", "country", "countryCode",
         "abbreviation", "name2", "name3", "natureId", "creation",
         "changes"];
 
@@ -85,7 +85,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Customers, true, true);
+    return shared.makeTable(Customers, false, true);
 }
 let theTable = makeTable();
 
@@ -106,6 +106,44 @@ if (Meteor.isClient) {
 
     Template.Customers$Edit.helpers({makeTable: theTable});
 
+    Session.set('editingRow', 'undefined');
+
+    Template.Customers$Edit.events({
+        'click tr': function (event, tmpl) {
+            let dataTable = $(event.currentTarget).closest('table').DataTable();
+            if(dataTable && dataTable !== "undefined") {
+                let row = dataTable.row(event.currentTarget).data();
+                if(row && row !== "undefined") {
+                    if(Session.get('editingRow')._id !== row._id) {
+                        Session.set('editingRow',row);
+                    }
+                }
+                else {
+                    Session.set('editingRow', 'undefined');
+                }
+            }
+            else {
+                Session.set('editingRow', 'undefined');
+            }
+        }
+    });
+
+    let allCellTemplates = Customers.columns.map(function (x) {
+        return Template["Customers$cell$" + x]
+    });
+
+    allCellTemplates.forEach(function (tmpl) {
+        if (!tmpl) return;
+        tmpl.helpers({
+            isEditing: function () {
+                if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+    });
+
     Template.Customers$columnHead.events({
         'change select': function (event, template) {
             let val = $.fn.dataTable.util.escapeRegex(
@@ -121,11 +159,15 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    if (Template.currentData().value === "natureId")
-                        return CustomersCats.findOne({_id: what}).entitled;
-                    else return what;
+                    if (Template.currentData().value === "natureId") {
+                        let one = CustomersCats.findOne({_id: what});
+                        if(one)
+                            return one.entitled;
+                        else
+                            console.log("no customers category for : " + what);
+                    }
                 }
-                else return what;
+                return what;
             }
         },
         translate: function (what) {
@@ -136,11 +178,27 @@ if (Meteor.isClient) {
     Template.Customers$cell$natureId.helpers({
         helpers: {
             translateKey: function (natureId) {
-                if(natureId)
-                    return CustomersCats.findOne({_id: natureId}).entitled;
-                else return natureId;
+                if(natureId) {
+                    let one = CustomersCats.findOne({_id: natureId});
+                    if(one)
+                        return one.entitled;
+                    else
+                        console.log("no customers category for : " + natureId);
+
+                }
+                return natureId;
             }
         },
+        natures: function () {
+            let cats = CustomersCats.find({});
+            if(!cats)
+                return [];
+            let results = [];
+            cats.forEach(function(cat) {
+                results.push(cat._id);
+            });
+            return results;
+        }
     });
 
     Template.Customers$Pagination.events({
@@ -205,7 +263,7 @@ if (Meteor.isClient) {
                         city: templ.$('#city').val(),
                         country: templ.$('#country').val(),
                         countryCode: templ.$('#country_code').val(),
-                        _id: templ.$('#code_cmi').val(),
+                        codeCMi: templ.$('#code_cmi').val(),
                         abbreviation: templ.$('#abbreviation').val(),
                         name2: templ.$('#name2').val(),
                         name3: templ.$('#name3').val(),
@@ -237,7 +295,7 @@ if (Meteor.isClient) {
     Template.Customers$cell$accounts.events({
         'click .accounts': function (event) {
             event.preventDefault();
-            Router.go('/customer_accounts/' + this._id);
+            Router.go('/customer_accounts/' + this.codeCMi);
         }
     });
 

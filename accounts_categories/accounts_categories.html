@@ -20,7 +20,11 @@
 </template>
 
 <template name="AccountsCats$cell$monthsMax">
-    {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=isEditing}}
+    {{#if notfix}}
+        {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=isEditing}}
+    {{else}}
+        {{> Widget$InputText vmTag="monthsMax" value="" editable=isEditing}}
+    {{/if}}
 </template>
 
 <template name="AccountsCats$cell$startTime">
@@ -53,13 +57,13 @@
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="entitled" type="text" class="validate">
+                            <input id="entitled" class="validate">
                             <label for="entitled">{{translate 'entitled'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="account_code" type="text" class="validate">
+                            <input id="account_code" class="validate">
                             <label for="account_code">{{translate 'accountCode'}}</label>
                         </div>
                     </div>
@@ -68,13 +72,13 @@
                             <label>Dates : </label>
                             <input id="var" type="radio" class="validate" name="date_var" value="VAR">
                             <label for="var">VAR</label>
-                            <input id="fix" type="radio" class="validate" name="date_var" checked="checked" value="FIX">
+                            <input id="fix" type="radio" class="validate" name="date_var" checked value="FIX">
                             <label for="fix">FIX</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="months_max" type="text" class="validate" disabled="disabled">
+                            <input id="months_max" class="validate" disabled>
                             <label for="months_max">{{translate 'monthsMax'}}</label>
                         </div>
                     </div>
@@ -95,7 +99,7 @@
                             <label>Multi : </label>
                             <input id="vrai" type="radio" class="validate" name="multi" value="VRAI">
                             <label for="vrai">VRAI</label>
-                            <input id="faux" type="radio" class="validate" name="multi" checked="checked" value="FAUX">
+                            <input id="faux" type="radio" class="validate" name="multi" checked value="FAUX">
                             <label for="faux">FAUX</label>
                         </div>
                     </div>

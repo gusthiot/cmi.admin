@@ -2,7 +2,7 @@
   "CustomerAccs": {
     "title": "Client Accounts",
     "column": {
-      "_id"           : "Account Id",
+      "accountId"     : "Account Id",
       "number"        : "Number",
       "entitled"      : "Entitled",
       "customerId"    : "Client Code",

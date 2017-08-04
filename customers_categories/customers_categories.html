@@ -8,11 +8,11 @@
 </template>
 
 <template name="CustomersCats$cell$entitled">
-    {{> Widget$InputText vmTag="entitled" value=entitled editable=0}}
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=isEditing}}
 </template>
 
 <template name="CustomersCats$cell$codeN">
-    {{> Widget$InputText vmTag="codeN" value=codeN editable=0}}
+    {{> Widget$InputText vmTag="codeN" value=codeN editable=isEditing}}
 </template>
 
 <template name="CustomersCats$cell$remove">

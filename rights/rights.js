@@ -131,14 +131,23 @@ if (Meteor.isClient) {
     });
 
     function isMulti(accountId) {
-        let catId = CustomerAccs.findOne({_id: accountId}).accountsCatId;
-        let multi = AccountsCats.findOne({_id: catId}).multi;
-        return multi === "VRAI";
+        let acc = CustomerAccs.findOne({_id: accountId});
+        if(acc) {
+            let catId = acc.accountsCatId;
+            let cat = AccountsCats.findOne({_id: catId});
+            if(cat) {
+                let multi = cat.multi;
+                return multi === "VRAI";
+            }
+        }
+        console.log("id problem ?");
+        return false;
     }
 
     Template.Rights$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
+            let acc = CustomerAccs.findOne({_id: templ.$('#account').val()});
             if(templ.$('#start_time').val() === "") {
                 Materialize.toast("Date de début invalide !", 5000);
             }
@@ -151,10 +160,13 @@ if (Meteor.isClient) {
             else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
                 Materialize.toast("Date de fin doit être après date de début !", 5000);
             }
-            else if(!shared.isOlderThanOrEgal(CustomerAccs.findOne({_id: templ.$('#account').val()}).startTime, templ.$('#start_time').val())) {
+            else if(!acc) {
+                Materialize.toast("Account Id invalide !", 5000);
+            }
+            else if(!shared.isOlderThanOrEgal(acc.startTime, templ.$('#start_time').val())) {
                 Materialize.toast("Date de début ne peut être avant début compte !", 5000);
             }
-            else if(!shared.isOlderThanOrEgal(templ.$('#end_time').val(),CustomerAccs.findOne({_id: templ.$('#account').val()}).endTime)) {
+            else if(!shared.isOlderThanOrEgal(templ.$('#end_time').val(),acc.endTime)) {
                 Materialize.toast("Date de fin ne peut être après fin compte !", 5000);
             }
             else {

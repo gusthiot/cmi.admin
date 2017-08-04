@@ -70,6 +70,44 @@ if (Meteor.isClient) {
 
     Template.CustomersCats$Edit.helpers({makeTable: theTable});
 
+    Session.set('editingRow', 'undefined');
+
+    Template.CustomersCats$Edit.events({
+        'click tr': function (event, tmpl) {
+            let dataTable = $(event.currentTarget).closest('table').DataTable();
+            if(dataTable && dataTable !== "undefined") {
+                let row = dataTable.row(event.currentTarget).data();
+                if(row && row !== "undefined") {
+                    if(Session.get('editingRow')._id !== row._id) {
+                        Session.set('editingRow',row);
+                    }
+                }
+                else {
+                    Session.set('editingRow', 'undefined');
+                }
+            }
+            else {
+                Session.set('editingRow', 'undefined');
+            }
+        }
+    });
+
+    let allCellTemplates = CustomersCats.columns.map(function (x) {
+        return Template["CustomersCats$cell$" + x]
+    });
+
+    allCellTemplates.forEach(function (tmpl) {
+        if (!tmpl) return;
+        tmpl.helpers({
+            isEditing: function () {
+                if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+    });
+
     Template.CustomersCats$columnHead.events({
         'change select': function (event, template) {
             let val = $.fn.dataTable.util.escapeRegex(

@@ -56,13 +56,19 @@ Router.route('/billables', function () {
 });
 
 Router.route('/customer_accounts/:cmi', function () {
-    this.render("CustomerAccs$Edit"
-        , {
-        data: function () {
-            return this.params.cmi;
-        }
+    let one = Customers.findOne({codeCMi: this.params.cmi});
+    if(one) {
+        this.render("CustomerAccs$Edit"
+            , {
+                data: function () {
+                    return one._id;
+                }
+            });
     }
-    );
+    else {
+        Router.go('/');
+    }
+
 });
 
 // Router.route('/customer_accounts', function () {

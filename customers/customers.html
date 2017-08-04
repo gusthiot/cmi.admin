@@ -7,68 +7,68 @@
     {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
 </template>
 
+<template name="Customers$cell$codeCMi">
+    {{> Widget$InputText vmTag="codeCMi" value=codeCMi editable=isEditing}}
+</template>
+
 <template name="Customers$cell$codeSAP">
-    {{> Widget$InputText vmTag="codeSAP" value=codeSAP editable=0}}
+    {{> Widget$InputText vmTag="codeSAP" value=codeSAP editable=isEditing}}
 </template>
 
 <template name="Customers$cell$name">
-    {{> Widget$InputText vmTag="name" value=name editable=0}}
+    {{> Widget$InputText vmTag="name" value=name editable=isEditing}}
 </template>
 
 <template name="Customers$cell$numAdd">
-    {{> Widget$InputText vmTag="numAdd" value=numAdd editable=0}}
+    {{> Widget$InputText vmTag="numAdd" value=numAdd editable=isEditing}}
 </template>
 
 <template name="Customers$cell$address">
-    {{> Widget$InputText vmTag="address" value=address editable=0}}
+    {{> Widget$InputText vmTag="address" value=address editable=isEditing}}
 </template>
 
 <template name="Customers$cell$postalBox">
-    {{> Widget$InputText vmTag="postalBox" value=postalBox editable=0}}
+    {{> Widget$InputText vmTag="postalBox" value=postalBox editable=isEditing}}
 </template>
 
 <template name="Customers$cell$npa">
-    {{> Widget$InputText vmTag="npa" value=npa editable=0}}
+    {{> Widget$InputText vmTag="npa" value=npa editable=isEditing}}
 </template>
 
 <template name="Customers$cell$city">
-    {{> Widget$InputText vmTag="city" value=city editable=0}}
+    {{> Widget$InputText vmTag="city" value=city editable=isEditing}}
 </template>
 
 <template name="Customers$cell$country">
-    {{> Widget$InputText vmTag="country" value=country editable=0}}
+    {{> Widget$InputText vmTag="country" value=country editable=isEditing}}
 </template>
 
 <template name="Customers$cell$countryCode">
-    {{> Widget$InputText vmTag="countryCode" value=countryCode editable=0}}
-</template>
-
-<template name="Customers$cell$codeCMi">
-    {{> Widget$InputText vmTag="codeCMi" value=codeCMi editable=0}}
+    {{> Widget$InputText vmTag="countryCode" value=countryCode editable=isEditing}}
 </template>
 
 <template name="Customers$cell$abbreviation">
-    {{> Widget$InputText vmTag="abbreviation" value=abbreviation editable=0}}
+    {{> Widget$InputText vmTag="abbreviation" value=abbreviation editable=isEditing}}
 </template>
 
 <template name="Customers$cell$name2">
-    {{> Widget$InputText vmTag="name2" value=name2 editable=0}}
+    {{> Widget$InputText vmTag="name2" value=name2 editable=isEditing}}
 </template>
 
 <template name="Customers$cell$name3">
-    {{> Widget$InputText vmTag="name3" value=name3 editable=0}}
+    {{> Widget$InputText vmTag="name3" value=name3 editable=isEditing}}
 </template>
 
 <template name="Customers$cell$natureId">
-    {{> Widget$Select vmTag="natureId" value=natureId editable=0 helpers=helpers}}
+    {{> Widget$Select vmTag="natureId" value=natureId values=natures editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Customers$cell$creation">
-    {{> Widget$InputText vmTag="creation" value=creation editable=0}}
+    {{> Widget$InputText vmTag="creation" value=creation editable=isEditing}}
 </template>
 
 <template name="Customers$cell$changes">
-    {{> Widget$InputText vmTag="changes" value=changes editable=0}}
+    {{> Widget$InputText vmTag="changes" value=changes editable=isEditing}}
 </template>
 
 <template name="Customers$cell$accounts">
@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="code_cmi" type="text" class="validate">
-                            <label for="code_cmi">{{translate '_id'}}</label>
+                            <label for="code_cmi">{{translate 'codeCMi'}}</label>
                         </div>
                     </div>
                     <div class="row">

@@ -2,7 +2,7 @@
   "CustomerAccs": {
     "title" : "Comptes Client",
     "column": {
-      "_id"           : "Id Compte",
+      "accountId"     : "Id Compte",
       "number"        : "Numéro",
       "entitled"      : "Intitulé",
       "customerId"    : "Code Client",

@@ -2,7 +2,7 @@
   "Customers": {
     "title": "Clients",
     "column": {
-      "_id"           : "CMi Code",
+      "codeCMi"       : "CMi Code",
       "codeSAP"       : "SAP Code",
       "name"          : "Client Name",
       "numAdd"        : "Address Number",

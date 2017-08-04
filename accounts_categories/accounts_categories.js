@@ -102,13 +102,18 @@ if (Meteor.isClient) {
                 if(row && row !== "undefined") {
                     if(Session.get('editingRow')._id !== row._id) {
                         Session.set('editingRow',row);
+                        Session.set('dateVar',row.dateVar);
                     }
                 }
-                else
+                else {
                     Session.set('editingRow', 'undefined');
+                    Session.set('dateVar', 'undefined');
+                }
             }
-            else
+            else {
                 Session.set('editingRow', 'undefined');
+                Session.set('dateVar', 'undefined');
+            }
         }
     });
 
@@ -121,20 +126,17 @@ if (Meteor.isClient) {
         tmpl.helpers({
             isEditing: function () {
                 if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
-                    // if(tmpl.viewName === "Template.AccountsCats$cell$monthsMax") {
-                    //     let dv = Template.currentData().dateVar;
-                    //     if(Session.get('dateVar') !== "undefined")
-                    //         dv = Session.get('dateVar');
-                    //     if(dv === "VAR")
-                    //         tmpl.$('input').prop('disabled', false);
-                    //     else
-                    //         tmpl.$('input').val("").prop('disabled', true);
-                    // }
+                    if(tmpl.viewName === "Template.AccountsCats$cell$monthsMax") {
+                        let dv = Template.currentData().dateVar;
+                        if(Session.get('dateVar') !== "undefined")
+                            dv = Session.get('dateVar');
+                        if(dv === 'FIX')
+                            return 0;
+                    }
                     return 1;
                 }
-                else {
+                else
                     return 0;
-                }
             }
         });
     });
@@ -159,6 +161,16 @@ if (Meteor.isClient) {
     Template.AccountsCats$cell$dateVar.helpers({
         vars: function () {
             return ["VAR", "FIX"];
+        }
+    });
+
+    Template.AccountsCats$cell$monthsMax.helpers({
+        notfix: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                if (Session.get('dateVar') === "FIX")
+                    return 0;
+            }
+            return 1;
         }
     });
 

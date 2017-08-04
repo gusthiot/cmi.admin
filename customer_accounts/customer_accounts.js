@@ -6,7 +6,7 @@ CustomerAccs = new Meteor.Collection("customer_accounts");
 CustomerAccs.name = "CustomerAccs";
 
 CustomerAccs.schema = new SimpleSchema({
-    _id: {
+    accountId: {
         type: SimpleSchema.Integer
     },
     number: {
@@ -42,7 +42,7 @@ CustomerAccs.schema = new SimpleSchema({
 });
 
 CustomerAccs.columns =
-    ["number", "entitled", "customerId", "accountsCatId", "startTime", "endTime", "state", "creation", "changes",
+    ["accountId", "number", "entitled", "customerId", "accountsCatId", "startTime", "endTime", "state", "creation", "changes",
         "closing"];
 
 CustomerAccs.allow({
@@ -67,7 +67,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(CustomerAccs, true, false);
+    return shared.makeTable(CustomerAccs, false, false);
 }
 let theTable = makeTable();
 
@@ -97,9 +97,56 @@ if (Meteor.isClient) {
                 return {};
         }
     });
+    Session.set('editingRow', 'undefined');
+    Session.set('accountCat', 'undefined');
 
     Template.CustomerAccs$Edit.onCreated(function(){
         code = this.data;
+    });
+
+    Template.CustomerAccs$Edit.events({
+        'click tr': function (event, tmpl) {
+            let dataTable = $(event.currentTarget).closest('table').DataTable();
+            if(dataTable && dataTable !== "undefined") {
+                let row = dataTable.row(event.currentTarget).data();
+                if(row && row !== "undefined") {
+                    if(Session.get('editingRow')._id !== row._id) {
+                        Session.set('editingRow',row);
+                        Session.set('accountCat',row.accountsCatId);
+                    }
+                }
+                else {
+                    Session.set('editingRow', 'undefined');
+                    Session.set('accountCat', 'undefined');
+                }
+            }
+            else {
+                Session.set('editingRow', 'undefined');
+                Session.set('accountCat', 'undefined');
+            }
+        }
+    });
+
+    let allCellTemplates = CustomerAccs.columns.map(function (x) {
+        return Template["CustomerAccs$cell$" + x];
+    });
+
+    allCellTemplates.forEach(function (tmpl) {
+        if (!tmpl) return;
+        tmpl.helpers({
+            isEditing: function () {
+                if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                    if(tmpl.viewName === "Template.CustomerAccs$cell$startTime" || tmpl.viewName === "Template.CustomerAccs$cell$endTime") {
+                        if(getVar('accountCat') === 'FIX')
+                            return 0;
+                    }
+                    if(tmpl.viewName === "Template.CustomerAccs$cell$customerId")
+                        return 0;
+                    return 1;
+                }
+                return 0;
+            }
+        });
     });
 
     Template.CustomerAccs$columnHead.events({
@@ -117,11 +164,15 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    if (Template.currentData().value === "accountsCatId")
-                        return AccountsCats.findOne({_id: what}).accountCode;
-                    else return what;
+                    if (Template.currentData().value === "accountsCatId") {
+                        let one = AccountsCats.findOne({_id: what});
+                        if (one)
+                            return one.accountCode;
+                        else
+                            console.log("no account category for : " + what);
+                    }
                 }
-                else return what;
+                return what;
             }
         },
         translate: function (what) {
@@ -132,11 +183,100 @@ if (Meteor.isClient) {
     Template.CustomerAccs$cell$accountsCatId.helpers({
         helpers: {
             translateKey: function (accountsCatId) {
-                if(accountsCatId)
-                    return AccountsCats.findOne({_id: accountsCatId}).accountCode;
-                else return accountsCatId;
+                if(accountsCatId) {
+                    let one = AccountsCats.findOne({_id: accountsCatId});
+                    if(one)
+                        return one.accountCode;
+                    else
+                        console.log("no account category for : " + accountsCatId);
+                }
+                return accountsCatId;
             }
         },
+        cats: function () {
+            let cats = AccountsCats.find({});
+            if(!cats)
+                return [];
+            let results = [];
+            cats.forEach(function(cat) {
+                results.push(cat._id);
+            });
+            return results;
+        }
+    });
+
+    Template.CustomerAccs$cell$accountsCatId.events({
+        "change select": function(evt) {
+            let newCat = $(evt.target).val();
+            if (newCat !== Session.get('accountCat')) {
+                Session.set('accountCat', newCat);
+            }
+        }
+    });
+
+    Template.CustomerAccs$cell$startTime.helpers({
+        notfix: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                if(getVar('accountCat') === 'FIX')
+                    return 0;
+            }
+            return 1;
+        },
+        startfix: function () {
+            let one = getOne('accountCat');
+            if(one)
+                return one.startTime;
+        }
+    });
+
+    Template.CustomerAccs$cell$endTime.helpers({
+        notfix: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                if(getVar('accountCat') === 'FIX')
+                    return 0;
+            }
+            return 1;
+        },
+        endfix: function () {
+            let one = getOne('accountCat');
+            if(one)
+                return one.endTime;
+        }
+    });
+
+    Template.CustomerAccs$cell$customerId.helpers({
+        helpers: {
+            translateKey: function (customerId) {
+                if(customerId) {
+                    let one = Customers.findOne({_id: customerId});
+                    if(one)
+                        return one.codeCMi;
+                    else
+                        console.log("no customer for : " + customerId);
+                }
+                return customerId;
+            }
+        },
+        customers: function () {
+            let custs = null;
+            if (code && code !== "undefined")
+                custs = Customers.find({_id: code});
+            else
+                custs = Customers.find({});
+            if(!custs)
+                return [];
+            let results = [];
+            custs.forEach(function(cust) {
+                results.push(cust._id);
+            });
+            return results;
+        }
+    });
+
+    Template.CustomerAccs$cell$state.helpers({
+        states: function () {
+            return ["Actif", "Passif"];
+        }
     });
 
     Template.CustomerAccs$Pagination.events({
@@ -195,7 +335,7 @@ if (Meteor.isClient) {
             else {
                 CustomerAccs.insert(
                     {
-                        _id: templ.$('#account_id').val(),
+                        accountId: templ.$('#account_id').val(),
                         number: templ.$('#number').val(),
                         entitled: templ.$('#entitled').val(),
                         customerId: templ.$('#customer').val(),
@@ -243,15 +383,29 @@ if (Meteor.isClient) {
         }
     });
 
-    function checkDates() {
+    function getVar(sessionName) {
+        let one = getOne(sessionName);
+        let dateVar = null;
+        if (one) {
+            dateVar = one.dateVar;
+        }
+        return dateVar;
+    }
+
+    function getOne(sessionName) {
         let one = null;
-        if (Session.get("account_cat") === "undefined") {
+        if (Session.get(sessionName) === "undefined") {
             one = AccountsCats.findOne({});
             if (one)
-                Session.set('account_cat', one._id);
+                Session.set(sessionName, one._id);
         }
         else
-            one = AccountsCats.findOne({_id: Session.get("account_cat")});
+            one = AccountsCats.findOne({_id: Session.get(sessionName)});
+        return one;
+    }
+
+    function checkDates() {
+        let one = getOne('account_cat');
         let dateVar = null;
         if (one) {
             dateVar = one.dateVar;
