@@ -4,7 +4,7 @@
 
 <template name="Customers$columnHead">
     {{translate type}}
-    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+    {{> Widget$Select vmTag="columnHead" value=type values=values editable=1 helpers=helpers}}
 </template>
 
 <template name="Customers$cell$codeCMi">

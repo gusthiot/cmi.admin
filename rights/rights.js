@@ -45,7 +45,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Rights, false, false);
+    return shared.makeTable(Rights, false);
 }
 let theTable = makeTable();
 
@@ -65,6 +65,41 @@ if (Meteor.isClient) {
     };
 
     Template.Rights$Edit.helpers({makeTable: theTable});
+
+    Session.set('editingRow', 'undefined');
+
+    Template.Rights$Edit.events({
+        'click tr': function (event, tmpl) {
+            let dataTable = $(event.currentTarget).closest('table').DataTable();
+            if(dataTable && dataTable !== "undefined") {
+                let row = dataTable.row(event.currentTarget).data();
+                if(row && row !== "undefined") {
+                    if(Session.get('editingRow')._id !== row._id)
+                        Session.set('editingRow',row);
+                }
+                else
+                    Session.set('editingRow', 'undefined');
+            }
+            else
+                Session.set('editingRow', 'undefined');
+        }
+    });
+
+    let allCellTemplates = Rights.columns.map(function (x) {
+        return Template["Rights$cell$" + x]
+    });
+
+    allCellTemplates.forEach(function (tmpl) {
+        if (!tmpl) return;
+        tmpl.helpers({
+            isEditing: function () {
+                if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+    });
 
     Template.Rights$columnHead.events({
         'change select': function (event, template) {
@@ -103,6 +138,41 @@ if (Meteor.isClient) {
                     return consumerId;
             }
         },
+        consumers: function () {
+            let users = User.collection.find({});
+            if(!users)
+                return [];
+            let results = [];
+            users.forEach(function(user) {
+                results.push(user._id);
+            });
+            return results;
+        }
+    });
+
+    Template.Rights$cell$accountId.helpers({
+        helpers: {
+            translateKey: function (custAccId) {
+                if(custAccId) {
+                    let one = CustomerAccs.findOne({_id: custAccId});
+                    if(one)
+                        return one.accountId;
+                    else
+                        console.log("no account for : " + custAccId);
+                }
+                return custAccId;
+            }
+        },
+        accounts: function () {
+            let accs = CustomerAccs.find({});
+            if(!accs)
+                return [];
+            let results = [];
+            accs.forEach(function(acc) {
+                results.push(acc._id);
+            });
+            return results;
+        }
     });
 
     Template.Rights$Pagination.events({
@@ -198,9 +268,8 @@ if (Meteor.isClient) {
     });
 
     Template.Rights$modalAdd.onRendered(function(){
-        $('.datepicker').pickadate({
-            selectMonths: true,
-            selectYears: 40
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd'
         });
     });
 

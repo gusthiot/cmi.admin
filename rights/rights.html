@@ -4,23 +4,23 @@
 
 <template name="Rights$columnHead">
     {{translate type}}
-    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+    {{> Widget$Select vmTag="columnHead" value=type values=values editable=1 helpers=helpers}}
 </template>
 
 <template name="Rights$cell$consumerId">
-    {{> Widget$Select vmTag="consumerId" value=consumerId editable=0 helpers=helpers}}
+    {{> Widget$Select vmTag="consumerId" value=consumerId values=consumers editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Rights$cell$accountId">
-    {{> Widget$Select vmTag="accountId" value=accountId editable=0}}
+    {{> Widget$Select vmTag="accountId" value=accountId values=accounts editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Rights$cell$startTime">
-    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
+    {{> Widget$Date vmTag="startTime" value=startTime editable=isEditing}}
 </template>
 
 <template name="Rights$cell$endTime">
-    {{> Widget$DateTime vmTag="endTime" value=endTime editable=0}}
+    {{> Widget$Date vmTag="endTime" value=endTime editable=isEditing}}
 </template>
 
 <template name="Rights$cell$remove">
@@ -61,13 +61,13 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="start_time" type="date" class="datepicker validate">
+                            <input id="start_time" class="datepicker validate">
                             <label for="start_time" class="active">{{translate 'startTime'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="end_time" type="date" class="datepicker validate">
+                            <input id="end_time" class="datepicker validate">
                             <label for="end_time" class="active">{{translate 'endTime'}}</label>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
 </template>
 
 <template name="Rights$account">
-    <option value="{{_id}}">{{_id}}</option>
+    <option value="{{_id}}">{{accountId}}</option>
 </template>
 
 <template name="Rights$Pagination">

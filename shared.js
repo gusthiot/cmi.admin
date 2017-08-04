@@ -1,8 +1,7 @@
 
 const debug = require("debug")("shared.js");
 
-export function makeTable(specific, displayId, accountCol) {
-    specific.columns.splice(0, 0, "_id");
+export function makeTable(specific, accountCol) {
     if(accountCol)
         specific.columns.push("accounts");
     specific.columns.push("remove");
@@ -25,15 +24,6 @@ export function makeTable(specific, displayId, accountCol) {
                     visible : true,
                     tmpl: Meteor.isClient && Template[specific.name + "$cell$" + colSymbol]
                 };
-
-            }
-            else if(colSymbol === "_id" && !displayId) {
-                return {
-                    data: colSymbol,
-                    orderable: false,
-                    visible : false
-                };
-
             }
             else {
                 return {

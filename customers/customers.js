@@ -85,7 +85,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Customers, false, true);
+    return shared.makeTable(Customers, true);
 }
 let theTable = makeTable();
 
@@ -114,17 +114,14 @@ if (Meteor.isClient) {
             if(dataTable && dataTable !== "undefined") {
                 let row = dataTable.row(event.currentTarget).data();
                 if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id) {
+                    if(Session.get('editingRow')._id !== row._id)
                         Session.set('editingRow',row);
-                    }
                 }
-                else {
+                else
                     Session.set('editingRow', 'undefined');
-                }
             }
-            else {
+            else
                 Session.set('editingRow', 'undefined');
-            }
         }
     });
 
