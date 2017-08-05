@@ -1,6 +1,4 @@
-
 const shared = require("../shared");
-const debug = require("debug")("customers_categories.js");
 
 CustomersCats = new Meteor.Collection("customers_categories");
 
@@ -71,21 +69,29 @@ if (Meteor.isClient) {
     Template.CustomersCats$Edit.helpers({makeTable: theTable});
 
     Session.set('editingRow', 'undefined');
+    Session.set('saving', 'undefined');
 
     Template.CustomersCats$Edit.events({
-        'click tr': function (event, tmpl) {
-            let dataTable = $(event.currentTarget).closest('table').DataTable();
-            if(dataTable && dataTable !== "undefined") {
-                let row = dataTable.row(event.currentTarget).data();
-                if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id)
-                        Session.set('editingRow',row);
+        'click tr': function (event) {
+            if(Session.get('saving') === "undefined") {
+                let dataTable = $(event.currentTarget).closest('table').DataTable();
+                if(dataTable && dataTable !== "undefined") {
+                    let row = dataTable.row(event.currentTarget).data();
+                    if(row && row !== "undefined") {
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                            Session.set('editingRow', row);
+                    }
+                    else
+                        Session.set('editingRow', 'undefined');
                 }
                 else
                     Session.set('editingRow', 'undefined');
             }
-            else
+            else {
+                event.preventDefault();
                 Session.set('editingRow', 'undefined');
+                Session.set('saving', 'undefined');
+            }
         }
     });
 
@@ -148,19 +154,26 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
+    function checkValues(values) {
+        if(values.entitled === "") {
+            Materialize.toast("Intitulé vide !", 5000);
+        }
+        else if(values.codeN === "" || /[^a-zA-Z0-9]/.test(values.codeN)) {
+            Materialize.toast("Code N invalide !", 5000);
+        }
+        else return true;
+        return false;
+    }
+
     Template.CustomersCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            if(templ.$('#entitled').val() === "") {
-                Materialize.toast("Intitulé vide !", 5000);
-            }
-            else if(templ.$('#code_n').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#code_n').val())) {
-                Materialize.toast("Code N invalide !", 5000);
-            }
-            else {
-                CustomersCats.insert(
-                    {entitled: templ.$('#entitled').val(), codeN: templ.$('#code_n').val()}
-                    );
+            let values = {
+                entitled: templ.$('#entitled').val(),
+                codeN: templ.$('#code_n').val()
+            };
+            if(checkValues(values)) {
+                CustomersCats.insert(values);
                 templ.find("form").reset();
             }
         }
@@ -172,6 +185,22 @@ if (Meteor.isClient) {
         },
         modalAdd: function () {
             return TAPi18n.__("CustomersCats.modal.add");
+        }
+    });
+
+    Template.CustomersCats$cell$save.helpers({
+        selected: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    Template.CustomersCats$cell$save.events({
+        'click .save': function (event) {
+            event.preventDefault();
+            Session.set('saving', 'yes');
         }
     });
 

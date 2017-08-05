@@ -1,5 +1,4 @@
 const shared = require("../shared");
-const debug = require("debug")("rights.js");
 
 Rights = new Meteor.Collection("rights");
 
@@ -67,21 +66,40 @@ if (Meteor.isClient) {
     Template.Rights$Edit.helpers({makeTable: theTable});
 
     Session.set('editingRow', 'undefined');
+    Session.set('saving', 'undefined');
 
     Template.Rights$Edit.events({
         'click tr': function (event, tmpl) {
-            let dataTable = $(event.currentTarget).closest('table').DataTable();
-            if(dataTable && dataTable !== "undefined") {
-                let row = dataTable.row(event.currentTarget).data();
-                if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id)
-                        Session.set('editingRow',row);
+            if(Session.get('saving') === "undefined") {
+                let dataTable = $(event.currentTarget).closest('table').DataTable();
+                if (dataTable && dataTable !== "undefined") {
+                    let row = dataTable.row(event.currentTarget).data();
+                    if (row && row !== "undefined") {
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                            Session.set('editingRow', row);
+                    }
+                    else
+                        Session.set('editingRow', 'undefined');
                 }
                 else
                     Session.set('editingRow', 'undefined');
             }
-            else
+            else {
+                event.preventDefault();
+                let children = $(event.currentTarget).children();
+                let i;
+                let values = {};
+                for (i = 0; i < children.length; i++) {
+                    let title = children[i].lastChild.title;
+                    let value = children[i].lastChild.value;
+                    if(title && value)
+                        values[title] = value;
+                }
+                console.log(values);
+                checkValues(values);
                 Session.set('editingRow', 'undefined');
+                Session.set('saving', 'undefined');
+            }
         }
     });
 
@@ -150,17 +168,37 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.Rights$cell$save.helpers({
+        selected: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                    return 1;
+            }
+            return 0;
+        }
+    });
+
+    Template.Rights$cell$save.events({
+        'click .save': function (event) {
+            event.preventDefault();
+            Session.set('saving', 'yes');
+        }
+    });
+
+    function accountId(custAccId) {
+        if(custAccId) {
+            let one = CustomerAccs.findOne({_id: custAccId});
+            if(one)
+                return one.accountId;
+            else
+                console.log("no account for : " + custAccId);
+        }
+        return custAccId;
+    }
+
     Template.Rights$cell$accountId.helpers({
         helpers: {
             translateKey: function (custAccId) {
-                if(custAccId) {
-                    let one = CustomerAccs.findOne({_id: custAccId});
-                    if(one)
-                        return one.accountId;
-                    else
-                        console.log("no account for : " + custAccId);
-                }
-                return custAccId;
+                return accountId(custAccId);
             }
         },
         accounts: function () {
@@ -214,39 +252,45 @@ if (Meteor.isClient) {
         return false;
     }
 
+    function checkValues(values) {
+        let acc = CustomerAccs.findOne({_id: values.accountId});
+        if(values.startTime === "") {
+            Materialize.toast("Date de début invalide !", 5000);
+        }
+        else if(values.endTime === "") {
+            Materialize.toast("Date de fin invalide !", 5000);
+            return false;
+        }
+        else if(!isMulti(values.accountId) && Rights.find({accountId: values.accountId}).count() > 0) {
+            Materialize.toast("Ce Compte n'est pas multi-utilisateurs et est déjà utilisé !", 5000);
+        }
+        else if(!shared.isOlderThan(values.startTime, values.endTime)) {
+            Materialize.toast("Date de fin doit être après date de début !", 5000);
+        }
+        else if(!acc) {
+            Materialize.toast("Account Id invalide !", 5000);
+        }
+        else if(!shared.isOlderThanOrEgal(acc.startTime, values.startTime)) {
+            Materialize.toast("Date de début ne peut être avant début compte !", 5000);
+        }
+        else if(!shared.isOlderThanOrEgal(values.endTime,acc.endTime)) {
+            Materialize.toast("Date de fin ne peut être après fin compte !", 5000);
+        }
+        else return true;
+        return false;
+    }
+
     Template.Rights$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            let acc = CustomerAccs.findOne({_id: templ.$('#account').val()});
-            if(templ.$('#start_time').val() === "") {
-                Materialize.toast("Date de début invalide !", 5000);
-            }
-            else if(templ.$('#end_time').val() === "") {
-                Materialize.toast("Date de fin invalide !", 5000);
-            }
-            else if(!isMulti(templ.$('#account').val()) && Rights.find({accountId: templ.$('#account').val()}).count() > 0) {
-                Materialize.toast("Ce Compte n'est pas multi-utilisateurs et est déjà utilisé !", 5000);
-            }
-            else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
-                Materialize.toast("Date de fin doit être après date de début !", 5000);
-            }
-            else if(!acc) {
-                Materialize.toast("Account Id invalide !", 5000);
-            }
-            else if(!shared.isOlderThanOrEgal(acc.startTime, templ.$('#start_time').val())) {
-                Materialize.toast("Date de début ne peut être avant début compte !", 5000);
-            }
-            else if(!shared.isOlderThanOrEgal(templ.$('#end_time').val(),acc.endTime)) {
-                Materialize.toast("Date de fin ne peut être après fin compte !", 5000);
-            }
-            else {
-                Rights.insert(
-                    {
-                        consumerId: templ.$('#consumer').val(),
-                        accountId: templ.$('#account').val(),
-                        startTime: templ.$('#start_time').val(),
-                        endTime: templ.$('#end_time').val()
-                    });
+            let values = {
+                startTime : templ.$('#start_time').val(),
+                endTime: templ.$('#end_time').val(),
+                accountId: templ.$('#account').val(),
+                consumerId: templ.$('#consumer').val()
+            };
+            if(checkValues(values)) {
+                Rights.insert(values);
                 templ.find("form").reset();
             }
         }
@@ -284,7 +328,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            shared.confirmRemove(this.consumerId + " - " + this.accountId, this._id, Rights);
+            shared.confirmRemove(this.consumerId + " - " + accountId(this.accountId), this._id, Rights);
         }
     });
 }

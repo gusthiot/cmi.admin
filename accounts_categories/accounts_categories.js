@@ -1,5 +1,4 @@
 const shared = require("../shared");
-const debug = require("debug")("accounts_categories.js");
 
 AccountsCats = new Meteor.Collection("accounts_categories");
 
@@ -93,16 +92,23 @@ if (Meteor.isClient) {
 
     Session.set('editingRow', 'undefined');
     Session.set('dateVar', 'undefined');
+    Session.set('saving', 'undefined');
 
     Template.AccountsCats$Edit.events({
-        'click tr': function (event, tmpl) {
-            let dataTable = $(event.currentTarget).closest('table').DataTable();
-            if(dataTable && dataTable !== "undefined") {
-                let row = dataTable.row(event.currentTarget).data();
-                if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id) {
-                        Session.set('editingRow',row);
-                        Session.set('dateVar',row.dateVar);
+        'click tr': function (event) {
+            if(Session.get('saving') === "undefined") {
+                let dataTable = $(event.currentTarget).closest('table').DataTable();
+                if(dataTable && dataTable !== "undefined") {
+                    let row = dataTable.row(event.currentTarget).data();
+                    if(row && row !== "undefined") {
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id) {
+                            Session.set('editingRow', row);
+                            Session.set('dateVar',row.dateVar);
+                        }
+                    }
+                    else {
+                        Session.set('editingRow', 'undefined');
+                        Session.set('dateVar', 'undefined');
                     }
                 }
                 else {
@@ -111,8 +117,9 @@ if (Meteor.isClient) {
                 }
             }
             else {
+                event.preventDefault();
                 Session.set('editingRow', 'undefined');
-                Session.set('dateVar', 'undefined');
+                Session.set('saving', 'undefined');
             }
         }
     });
@@ -161,6 +168,22 @@ if (Meteor.isClient) {
     Template.AccountsCats$cell$dateVar.helpers({
         vars: function () {
             return ["VAR", "FIX"];
+        }
+    });
+
+    Template.AccountsCats$cell$save.helpers({
+        selected: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    Template.AccountsCats$cell$save.events({
+        'click .save': function (event) {
+            event.preventDefault();
+            Session.set('saving', 'yes');
         }
     });
 
@@ -214,29 +237,34 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
+    function checkValues(values) {
+        if(values.entitled === "") {
+            Materialize.toast("Intitulé vide !", 5000);
+        }
+        else if(values.accountCode === "" || /[^a-zA-Z0-9]/.test(values.accountCode)) {
+            Materialize.toast("Code type compte invalide !", 5000);
+        }
+        else if(values.monthsMax === !shared.isPositiveInteger(values.monthsMax)) {
+            Materialize.toast("Nombre de mois invalide !", 5000);
+        }
+        else return true;
+        return false;
+    }
+
     Template.AccountsCats$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            if(templ.$('#entitled').val() === "") {
-                Materialize.toast("Intitulé vide !", 5000);
-            }
-            else if(templ.$('#account_code').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#account_code').val())) {
-                Materialize.toast("Code type compte invalide !", 5000);
-            }
-            else if(templ.$('#months_max').val() === !shared.isPositiveInteger(templ.$('#months_max').val())) {
-                Materialize.toast("Nombre de mois invalide !", 5000);
-            }
-            else {
-                AccountsCats.insert(
-                    {
-                        entitled: templ.$('#entitled').val(),
-                        accountCode: templ.$('#account_code').val(),
-                        dateVar: $(templ.find('input:radio[name=date_var]:checked')).val(),
-                        monthsMax: templ.$('#months_max').val(),
-                        startTime: templ.$('#start_time').val(),
-                        endTime: templ.$('#end_time').val(),
-                        multi: $(templ.find('input:radio[name=multi]:checked')).val()
-                    });
+            let values = {
+                entitled: templ.$('#entitled').val(),
+                accountCode: templ.$('#account_code').val(),
+                dateVar: $(templ.find('input:radio[name=date_var]:checked')).val(),
+                monthsMax: templ.$('#months_max').val(),
+                startTime: templ.$('#start_time').val(),
+                endTime: templ.$('#end_time').val(),
+                multi: $(templ.find('input:radio[name=multi]:checked')).val()
+            };
+            if(checkValues(values)) {
+                AccountsCats.insert(values);
                 templ.find("form").reset();
             }
         },

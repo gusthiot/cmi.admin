@@ -39,6 +39,12 @@
     {{> Widget$Select vmTag="multi" value=multi values=multis editable=isEditing}}
 </template>
 
+<template name="AccountsCats$cell$save">
+    {{#if selected}}
+        <button class="btn waves-effect waves-light save">save</button>
+    {{/if}}
+</template>
+
 <template name="AccountsCats$cell$remove">
     <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
 </template>

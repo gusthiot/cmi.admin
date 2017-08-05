@@ -4,12 +4,21 @@ const debug = require("debug")("shared.js");
 export function makeTable(specific, accountCol) {
     if(accountCol)
         specific.columns.push("accounts");
+    specific.columns.push("save");
     specific.columns.push("remove");
     return new Tabular.Table({
         name: specific.name,
         collection: specific,
         columns: _.map(specific.columns, function (colSymbol) {
             if(colSymbol === "remove") {
+                return {
+                    data: colSymbol,
+                    orderable: false,
+                    visible : true,
+                    tmpl: Meteor.isClient && Template[specific.name + "$cell$" + colSymbol]
+                };
+            }
+            else if(colSymbol === "save") {
                 return {
                     data: colSymbol,
                     orderable: false,
@@ -58,7 +67,7 @@ export function setupColumnFilterUI(parentView, dataTableElement, specific) {
 
         let column = this,
             type = specific.columns[column.index()];
-        if (type === undefined || type === "remove" || type === "accounts") {
+        if (type === undefined || type === "remove" || type === "save" || type === "accounts") {
             return;
         }
 

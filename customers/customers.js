@@ -1,5 +1,4 @@
 const shared = require("../shared");
-const debug = require("debug")("customers.js");
 
 Customers = new Meteor.Collection("customers");
 
@@ -107,21 +106,29 @@ if (Meteor.isClient) {
     Template.Customers$Edit.helpers({makeTable: theTable});
 
     Session.set('editingRow', 'undefined');
+    Session.set('saving', 'undefined');
 
     Template.Customers$Edit.events({
-        'click tr': function (event, tmpl) {
-            let dataTable = $(event.currentTarget).closest('table').DataTable();
-            if(dataTable && dataTable !== "undefined") {
-                let row = dataTable.row(event.currentTarget).data();
-                if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id)
-                        Session.set('editingRow',row);
+        'click tr': function (event) {
+            if(Session.get('saving') === "undefined") {
+                let dataTable = $(event.currentTarget).closest('table').DataTable();
+                if(dataTable && dataTable !== "undefined") {
+                    let row = dataTable.row(event.currentTarget).data();
+                    if(row && row !== "undefined") {
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                            Session.set('editingRow', row);
+                    }
+                    else
+                        Session.set('editingRow', 'undefined');
                 }
                 else
                     Session.set('editingRow', 'undefined');
             }
-            else
+            else {
+                event.preventDefault();
                 Session.set('editingRow', 'undefined');
+                Session.set('saving', 'undefined');
+            }
         }
     });
 
@@ -169,6 +176,22 @@ if (Meteor.isClient) {
         },
         translate: function (what) {
             return TAPi18n.__("Customers.column." + what);
+        }
+    });
+
+    Template.Customers$cell$save.helpers({
+        selected: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    Template.Customers$cell$save.events({
+        'click .save': function (event) {
+            event.preventDefault();
+            Session.set('saving', 'yes');
         }
     });
 
@@ -223,51 +246,56 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
+    function checkValues(values) {
+        if(values.codeSAP === "" || !shared.isPositiveInteger(values.codeSAP)) {
+            Materialize.toast("Code SAP invalide !", 5000);
+        }
+        else if(values.codeCMi === "" || /[^a-zA-Z0-9]/.test(values.codeCMi)) {
+            Materialize.toast("Code CMi invalide !", 5000);
+        }
+        else if(Customers.find({codeCMi: values.codeCMi}).count() > 0) {
+            Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
+        }
+        else if(values.abbreviation === "" || /\s/.test(values.abbreviation)) {
+            Materialize.toast("Abréviation invalide !", 5000);
+        }
+        else if(Customers.find({abbreviation: values.abbreviation}).count() > 0) {
+            Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
+        }
+        else if(values.numAdd !== "" && !shared.isPositiveInteger(values.numAdd)) {
+            Materialize.toast("Numéro d'adresse invalide !", 5000);
+        }
+        else if(values.npa !== "" && !shared.isPositiveInteger(values.npa)) {
+            Materialize.toast("NPA invalide !", 5000);
+        }
+        else return true;
+        return false;
+    }
+
     Template.Customers$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            if(templ.$('#code_sap').val() === "" || !shared.isPositiveInteger(templ.$('#code_sap').val())) {
-                Materialize.toast("Code SAP invalide !", 5000);
-            }
-            else if(templ.$('#code_cmi').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#code_cmi').val())) {
-                Materialize.toast("Code CMi invalide !", 5000);
-            }
-            else if(Customers.find({_id: templ.$('#code_cmi').val()}).count() > 0) {
-                Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
-            }
-            else if(templ.$('#abbreviation').val() === "" || /\s/.test(templ.$('#abbreviation').val())) {
-                Materialize.toast("Abréviation invalide !", 5000);
-            }
-            else if(Customers.find({abbreviation: templ.$('#abbreviation').val()}).count() > 0) {
-                Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
-            }
-            else if(templ.$('#num_add').val() !== "" && !shared.isPositiveInteger(templ.$('#num_add').val())) {
-                Materialize.toast("Numéro d'adresse invalide !", 5000);
-            }
-            else if(templ.$('#npa').val() !== "" && !shared.isPositiveInteger(templ.$('#npa').val())) {
-                Materialize.toast("NPA invalide !", 5000);
-            }
-            else {
-                Customers.insert(
-                    {
-                        entitled: templ.$('#entitled').val(),
-                        codeSAP: templ.$('#code_sap').val(),
-                        name: templ.$('#name').val(),
-                        numAdd: templ.$('#num_add').val(),
-                        address: templ.$('#address').val(),
-                        postalBox: templ.$('#postal_box').val(),
-                        npa: templ.$('#npa').val(),
-                        city: templ.$('#city').val(),
-                        country: templ.$('#country').val(),
-                        countryCode: templ.$('#country_code').val(),
-                        codeCMi: templ.$('#code_cmi').val(),
-                        abbreviation: templ.$('#abbreviation').val(),
-                        name2: templ.$('#name2').val(),
-                        name3: templ.$('#name3').val(),
-                        natureId: templ.$('#nature').val(),
-                        creation: templ.$('#creation').val(),
-                        changes: templ.$('#changes').val()
-                    });
+            let values = {
+                entitled: templ.$('#entitled').val(),
+                codeSAP: templ.$('#code_sap').val(),
+                name: templ.$('#name').val(),
+                numAdd: templ.$('#num_add').val(),
+                address: templ.$('#address').val(),
+                postalBox: templ.$('#postal_box').val(),
+                npa: templ.$('#npa').val(),
+                city: templ.$('#city').val(),
+                country: templ.$('#country').val(),
+                countryCode: templ.$('#country_code').val(),
+                codeCMi: templ.$('#code_cmi').val(),
+                abbreviation: templ.$('#abbreviation').val(),
+                name2: templ.$('#name2').val(),
+                name3: templ.$('#name3').val(),
+                natureId: templ.$('#nature').val(),
+                creation: templ.$('#creation').val(),
+                changes: templ.$('#changes').val()
+            };
+            if(checkValues(values)) {
+                Customers.insert(values);
                 templ.find("form").reset();
             }
         }

@@ -1,5 +1,4 @@
 const shared = require("../shared");
-const debug = require("debug")("customer_accounts.js");
 
 CustomerAccs = new Meteor.Collection("customer_accounts");
 
@@ -99,20 +98,27 @@ if (Meteor.isClient) {
     });
     Session.set('editingRow', 'undefined');
     Session.set('accountCat', 'undefined');
+    Session.set('saving', 'undefined');
 
     Template.CustomerAccs$Edit.onCreated(function(){
         code = this.data;
     });
 
     Template.CustomerAccs$Edit.events({
-        'click tr': function (event, tmpl) {
-            let dataTable = $(event.currentTarget).closest('table').DataTable();
-            if(dataTable && dataTable !== "undefined") {
-                let row = dataTable.row(event.currentTarget).data();
-                if(row && row !== "undefined") {
-                    if(Session.get('editingRow')._id !== row._id) {
-                        Session.set('editingRow',row);
-                        Session.set('accountCat',row.accountsCatId);
+        'click tr': function (event) {
+            if(Session.get('saving') === "undefined") {
+                let dataTable = $(event.currentTarget).closest('table').DataTable();
+                if(dataTable && dataTable !== "undefined") {
+                    let row = dataTable.row(event.currentTarget).data();
+                    if(row && row !== "undefined") {
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id) {
+                            Session.set('editingRow', row);
+                            Session.set('accountCat',row.accountsCatId);
+                        }
+                    }
+                    else {
+                        Session.set('editingRow', 'undefined');
+                        Session.set('accountCat', 'undefined');
                     }
                 }
                 else {
@@ -121,8 +127,9 @@ if (Meteor.isClient) {
                 }
             }
             else {
+                event.preventDefault();
                 Session.set('editingRow', 'undefined');
-                Session.set('accountCat', 'undefined');
+                Session.set('saving', 'undefined');
             }
         }
     });
@@ -273,6 +280,22 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.CustomerAccs$cell$save.helpers({
+        selected: function () {
+            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    Template.CustomerAccs$cell$save.events({
+        'click .save': function (event) {
+            event.preventDefault();
+            Session.set('saving', 'yes');
+        }
+    });
+
     Template.CustomerAccs$cell$state.helpers({
         states: function () {
             return ["Actif", "Passif"];
@@ -305,48 +328,56 @@ if (Meteor.isClient) {
     });
     Session.set('account_cat', 'undefined');
 
+    function checkValues(values) {
+        let one = AccountsCats.findOne({_id: values.accountsCatId});
+        if (values.accountId === "" || !shared.isPositiveInteger(values.accountId)) {
+            Materialize.toast("Id compte invalide !", 5000);
+        }
+        else if (CustomerAccs.find({_id: values.accountId}).count() > 0) {
+            Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
+        }
+        else if (values.number === "" || /[^a-zA-Z0-9]/.test(values.number)) {
+            Materialize.toast("Numéro de compte invalide !", 5000);
+        }
+        else if (!one) {
+            Materialize.toast("Id catégorie de compte invalide !", 5000);
+        }
+        else if (values.startTime === "" || shared.isOlderThan(values.startTime, one.startTime)) {
+            Materialize.toast("Date de début invalide !", 5000);
+        }
+        else if (values.endTime === "" || shared.isOlderThan(one.endTime, values.endTime)) {
+            Materialize.toast("Date de fin invalide !", 5000);
+        }
+        else if (!shared.isOlderThan(values.startTime, values.endTime)) {
+            Materialize.toast("Date de fin doit être après date de début !", 5000);
+        }
+        else if (one.dateVar === "VAR" && shared.monthDiff(values.startTime, values.endTime) > one.monthsMax) {
+            Materialize.toast("Période trop longue pour cette catégorie !", 5000);
+        }
+        else return true;
+        return false;
+    }
+
+
+
     Template.CustomerAccs$modalAdd.events({
         'click .modal-done': function (event, templ) {
             event.preventDefault();
-            let one = AccountsCats.findOne({_id: templ.$('#accounts_cat').val()});
-            if(templ.$('#account_id').val() === "" || !shared.isPositiveInteger(templ.$('#account_id').val())) {
-                Materialize.toast("Id compte invalide !", 5000);
-            }
-            else if(CustomerAccs.find({_id: templ.$('#account_id').val()}).count() > 0) {
-                Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
-            }
-            else if(templ.$('#number').val() === "" || /[^a-zA-Z0-9]/.test(templ.$('#number').val())) {
-                Materialize.toast("Numéro de compte invalide !", 5000);
-            }
-            else if(templ.$('#start_time').val() === "" || shared.isOlderThan(templ.$('#start_time').val(), one.startTime)) {
-                console.log(one.startTime,templ.$('#start_time').val());
-                Materialize.toast("Date de début invalide !", 5000);
-            }
-            else if(templ.$('#end_time').val() === ""|| shared.isOlderThan(one.endTime, templ.$('#end_time').val())) {
-                console.log(templ.$('#end_time').val(),one.endTime);
-                Materialize.toast("Date de fin invalide !", 5000);
-            }
-            else if(!shared.isOlderThan(templ.$('#start_time').val(), templ.$('#end_time').val())) {
-                Materialize.toast("Date de fin doit être après date de début !", 5000);
-            }
-            else if(one.dateVar === "VAR" && shared.monthDiff(templ.$('#start_time').val(), templ.$('#end_time').val()) > one.monthsMax) {
-                Materialize.toast("Période trop longue pour cette catégorie !", 5000);
-            }
-            else {
-                CustomerAccs.insert(
-                    {
-                        accountId: templ.$('#account_id').val(),
-                        number: templ.$('#number').val(),
-                        entitled: templ.$('#entitled').val(),
-                        customerId: templ.$('#customer').val(),
-                        accountsCatId: templ.$('#accounts_cat').val(),
-                        startTime: templ.$('#start_time').val(),
-                        endTime: templ.$('#end_time').val(),
-                        state: $(templ.find('input:radio[name=state]:checked')).val(),
-                        creation: templ.$('#creation').val(),
-                        changes: templ.$('#changes').val(),
-                        closing: templ.$('#closing').val()
-                    });
+            let values = {
+                accountId: templ.$('#account_id').val(),
+                number: templ.$('#number').val(),
+                entitled: templ.$('#entitled').val(),
+                customerId: templ.$('#customer').val(),
+                accountsCatId: templ.$('#accounts_cat').val(),
+                startTime: templ.$('#start_time').val(),
+                endTime: templ.$('#end_time').val(),
+                state: $(templ.find('input:radio[name=state]:checked')).val(),
+                creation: templ.$('#creation').val(),
+                changes: templ.$('#changes').val(),
+                closing: templ.$('#closing').val()
+            };
+            if(checkValues(values)) {
+                CustomerAccs.insert(values);
                 templ.find("form").reset();
             }
         },
