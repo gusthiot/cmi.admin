@@ -118,7 +118,23 @@ if (Meteor.isClient) {
             }
             else {
                 event.preventDefault();
-                Session.set('editingRow', 'undefined');
+                let values = shared.getChildrenValues($(event.currentTarget).children(), AccountsCats.columns);
+                if(checkValues(values)) {
+                    let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                    if(Object.keys(updatingValues).length > 0) {
+                        AccountsCats.update(Session.get('editingRow')._id,
+                            {$set: updatingValues},
+                            function (error) {
+                                if (error)
+                                    Materialize.toast(error, 5000);
+                                else
+                                    Materialize.toast("Mise à jour effectuée", 5000);
+                            });
+                    }
+                    else
+                        Materialize.toast("Pas de changement", 5000);
+                    Session.set('editingRow', 'undefined');
+                }
                 Session.set('saving', 'undefined');
             }
         }
@@ -241,8 +257,11 @@ if (Meteor.isClient) {
         if(values.entitled === "") {
             Materialize.toast("Intitulé vide !", 5000);
         }
-        else if(values.accountCode === "" || /[^a-zA-Z0-9]/.test(values.accountCode)) {
+        else if(values.accountCode === "" || /[^a-zA-Z0-9.]/.test(values.accountCode)) {
             Materialize.toast("Code type compte invalide !", 5000);
+        }
+        else if(values.dateVar === "VAR" && values.monthsMax === "") {
+            Materialize.toast("Période variable doit avoir un max !", 5000);
         }
         else if(values.monthsMax === !shared.isPositiveInteger(values.monthsMax)) {
             Materialize.toast("Nombre de mois invalide !", 5000);
@@ -265,6 +284,7 @@ if (Meteor.isClient) {
             };
             if(checkValues(values)) {
                 AccountsCats.insert(values);
+                Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
         },

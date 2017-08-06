@@ -136,3 +136,32 @@ export function monthDiff(time1, time2) {
     months += d2.getMonth();
     return months <= 0 ? 0 : months;
 }
+
+export function updatingValues(newValues, oldValues) {
+    let updatingValues = {};
+    for(let k in newValues) {
+        if(oldValues.hasOwnProperty(k)) {
+            if(newValues[k] !== oldValues[k])
+                updatingValues[k] = newValues[k];
+        }
+        else
+            console.log("how can that be possible !?!");
+    }
+    return updatingValues;
+}
+
+export function getChildrenValues(children, columns) {
+    let i;
+    let values = {};
+    for (i = 0; i < children.length; i++) {
+        let title = children[i].lastChild.title;
+        let value = children[i].lastChild.value;
+        if(title === undefined && children[i].lastChild.previousSibling) {
+            title = children[i].lastChild.previousSibling.title;
+            value = children[i].lastChild.previousSibling.value;
+        }
+        if(title && columns.indexOf(title) !== -1 && value !== undefined)
+            values[title] = value;
+    }
+    return values;
+}

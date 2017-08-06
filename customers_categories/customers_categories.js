@@ -89,7 +89,23 @@ if (Meteor.isClient) {
             }
             else {
                 event.preventDefault();
-                Session.set('editingRow', 'undefined');
+                let values = shared.getChildrenValues($(event.currentTarget).children(), CustomersCats.columns);
+                if(checkValues(values)) {
+                    let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                    if(Object.keys(updatingValues).length > 0) {
+                        CustomersCats.update(Session.get('editingRow')._id,
+                            {$set: updatingValues},
+                            function (error) {
+                                if (error)
+                                    Materialize.toast(error, 5000);
+                                else
+                                    Materialize.toast("Mise à jour effectuée", 5000);
+                            });
+                    }
+                    else
+                        Materialize.toast("Pas de changement", 5000);
+                    Session.set('editingRow', 'undefined');
+                }
                 Session.set('saving', 'undefined');
             }
         }
@@ -174,6 +190,7 @@ if (Meteor.isClient) {
             };
             if(checkValues(values)) {
                 CustomersCats.insert(values);
+                Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
         }

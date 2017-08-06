@@ -86,18 +86,23 @@ if (Meteor.isClient) {
             }
             else {
                 event.preventDefault();
-                let children = $(event.currentTarget).children();
-                let i;
-                let values = {};
-                for (i = 0; i < children.length; i++) {
-                    let title = children[i].lastChild.title;
-                    let value = children[i].lastChild.value;
-                    if(title && value)
-                        values[title] = value;
+                let values = shared.getChildrenValues($(event.currentTarget).children(), Rights.columns);
+                if(checkValues(values)) {
+                    let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                    if(Object.keys(updatingValues).length > 0) {
+                        Rights.update(Session.get('editingRow')._id,
+                            {$set: updatingValues},
+                            function (error) {
+                                if (error)
+                                    Materialize.toast(error, 5000);
+                                else
+                                    Materialize.toast("Mise à jour effectuée", 5000);
+                            });
+                    }
+                    else
+                        Materialize.toast("Pas de changement", 5000);
+                    Session.set('editingRow', 'undefined');
                 }
-                console.log(values);
-                checkValues(values);
-                Session.set('editingRow', 'undefined');
                 Session.set('saving', 'undefined');
             }
         }
@@ -291,6 +296,7 @@ if (Meteor.isClient) {
             };
             if(checkValues(values)) {
                 Rights.insert(values);
+                Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
         }

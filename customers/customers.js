@@ -126,7 +126,23 @@ if (Meteor.isClient) {
             }
             else {
                 event.preventDefault();
-                Session.set('editingRow', 'undefined');
+                let values = shared.getChildrenValues($(event.currentTarget).children(), Customers.columns);
+                if(checkValues(values, 'update')) {
+                    let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                    if(Object.keys(updatingValues).length > 0) {
+                        Customers.update(Session.get('editingRow')._id,
+                            {$set: updatingValues},
+                            function (error) {
+                                if (error)
+                                    Materialize.toast(error, 5000);
+                                else
+                                    Materialize.toast("Mise à jour effectuée", 5000);
+                            });
+                    }
+                    else
+                        Materialize.toast("Pas de changement", 5000);
+                    Session.set('editingRow', 'undefined');
+                }
                 Session.set('saving', 'undefined');
             }
         }
@@ -246,23 +262,26 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    function checkValues(values) {
+    function checkValues(values, mode) {
         if(values.codeSAP === "" || !shared.isPositiveInteger(values.codeSAP)) {
             Materialize.toast("Code SAP invalide !", 5000);
         }
         else if(values.codeCMi === "" || /[^a-zA-Z0-9]/.test(values.codeCMi)) {
             Materialize.toast("Code CMi invalide !", 5000);
         }
-        else if(Customers.find({codeCMi: values.codeCMi}).count() > 0) {
-            Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
+        else if((mode === "insert" || (mode === "update") && values.codeCMi !== Session.get('editingRow').codeCMi) &&
+            (Customers.find({codeCMi: values.codeCMi}).count() > 0)) {
+                Materialize.toast("Ce Code CMi est déjà utilisé !", 5000);
         }
         else if(values.abbreviation === "" || /\s/.test(values.abbreviation)) {
             Materialize.toast("Abréviation invalide !", 5000);
         }
-        else if(Customers.find({abbreviation: values.abbreviation}).count() > 0) {
-            Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
+        else if((mode === "insert" || (mode === "update") && values.abbreviation !== Session.get('editingRow').abbreviation)
+            && (Customers.find({abbreviation: values.abbreviation}).count() > 0)) {
+                Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
         }
         else if(values.numAdd !== "" && !shared.isPositiveInteger(values.numAdd)) {
+            console.log(values.numAdd);
             Materialize.toast("Numéro d'adresse invalide !", 5000);
         }
         else if(values.npa !== "" && !shared.isPositiveInteger(values.npa)) {
@@ -276,7 +295,7 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             let values = {
-                entitled: templ.$('#entitled').val(),
+                codeCMi: templ.$('#code_cmi').val(),
                 codeSAP: templ.$('#code_sap').val(),
                 name: templ.$('#name').val(),
                 numAdd: templ.$('#num_add').val(),
@@ -286,7 +305,6 @@ if (Meteor.isClient) {
                 city: templ.$('#city').val(),
                 country: templ.$('#country').val(),
                 countryCode: templ.$('#country_code').val(),
-                codeCMi: templ.$('#code_cmi').val(),
                 abbreviation: templ.$('#abbreviation').val(),
                 name2: templ.$('#name2').val(),
                 name3: templ.$('#name3').val(),
@@ -294,10 +312,12 @@ if (Meteor.isClient) {
                 creation: templ.$('#creation').val(),
                 changes: templ.$('#changes').val()
             };
-            if(checkValues(values)) {
+            if(checkValues(values, 'insert')) {
                 Customers.insert(values);
+                Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
+            else console.log("no check");
         }
     });
 
