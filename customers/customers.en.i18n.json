@@ -1,6 +1,6 @@
 {
   "Customers": {
-    "title": "Clients",
+    "title"           : "Clients",
     "column": {
       "codeCMi"       : "CMi Code",
       "codeSAP"       : "SAP Code",
@@ -20,7 +20,7 @@
       "changes"       : "Changes"
     },
     "modal": {
-      "add" : "Add Client"
+      "add"           : "Add Client"
     }
   }
 }

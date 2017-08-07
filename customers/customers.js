@@ -74,7 +74,6 @@ Customers.allow({
     update: function () {
         return true;
     }
-
 });
 
 if (Meteor.isServer) {
@@ -281,7 +280,6 @@ if (Meteor.isClient) {
                 Materialize.toast("Cet abréviation est déjà utilisée !", 5000);
         }
         else if(values.numAdd !== "" && !shared.isPositiveInteger(values.numAdd)) {
-            console.log(values.numAdd);
             Materialize.toast("Numéro d'adresse invalide !", 5000);
         }
         else if(values.npa !== "" && !shared.isPositiveInteger(values.npa)) {
@@ -317,7 +315,6 @@ if (Meteor.isClient) {
                 Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
-            else console.log("no check");
         }
     });
 

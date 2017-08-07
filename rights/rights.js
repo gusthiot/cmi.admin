@@ -139,12 +139,12 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    // if (Template.currentData().value === "consumerId")
-                    //     return User.collection.findOne({_id: what}).codeCMi;
-                    // else
-                    return what;
+                    if (Template.currentData().value === "consumerId")
+                        return userId(what);
+                    if (Template.currentData().value === "accountId")
+                        return accountId(what);
                 }
-                else return what;
+                return what;
             }
         },
         translate: function (what) {
@@ -154,15 +154,12 @@ if (Meteor.isClient) {
 
     Template.Rights$cell$consumerId.helpers({
         helpers: {
-            translateKey: function (consumerId) {
-                // if(consumerId)
-                //     return Customers.findOne({_id: customerId}).codeCMi;
-                // else
-                    return consumerId;
+            translateKey: function (customerId) {
+                return userId(customerId);
             }
         },
         consumers: function () {
-            let users = User.collection.find({});
+            let users = Consumers.find({});
             if(!users)
                 return [];
             let results = [];
@@ -198,6 +195,17 @@ if (Meteor.isClient) {
                 console.log("no account for : " + custAccId);
         }
         return custAccId;
+    }
+
+    function userId(consumerId) {
+        if(consumerId) {
+            let one = Consumers.findOne({_id: consumerId});
+            if(one)
+                return one.userId;
+            else
+                console.log("no user for : " + consumerId);
+        }
+        return consumerId;
     }
 
     Template.Rights$cell$accountId.helpers({
@@ -304,7 +312,7 @@ if (Meteor.isClient) {
 
     Template.Rights$modalAdd.helpers({
         consumers: function () {
-            return User.collection.find({});
+            return Consumers.find({});
         },
         accounts: function () {
             return CustomerAccs.find({});
@@ -334,7 +342,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            shared.confirmRemove(this.consumerId + " - " + accountId(this.accountId), this._id, Rights);
+            shared.confirmRemove(userId(this.consumerId) + " - " + accountId(this.accountId), this._id, Rights);
         }
     });
 }

@@ -1,12 +1,12 @@
 {
   "CustomersCats": {
-    "title": "Clients Categories",
+    "title"       : "Clients Categories",
     "column": {
       "entitled"  : "Entitled",
       "codeN"     : "Code N"
     },
     "modal": {
-      "add" : "Add Clients Category"
+      "add"       : "Add Clients Category"
     }
   }
 }

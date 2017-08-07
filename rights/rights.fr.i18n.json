@@ -1,6 +1,6 @@
 {
   "Rights": {
-    "title": "Droits",
+    "title"         : "Droits",
     "column": {
       "consumerId"  : "Utilisateur",
       "accountId"   : "Id Compte",
@@ -8,7 +8,7 @@
       "endTime"     : "Date Fin"
     },
     "modal": {
-      "add" : "Ajouter Droit"
+      "add"         : "Ajouter Droit"
     }
   }
 }

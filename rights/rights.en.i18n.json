@@ -1,6 +1,6 @@
 {
   "Rights": {
-    "title": "Rights",
+    "title"         : "Rights",
     "column": {
       "consumerId"  : "User",
       "accountId"   : "Account Id",
@@ -8,7 +8,7 @@
       "endTime"     : "End Time"
     },
     "modal": {
-      "add" : "Add Right"
+      "add"         : "Add Right"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "AccountsCats": {
-    "title": "Accounts Categories",
+    "title"         : "Accounts Categories",
     "column": {
       "entitled"    : "Entitled",
       "accountCode" : "Account Type Code",
@@ -11,7 +11,7 @@
       "multi"       : "Multi-Users Account"
     },
     "modal": {
-      "add" : "Add Accounts Category"
+      "add"         : "Add Accounts Category"
     }
   }
 }

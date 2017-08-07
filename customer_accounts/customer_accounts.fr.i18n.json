@@ -1,6 +1,6 @@
 {
   "CustomerAccs": {
-    "title" : "Comptes Client",
+    "title"           : "Comptes Client",
     "column": {
       "accountId"     : "Id Compte",
       "number"        : "Numéro",
@@ -15,7 +15,7 @@
       "closing"       : "Fermeture"
     },
     "modal": {
-      "add" : "Ajouter Compte Client"
+      "add"           : "Ajouter Compte Client"
     }
   }
 }
