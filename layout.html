@@ -40,17 +40,17 @@
 <template name="nav$Menu">
     <li>
         <a class="dropdown-button" data-activates="navmenu-dropdown">
-            Things to do <i class="material-icons right">add</i>
+            Pages <i class="material-icons right">add</i>
         </a>
     </li>
     <li><ul id="navmenu-dropdown" class="dropdown-content">
         <li><a href="/user">Users</a></li>
         <li><a href="/billables">{{_ "Billables.title"}}</a></li>
-        <li><a href="/zipAsync">Generate zip</a></li>
-        <li class="divider"></li>
-        <li><a href="#">Separated link</a></li>
-        <li class="divider"></li>
-        <li><a href="#">One more separated link</a></li>
+        <li><a href="/accounts_categories">{{_ "AccountsCats.title"}}</a></li>
+        <li><a href="/customers">{{_ "Customers.title"}}</a></li>
+        <li><a href="/customers_categories">{{_ "CustomersCats.title"}}</a></li>
+        <li><a href="/consumers">{{_ "Consumers.title"}}</a></li>
+        <li><a href="/rights">{{_ "Rights.title"}}</a></li>
     </ul>
     </li>
     <li>

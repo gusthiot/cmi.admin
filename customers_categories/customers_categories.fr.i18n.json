@@ -1,0 +1,12 @@
+{
+  "CustomersCats": {
+    "title"       : "Catégories Clients",
+    "column": {
+      "entitled"  : "Intitulé",
+      "codeN"     : "Code N"
+    },
+    "modal": {
+      "add"       : "Ajouter Catégorie Client"
+    }
+  }
+}

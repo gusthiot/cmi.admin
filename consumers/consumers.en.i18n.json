@@ -1,0 +1,22 @@
+{
+  "Consumers": {
+    "title"         : "Consumers",
+    "column": {
+      "sciper"      : "Sciper",
+      "firstname"   : "Firstname",
+      "lastname"    : "Lastname",
+      "phone"       : "Phone",
+      "email"       : "Email",
+      "userId"      : "User id",
+      "login"       : "Login",
+      "password"    : "Password",
+      "right"       : "Right",
+      "creation"    : "Creation",
+      "changes"     : "Changes",
+      "closing"     : "Closing"
+    },
+    "modal": {
+      "add"         : "Add User"
+    }
+  }
+}

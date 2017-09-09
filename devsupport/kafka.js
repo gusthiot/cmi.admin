@@ -33,7 +33,7 @@ if (Meteor.isServer) {
         {
           fromOffset: true,
           // Only one client in a given group ID may receive any given message.
-          // Since we want an unlimited number of clients to tail the stream at
+          // Since we want an unlimited number of customers to tail the stream at
           // the same time, we want all different group IDs
           // Also, slashes are not welcome - This is used as part of a
           // ZooKeeper path

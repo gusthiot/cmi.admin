@@ -1,0 +1,21 @@
+{
+  "CustomerAccs": {
+    "title"           : "Client Accounts",
+    "column": {
+      "accountId"     : "Account Id",
+      "number"        : "Number",
+      "entitled"      : "Entitled",
+      "customerId"    : "Client Code",
+      "accountsCatId" : "Account Type Code",
+      "startTime"     : "Start Time",
+      "endTime"       : "End Time",
+      "state"         : "State",
+      "creation"      : "Creation",
+      "changes"       : "Changes",
+      "closing"       : "Closing"
+    },
+    "modal": {
+      "add"           : "Add Client Account"
+    }
+  }
+}

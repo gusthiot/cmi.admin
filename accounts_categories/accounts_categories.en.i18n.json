@@ -1,0 +1,17 @@
+{
+  "AccountsCats": {
+    "title"         : "Accounts Categories",
+    "column": {
+      "entitled"    : "Entitled",
+      "accountCode" : "Account Type Code",
+      "dateVar"     : "Variable/Fix Date",
+      "monthsMax"   : "Time max",
+      "startTime"   : "Start Time",
+      "endTime"     : "End Time",
+      "multi"       : "Multi-Users Account"
+    },
+    "modal": {
+      "add"         : "Add Accounts Category"
+    }
+  }
+}

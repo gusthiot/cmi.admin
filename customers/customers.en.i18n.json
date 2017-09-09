@@ -1,0 +1,26 @@
+{
+  "Customers": {
+    "title"           : "Clients",
+    "column": {
+      "codeCMi"       : "CMi Code",
+      "codeSAP"       : "SAP Code",
+      "name"          : "Client Name",
+      "numAdd"        : "Address Number",
+      "address"       : "Address",
+      "postalBox"     : "Postal Box",
+      "npa"           : "NPA",
+      "city"          : "City",
+      "country"       : "Country",
+      "countryCode"   : "Country Code",
+      "abbreviation"  : "Client Abbreviation",
+      "name2"         : "Name 2",
+      "name3"         : "Name 3",
+      "natureId"      : "Nature Client",
+      "creation"      : "Creation",
+      "changes"       : "Changes"
+    },
+    "modal": {
+      "add"           : "Add Client"
+    }
+  }
+}

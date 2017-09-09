@@ -3,21 +3,21 @@
 </template>
 
 <template name="Billable$columnHead">
-    text
-        {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
+    {{type}}
+    {{> Widget$Select value=type values=values editable=1 helpers=helpers}}
 </template>
 
 <template name="Billable$cell$type">
-    {{> Widget$Select vmTag="type" value=type values=values editable=isEditing helpers=translateKey}}
+    {{> Widget$Select vmTag="type" value=type values=values editable=0 helpers=translateKey}}
 </template>
 
 
 <template name="Billable$cell$operatedByUser">
-    {{> Widget$Select value=operatedByUser values=users editable=isEditing helpers=helpers vmTag="operatedByUser"}}
+    {{> Widget$Select value=operatedByUser values=users editable=0 helpers=helpers vmTag="operatedByUser"}}
 </template>
 
 <template name="Billable$cell$billableToAccount">
-    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=isEditing}}
+    {{> Widget$InputText vmTag="billableToAccount" value=billableToAccount editable=0}}
 </template>
 
 <template name="Billable$cell$billableToAccount$edit">
@@ -30,27 +30,27 @@
 </template>
 
 <template name="Billable$cell$billableToProject">
-    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=isEditing}}
+    {{> Widget$Select vmTag="billableToProject" value=billableToProject values=projects editable=0}}
 </template>
 
 <template name="Billable$cell$startTime">
-    {{> Widget$DateTime vmTag="startTime" value=startTime editable=isEditing}}
+    {{> Widget$DateTime vmTag="startTime" value=startTime editable=0}}
 </template>
 
 <template name="Billable$cell$billingDetails">
-    {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=isEditing}}
+    {{> Widget$Textarea vmTag="billingDetails" value=billingDetails editable=0}}
 </template>
 
 <template name="Billable$cell$discount">
-    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=isEditing}}
+    {{> Widget$Select vmTag="discount" value=discount values=discounts editable=0}}
 </template>
 
 <template name="Billable$cell$validationState">
-    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=isEditing}}
+    {{> Widget$Select vmTag="validationState" value=validationState values=validationStates editable=0}}
 </template>
 
 <template name="Billable$cell$valSaveBtn">
-    {{#if isEditing}}
+    {{#if 1}}
         {{> Billable$cell$valSaveBtn$edit}}
     {{/if}}
 </template>
@@ -65,39 +65,6 @@
             class="material-icons">add</i></a>
 
     {{> Billable$cell$modalUser}}
-</template>
-
-<template name="Billable$zipAsync">
-
-    <div class="row">
-        <form class="col s8 offset-s2">
-            <fieldset>
-                <legend> Generate a zip file </legend>
-                <div class="row">
-                    <div class="input-field col s6 offset-s3">
-                        <input id="username" type="text" class="validate">
-                        <label for="username">Username</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s6 offset-s3">
-                        <input id="password" type="password" class="validate">
-                        <label for="password">Password</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col s6 offset-s4">
-                        <button class="send btn waves-effect waves-light" type="submit" name="action">Authentication
-                            <i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </div>
-
-            </fieldset>
-        </form>
-    </div>
 </template>
 
 <template name="Billable$cell$modalUser">

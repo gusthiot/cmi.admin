@@ -1,10 +1,9 @@
-/**
+  /**
  * Mapping between URLs and templates.
  *
  * In Meteor, both the client and the server know this mapping; one doesn't
  * simply navigate between pages.
  */
-
 Router.configure({
     // the default layout that goes into <body>...</body>
     layoutTemplate: "defaultLayout"
@@ -14,23 +13,23 @@ Router.route('/', function () {
     this.render("Homepage");
 });
 
-renderUserSearchBoxInNavBar = function (thatRoute) {
+renderUserSearchBoxInNavBar = function(thatRoute) {
     thatRoute.render('User$Pick', {
         to: "searchbox",
-        data: function () {
+        data: function() {
             return {
                 withLDAP: true,
                 id: "LayoutUserSearch"
             };
         }
     });
-}
+};
 
 if (Meteor.isClient) {
     Template.User$Pick.events({
-        'user:selected #LayoutUserSearch': function (event, that, id) {
+        'user:selected #LayoutUserSearch': function(event, that, id) {
             if (id === undefined) return;
-            var url = '/user/' + id + '/edit';
+            let url = '/user/' + id + '/edit';
             Router.go(url);
         }
     });
@@ -42,15 +41,13 @@ Router.route('/user', function () {
 
 Router.route('/user/:sciper/edit', function () {
     renderUserSearchBoxInNavBar(this);
-    var user = User.bySciper(this.params.sciper);
+    let user = User.bySciper(this.params.sciper);
     if (!user) {
         this.render('AccessControl$PermissionDenied');
     } else {
-        this.render('User$Edit', {
-            data: {
-                object: user
-            }
-        });
+        this.render('User$Edit', {data: {
+            object: user
+        }});
     }
 });
 
@@ -58,10 +55,40 @@ Router.route('/billables', function () {
     this.render("Billables$Edit");
 });
 
-Router.route('/zipAsync', function () {
-    this.render("Billable$zipAsync");
+Router.route('/customer_accounts/:cmi', function () {
+    let one = Customers.findOne({codeCMi: this.params.cmi});
+    if(one) {
+        this.render("CustomerAccs$Edit"
+            , {
+                data: function () {
+                    return one._id;
+                }
+            });
+    }
+    else {
+        Router.go('/');
+    }
+
 });
 
+// Router.route('/customer_accounts', function () {
+//     this.render("CustomerAccs$Edit");
+// });
+Router.route('/accounts_categories', function () {
+    this.render("AccountsCats$Edit");
+});
+Router.route('/customers', function () {
+    this.render("Customers$Edit");
+});
+Router.route('/customers_categories', function () {
+    this.render("CustomersCats$Edit");
+});
+Router.route('/consumers', function () {
+    this.render("Consumers$Edit");
+});
+Router.route('/rights', function () {
+    this.render("Rights$Edit");
+});
 
 if (Devsupport.isActive()) {
     Router.route('/test', function () {
@@ -69,13 +96,11 @@ if (Devsupport.isActive()) {
     });
 
     Router.route('/devsupport/kafka/(.*)', function () {
-        var topic = this.params[0];
+        let topic = this.params[0];
         Kafka.subscribe(topic);
-        this.render("Kafka", {
-            data: {
-                topic: topic
-            }
-        });
+        this.render("Kafka", {data: {
+            topic: topic
+        }});
     });
 }
 
@@ -87,11 +112,11 @@ Router.route("/packages/bootstrap-3/(.*)",
         });
         this.response.end();
     },
-    {where: "server"});
+    { where: "server" });
 
 if (Meteor.isClient) {
     Template.nav.onRendered(function () {
-        var $ = this.$.bind(this);
+        let $ = this.$.bind(this);
         $(".button-collapse").assertSizeAtLeast(1).sideNav();
         Tracker.autorun(function () {
             if (IsScreenFullSize.get()) {
@@ -101,7 +126,7 @@ if (Meteor.isClient) {
         });
     });
     Template.nav$Menu.onRendered(function () {
-        var $ = this.$.bind(this);
+        let $ = this.$.bind(this);
         $(".dropdown-button").assertSizeAtLeast(1).dropdown({
             belowOrigin: true, // Displays dropdown below the button
         });
@@ -128,7 +153,7 @@ if (Meteor.isClient) {
         allModalTemplates: function () {
             return flatMap(_.keys(Template), function (k) {
                 if (k.match(/Modal$/)) {
-                    return [{tmpl: k}];
+                    return [{ tmpl: k }];
                 } else {
                     return [];
                 }

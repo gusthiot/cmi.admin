@@ -1,0 +1,18 @@
+{
+  "AccountsCats": {
+    "title"         : "Catégories Comptes",
+    "column": {
+      "entitled"    : "Intitulé",
+      "accountCode" : "Code Type Compte",
+      "dateVar"     : "Date Variable/Fixe",
+      "monthsMax"   : "Durée max",
+      "startTime"   : "Date Début",
+      "endTime"     : "Date Fin",
+      "multi"       : "Compte Multi-utilisateurs"
+    },
+    "modal": {
+      "add"         : "Ajouter Catégorie Comptes"
+    }
+  }
+}
+

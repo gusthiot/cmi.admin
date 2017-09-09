@@ -111,7 +111,7 @@ function setupColumnFilterUI(parentView, dataTableElement) {
             type: type,
             values: function () {
                 var values = _.uniq(_.pluck(_.sortBy(Billables.find({}).fetch(), type), type),
-                    true);  // invoke _.uniq variant for sorted list
+                  true);  // invoke _.uniq variant for sorted list
                 values.push(undefined); //  permit an empty choice
                 return values;
             }
@@ -144,17 +144,17 @@ if (Meteor.isClient) {
             },
         },
     }),
-        // When selects in column headers change, filter values accordingly
-        Template.Billable$columnHead.events({
-            'change select': function (event, template) {
-                var val = $.fn.dataTable.util.escapeRegex(
-                    $(event.target).val()
-                );
-                template.dataTable.column
-                    .search(val ? '^' + val + '$' : '', true, false)
-                    .draw();
-            }
-        });
+    // When selects in column headers change, filter values accordingly
+    Template.Billable$columnHead.events({
+        'change select': function (event, template) {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(event.target).val()
+            );
+            template.dataTable.column
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        }
+    });
 }
 
 var theTable = makeTable();
@@ -339,6 +339,12 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
     // This code only runs on the server
+    //Billables.remove({});
+    if (Billables.find({}).count() === 0) {
+        Billables.insert({type: "USAGE_FEE", operatedByUser: "Christophe Gusthiot", billableToAccount: "5", billableToProject: "6", startTime: "2017-01-02", updatedAt: "2017-07-21"});
+        Billables.insert({type: "USAGE_FEE", operatedByUser: "Christophe Gusthiot", billableToAccount: "1", billableToProject: "2", startTime: "2017-02-02", updatedAt: "2017-08-20"});
+    }
+
     Meteor.publish('Billables', function () {
         return Billables.find({});
     });
@@ -381,7 +387,7 @@ if (Meteor.isClient) {
 
 // ======================================================================================================
 // ================================ Users select drop-down ==============================================
-function userTranslate(k) {
+function userTranslate (k) {
     var userId = User.collection.findOne({_id: k});
     if (userId) {
         return TAPi18n.__(userId.fullName);
@@ -453,65 +459,4 @@ if (Meteor.isClient) {
             templateInstance.paginate.next();
         }
     });
-}
-
-// ======================================================================================================
-// =================================== Save a file  =====================================================
-if (Meteor.isClient) {
-    Template.Billable$zipAsync.events({
-        'click button.send': function (e) {
-            e.preventDefault();
-            Meteor.call("autoGenerate", function (err, result) {
-                if (err) {
-                    console.log("Error:" + err);
-                }
-                return result;
-            });
-            Meteor.call('autoGenerateCsv', 'helloworld.csv', function (err, result) {
-                if (err) {
-                    console.log("Error:" + err);
-                }
-                return result;
-            });
-        }
-    });
-}
-
-if (Meteor.isServer) {
-    Meteor.methods({
-        autoGenerate: function () {
-            const fs = require('fs');
-            //import { myPackageLog } from 'my-package'
-
-            var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
-
-            fs.writeFile(path + 'helloworld.csv', 'ID;Hello World;xxxx;this is a test;', function (err) {
-                if (err) {
-                    console.log("Error:" + err);
-                } else {
-                    console.log("Success");
-                }
-            });
-        },
-        autoGenerateCsv: function (filename) {
-            const
-                fs = require('fs'),
-                csv = require('csv'),
-                iconv = require('iconv-lite');
-
-            var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
-
-            var stream = fs.createReadStream(path + filename)
-                .pipe(iconv.decodeStream('iso-8859-1'))
-                .pipe(csv.parse({delimiter: ";"}));
-
-            console.log("csv created");
-            console.log(stream);
-
-            return stream;
-
-
-        }
-    });
-
 }

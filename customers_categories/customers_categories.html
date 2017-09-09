@@ -1,0 +1,81 @@
+<template name="CustomersCats$Edit">
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="CustomersCats$columnHead">
+    {{translate type}}
+    {{> Widget$Select vmTag="columnHead" value=type values=values editable=1}}
+</template>
+
+<template name="CustomersCats$cell$entitled">
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=isEditing}}
+</template>
+
+<template name="CustomersCats$cell$codeN">
+    {{> Widget$InputText vmTag="codeN" value=codeN editable=isEditing}}
+</template>
+
+<template name="CustomersCats$cell$save">
+    {{#if selected}}
+        <button class="btn waves-effect waves-light save">save</button>
+    {{/if}}
+</template>
+
+<template name="CustomersCats$cell$remove">
+    <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
+</template>
+
+<template name="CustomersCats$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> CustomersCats$modalAdd}}
+</template>
+
+<template name="CustomersCats$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>{{modalAdd}}</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="entitled" type="text" class="validate">
+                            <label for="entitled">{{translate 'entitled'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="code_n" type="text" class="validate">
+                            <label for="code_n">{{translate 'codeN'}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="CustomersCats$Pagination">
+    {{> CustomersCats$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="nexts btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
+</template>

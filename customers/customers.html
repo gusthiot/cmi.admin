@@ -1,0 +1,227 @@
+<template name="Customers$Edit">
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="Customers$columnHead">
+    {{translate type}}
+    {{> Widget$Select vmTag="columnHead" value=type values=values editable=1 helpers=helpers}}
+</template>
+
+<template name="Customers$cell$codeCMi">
+    {{> Widget$InputText vmTag="codeCMi" value=codeCMi editable=isEditing}}
+</template>
+
+<template name="Customers$cell$codeSAP">
+    {{> Widget$InputText vmTag="codeSAP" value=codeSAP editable=isEditing}}
+</template>
+
+<template name="Customers$cell$name">
+    {{> Widget$InputText vmTag="name" value=name editable=isEditing}}
+</template>
+
+<template name="Customers$cell$numAdd">
+    {{> Widget$InputText vmTag="numAdd" value=numAdd editable=isEditing}}
+</template>
+
+<template name="Customers$cell$address">
+    {{> Widget$InputText vmTag="address" value=address editable=isEditing}}
+</template>
+
+<template name="Customers$cell$postalBox">
+    {{> Widget$InputText vmTag="postalBox" value=postalBox editable=isEditing}}
+</template>
+
+<template name="Customers$cell$npa">
+    {{> Widget$InputText vmTag="npa" value=npa editable=isEditing}}
+</template>
+
+<template name="Customers$cell$city">
+    {{> Widget$InputText vmTag="city" value=city editable=isEditing}}
+</template>
+
+<template name="Customers$cell$country">
+    {{> Widget$InputText vmTag="country" value=country editable=isEditing}}
+</template>
+
+<template name="Customers$cell$countryCode">
+    {{> Widget$InputText vmTag="countryCode" value=countryCode editable=isEditing}}
+</template>
+
+<template name="Customers$cell$abbreviation">
+    {{> Widget$InputText vmTag="abbreviation" value=abbreviation editable=isEditing}}
+</template>
+
+<template name="Customers$cell$name2">
+    {{> Widget$InputText vmTag="name2" value=name2 editable=isEditing}}
+</template>
+
+<template name="Customers$cell$name3">
+    {{> Widget$InputText vmTag="name3" value=name3 editable=isEditing}}
+</template>
+
+<template name="Customers$cell$natureId">
+    {{> Widget$Select vmTag="natureId" value=natureId values=natures editable=isEditing helpers=helpers}}
+</template>
+
+<template name="Customers$cell$creation">
+    {{> Widget$InputText vmTag="creation" value=creation editable=isEditing}}
+</template>
+
+<template name="Customers$cell$changes">
+    {{> Widget$InputText vmTag="changes" value=changes editable=isEditing}}
+</template>
+
+<template name="Customers$cell$accounts">
+    <button class="btn-large waves-effect waves-light accounts">accounts</button>
+</template>
+
+<template name="Customers$cell$save">
+    {{#if selected}}
+        <button class="btn waves-effect waves-light save">save</button>
+    {{/if}}
+</template>
+
+<template name="Customers$cell$remove">
+    <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
+</template>
+
+<template name="Customers$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> Customers$modalAdd}}
+</template>
+
+<template name="Customers$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>{{modalAdd}}</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="code_cmi" class="validate">
+                            <label for="code_cmi">{{translate 'codeCMi'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="code_sap" class="validate">
+                            <label for="code_sap">{{translate 'codeSAP'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name" class="validate">
+                            <label for="name">{{translate 'name'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="num_add" class="validate">
+                            <label for="num_add">{{translate 'numAdd'}}</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="address" class="validate">
+                            <label for="address">{{translate 'address'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="postal_box" class="validate">
+                            <label for="postal_box">{{translate 'postalBox'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="npa" class="validate">
+                            <label for="npa">{{translate 'npa'}}</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="city" class="validate">
+                            <label for="city">{{translate 'city'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="country" class="validate">
+                            <label for="country">{{translate 'country'}}</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="country_code" class="validate">
+                            <label for="country_code">{{translate 'countryCode'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="abbreviation" class="validate">
+                            <label for="abbreviation">{{translate 'abbreviation'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name2" class="validate">
+                            <label for="name2">{{translate 'name2'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name3" class="validate">
+                            <label for="name3">{{translate 'name3'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="nature">{{translate 'natureId'}}</label>
+                            <select class="form-control validate" id="nature">
+                                {{#each natures}}
+                                    {{> Customers$nature}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="creation" class="validate">
+                            <label for="creation">{{translate 'creation'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="changes" class="validate">
+                            <label for="changes">{{translate 'changes'}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="Customers$nature">
+    <option value="{{_id}}">{{entitled}}</option>
+</template>
+
+<template name="Customers$Pagination">
+    {{> Customers$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="nexts btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
+</template>

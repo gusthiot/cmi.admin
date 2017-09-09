@@ -1,0 +1,22 @@
+{
+  "Consumers": {
+    "title"         : "Utilisateurs",
+    "column": {
+      "sciper"      : "Sciper",
+      "firstname"   : "Prénom",
+      "lastname"    : "Nom",
+      "phone"       : "Téléphone",
+      "email"       : "Email",
+      "userId"      : "Id utilisateur",
+      "login"       : "Login",
+      "password"    : "Mot de passe",
+      "right"       : "Droit",
+      "creation"    : "Création",
+      "changes"     : "Changements",
+      "closing"     : "Fermeture"
+    },
+    "modal": {
+      "add"         : "Ajouter Utilisateur"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "Rights": {
+    "title"         : "Rights",
+    "column": {
+      "consumerId"  : "User",
+      "accountId"   : "Account Id",
+      "startTime"   : "Start Time",
+      "endTime"     : "End Time"
+    },
+    "modal": {
+      "add"         : "Add Right"
+    }
+  }
+}

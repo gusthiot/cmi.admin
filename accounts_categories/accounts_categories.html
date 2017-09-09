@@ -1,0 +1,141 @@
+<template name="AccountsCats$Edit">
+    {{> tabular table=makeTable class="responsive-table striped"}}
+</template>
+
+<template name="AccountsCats$columnHead">
+    {{ translate type}}
+    {{> Widget$Select vmTag="columnHead" value=type values=values editable=1}}
+</template>
+
+<template name="AccountsCats$cell$entitled">
+    {{> Widget$InputText vmTag="entitled" value=entitled editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$accountCode">
+    {{> Widget$InputText vmTag="accountCode" value=accountCode editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$dateVar">
+    {{> Widget$Select vmTag="dateVar" value=dateVar values=vars editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$monthsMax">
+    {{#if notfix}}
+        {{> Widget$InputText vmTag="monthsMax" value=monthsMax editable=isEditing}}
+    {{else}}
+        {{> Widget$InputText vmTag="monthsMax" value="" editable=isEditing}}
+    {{/if}}
+</template>
+
+<template name="AccountsCats$cell$startTime">
+    {{> Widget$Date vmTag="startTime" value=startTime editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$endTime">
+    {{> Widget$Date vmTag="endTime" value=endTime editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$multi">
+    {{> Widget$Select vmTag="multi" value=multi values=multis editable=isEditing}}
+</template>
+
+<template name="AccountsCats$cell$save">
+    {{#if selected}}
+        <button class="btn waves-effect waves-light save">save</button>
+    {{/if}}
+</template>
+
+<template name="AccountsCats$cell$remove">
+    <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
+</template>
+
+<template name="AccountsCats$addButton">
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
+            class="material-icons">add</i></a>
+    {{> AccountsCats$modalAdd}}
+</template>
+
+<template name="AccountsCats$modalAdd">
+    <div id="modalAdd" class="modal bottom-sheet">
+        <div class="modal-content center">
+            <h4>{{modalAdd}}</h4>
+            <div class="row">
+                <form class="col s6 offset-s3">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="entitled" class="validate">
+                            <label for="entitled">{{translate 'entitled'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="account_code" class="validate">
+                            <label for="account_code">{{translate 'accountCode'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label>Dates : </label>
+                            <input id="var" type="radio" class="validate" name="date_var" value="VAR">
+                            <label for="var">VAR</label>
+                            <input id="fix" type="radio" class="validate" name="date_var" checked value="FIX">
+                            <label for="fix">FIX</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="months_max" class="validate" disabled>
+                            <label for="months_max">{{translate 'monthsMax'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="start_time" class="datepicker validate">
+                            <label for="start_time" class="active">{{translate 'startTime'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="end_time" class="datepicker validate">
+                            <label for="end_time" class="active">{{translate 'endTime'}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label>Multi : </label>
+                            <input id="vrai" type="radio" class="validate" name="multi" value="VRAI">
+                            <label for="vrai">VRAI</label>
+                            <input id="faux" type="radio" class="validate" name="multi" checked value="FAUX">
+                            <label for="faux">FAUX</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                            <i class="material-icons">cancel</i></a>
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="AccountsCats$Pagination">
+    {{> AccountsCats$addButton}}
+    {{#if notnull pages}}
+        {{#if notfirst page}}
+            <button class="previous btn-large waves-effect waves-light">Previous</button>
+        {{/if}}
+        <span class="letSize">{{page}} of {{pages}}</span>
+        {{#if notlast page pages}}
+            <button class="nexts btn-large waves-effect waves-light">Next</button>
+        {{/if}}
+    {{/if}}
+</template>
