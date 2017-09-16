@@ -34,9 +34,9 @@ CustomersCats.allow({
 if (Meteor.isServer) {
     // CustomersCats.remove({});
     if (CustomersCats.find({}).count() === 0) {
-        CustomersCats.insert({entitled: "Interne", codeN:"I"});
-        CustomersCats.insert({entitled: "Externe Académique", codeN:"A"});
-        CustomersCats.insert({entitled: "Externe Industriel", codeN:"E"});
+        CustomersCats.insert({entitled: "Interne", codeN: "I"});
+        CustomersCats.insert({entitled: "Externe Académique", codeN: "A"});
+        CustomersCats.insert({entitled: "Externe Industriel", codeN: "E"});
     }
 
     Meteor.publish(CustomersCats.name, function () {

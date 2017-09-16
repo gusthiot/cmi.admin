@@ -15,23 +15,29 @@ tracker@1.1.0                 # Meteor's client-side reactive programming librar
 es5-shim@4.6.14_1                # ECMAScript 5 compatibility for older browsers.
 ecmascript@0.5.8_1              # Enable ECMAScript2015+ syntax in app code
 
-# Model building blocks
+check@1.2.3
+reactive-var@1.0.10            # in search/ and widgets
 aldeed:autoform
+aldeed:collection2
+iron:router
+tap:i18n
+epfl:accounts-tequila
+epfl:loginfirst
+epfl:become
+fortawesome:fontawesome
 aldeed:tabular
 standard-minifier-css@1.2.0_1
 standard-minifier-js@1.2.0_1
 gildaspk:autoform-materialize
 
-# UI building blocks
-materialize:materialize@=0.97.6     # Latest version gives out some 404
-gildaspk:autoform-materialize
-fortawesome:fontawesome
 momentjs:moment
 rzymek:moment-locale-fr
 rzymek:moment-locale-de
 rzymek:moment-locale-it
-yangzai:moment-ejson
+
+aldeed:simple-schema
 nerdmed:mediaqueries
+manuel:viewmodel
 mrt:jquery-ui
 mizzao:jquery-ui
 shell-server@0.2.1
