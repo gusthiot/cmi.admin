@@ -49,18 +49,18 @@ AccountsCats.allow({
 if (Meteor.isServer) {
     //AccountsCats.remove({});
     if (AccountsCats.find({}).count() === 0) {
-        AccountsCats.insert({entitled: "Standard", accountCode:"STD", dateVar: "VAR", monthsMax: 60, startTime: "2016-01-01", endTime: "2099-12-31", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 3 mois", accountCode:"DEVT16.17", dateVar: "VAR", monthsMax: 3, startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 6 mois", accountCode:"DEVS16.17", dateVar: "VAR", monthsMax: 6, startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
-        AccountsCats.insert({entitled: "Projet de Développement sur 12 mois", accountCode:"DEVA16.17", dateVar: "VAR", monthsMax: 12, startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Standard", accountCode:"STD", dateVar: "VAR", monthsMax: "60", startTime: "2016-01-01", endTime: "2099-12-31", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 3 mois", accountCode:"DEVT16.17", dateVar: "VAR", monthsMax: "3", startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 6 mois", accountCode:"DEVS16.17", dateVar: "VAR", monthsMax: "6", startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
+        AccountsCats.insert({entitled: "Projet de Développement sur 12 mois", accountCode:"DEVA16.17", dateVar: "VAR", monthsMax: "12", startTime: "2016-09-01", endTime: "2017-08-31", multi:"VRAI"});
         AccountsCats.insert({entitled: "Projet de Semestre Automne Bachelor", accountCode:"BSA16.17", dateVar: "FIX", startTime: "2016-09-20", endTime: "2017-01-27", multi:"FAUX"});
         AccountsCats.insert({entitled: "Projet de Semestre Printemps Bachelor", accountCode:"BSP16.17", dateVar: "FIX", startTime: "2017-02-20", endTime: "2017-06-23", multi:"FAUX"});
         AccountsCats.insert({entitled: "Projet de Semestre Automne Master", accountCode:"MSA16.17", dateVar: "FIX", startTime: "2016-09-20", endTime: "2017-01-27", multi:"FAUX"});
         AccountsCats.insert({entitled: "Projet de Semestre Printemps Master", accountCode:"MSP16.17", dateVar: "FIX", startTime: "2017-02-20", endTime: "2017-06-23", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Master", accountCode:"PDM16.17", dateVar: "VAR", monthsMax: 6, startTime: "2016-09-01", endTime: "2017-08-31", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet de Master (finit après 31/08)", accountCode:"PDM16.17+", dateVar: "VAR", monthsMax: 60, startTime: "2016-04-01", endTime: "2018-01-31", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet en Echange", accountCode:"ECH16.17", dateVar: "VAR", monthsMax: 6, startTime: "2016-09-01", endTime: "2017-08-31", multi:"FAUX"});
-        AccountsCats.insert({entitled: "Projet en Echange (finit après 31/08)", accountCode:"ECH16.17+", dateVar: "VAR", monthsMax: 6, startTime: "2016-09-01", endTime: "2018-01-31", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master", accountCode:"PDM16.17", dateVar: "VAR", monthsMax: "6", startTime: "2016-09-01", endTime: "2017-08-31", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet de Master (finit après 31/08)", accountCode:"PDM16.17+", dateVar: "VAR", monthsMax: "60", startTime: "2016-04-01", endTime: "2018-01-31", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange", accountCode:"ECH16.17", dateVar: "VAR", monthsMax: "6", startTime: "2016-09-01", endTime: "2017-08-31", multi:"FAUX"});
+        AccountsCats.insert({entitled: "Projet en Echange (finit après 31/08)", accountCode:"ECH16.17+", dateVar: "VAR", monthsMax: "6", startTime: "2016-09-01", endTime: "2018-01-31", multi:"FAUX"});
     }
 
     Meteor.publish(AccountsCats.name, function () {
@@ -265,6 +265,15 @@ if (Meteor.isClient) {
         }
         else if(values.monthsMax === !shared.isPositiveInteger(values.monthsMax)) {
             Materialize.toast("Nombre de mois invalide !", 5000);
+        }
+        else if (values.startTime === "") {
+            Materialize.toast("Date de début invalide !", 5000);
+        }
+        else if (values.endTime === "") {
+            Materialize.toast("Date de fin invalide !", 5000);
+        }
+        else if (!shared.isOlderThan(values.startTime, values.endTime)) {
+            Materialize.toast("Date de fin doit être après date de début !", 5000);
         }
         else return true;
         return false;
