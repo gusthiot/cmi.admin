@@ -12,7 +12,5 @@ services:
         - MONGO_URL=mongodb://mongodb
         - ROOT_URL=http://localhost:3000
   mongodb:
-    container_name: mongodb
-    build: docker_mongodb
-    image: epflcmi/mongodb
+    image: mongo
 

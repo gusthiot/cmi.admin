@@ -1,4 +1,0 @@
-[submodule "packages/meteor-tabular"]
-	path = packages/meteor-tabular
-	url = git@github.com:domq/meteor-tabular.git
-	branch = devel

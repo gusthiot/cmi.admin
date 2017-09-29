@@ -141,8 +141,10 @@ export function updatingValues(newValues, oldValues) {
     let updatingValues = {};
     for(let k in newValues) {
         if(oldValues.hasOwnProperty(k)) {
-            if(newValues[k] !== oldValues[k])
+            if(newValues[k] !== oldValues[k]) {
+                console.log(updatingValues[k] + " -> " + newValues[k]);
                 updatingValues[k] = newValues[k];
+            }
         }
         else
             console.log("how can that be possible !?!");

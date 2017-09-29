@@ -5,7 +5,6 @@
 .PHONY: init clean dbdump dbrestore
 
 init:
-	git submodule update --init
 	meteor npm install
 
 clean:

@@ -51,15 +51,10 @@ Router.route('/user/:sciper/edit', function () {
     }
 });
 
-Router.route('/billables', function () {
-    this.render("Billables$Edit");
-});
-
 Router.route('/customer_accounts/:cmi', function () {
     let one = Customers.findOne({codeCMi: this.params.cmi});
     if(one) {
-        this.render("CustomerAccs$Edit"
-            , {
+        this.render("CustomerAccs$Edit", {
                 data: function () {
                     return one._id;
                 }
@@ -68,12 +63,8 @@ Router.route('/customer_accounts/:cmi', function () {
     else {
         Router.go('/');
     }
-
 });
 
-// Router.route('/customer_accounts', function () {
-//     this.render("CustomerAccs$Edit");
-// });
 Router.route('/accounts_categories', function () {
     this.render("AccountsCats$Edit");
 });
@@ -89,30 +80,6 @@ Router.route('/consumers', function () {
 Router.route('/rights', function () {
     this.render("Rights$Edit");
 });
-
-if (Devsupport.isActive()) {
-    Router.route('/test', function () {
-        this.render("Test");
-    });
-
-    Router.route('/devsupport/kafka/(.*)', function () {
-        let topic = this.params[0];
-        Kafka.subscribe(topic);
-        this.render("Kafka", {data: {
-            topic: topic
-        }});
-    });
-}
-
-/* Work around some kind of URL mapping bug in bootstrap-3 */
-Router.route("/packages/bootstrap-3/(.*)",
-    function () {
-        this.response.writeHead(302, {
-            'Location': "/packages/mrt_bootstrap-3/" + this.params[0]
-        });
-        this.response.end();
-    },
-    { where: "server" });
 
 if (Meteor.isClient) {
     Template.nav.onRendered(function () {
