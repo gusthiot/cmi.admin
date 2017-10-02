@@ -21,8 +21,8 @@ aldeed:autoform
 aldeed:tabular
 aldeed:collection2-core
 
-standard-minifier-css
-standard-minifier-js
+standard-minifier-css       # Keep it to avoid connection issues
+standard-minifier-js        # Keep it to avoid connection issues
 
 # UI building blocks
 materialize:materialize@=0.97.6     # Latest version gives out some 404
@@ -47,6 +47,6 @@ tap:i18n
 manuel:viewmodel
 
 # Access control
-epfl:accounts-tequila@=0.1.0
+epfl:accounts-tequila@=0.1.0        # Older version to avoid connection issues
 epfl:loginfirst
 epfl:become
