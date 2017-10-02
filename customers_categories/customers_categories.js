@@ -1,6 +1,6 @@
-const shared = require("../shared");
+const shared = require("../lib/shared");
 
-CustomersCats = new Meteor.Collection("customers_categories");
+const CustomersCats = new Meteor.Collection("customers_categories");
 
 CustomersCats.name = "CustomersCats";
 

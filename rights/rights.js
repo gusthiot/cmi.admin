@@ -1,6 +1,6 @@
-const shared = require("../shared");
+const shared = require("../lib/shared");
 
-Rights = new Meteor.Collection("rights");
+const Rights = new Meteor.Collection("rights");
 
 Rights.name = "Rights";
 

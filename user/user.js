@@ -104,10 +104,21 @@ Meteor.startup( function () {
 User.Search = new Search( "userSearch" );
 
 if (Meteor.isServer) {
-    var ldapContext = require( "epfl-ldap" )(),
-        escapeStringRegexp = require( 'escape-string-regexp' ),
-        Future = require( 'fibers/future' ),
-        getSyncUserByName = Meteor.wrapAsync( ldapContext.users.searchUserByName );
+  var ldapContext;
+  function findInLDAP() {
+    if (!Devsupport.isOnline()) {
+      return Devsupport.fakeData.ldapUsers( self, query );
+    }
+    if (! ldapContext) {
+        ldapContext = require( "epfl-ldap" )();
+    }
+    Meteor.wrapAsync( ldapContext.users.searchUserByName )( query ).forEach( function (result) {
+      addOrChange( result.sciper, {ldapFullName: result.displayName} );
+    } );
+  }
+
+  var escapeStringRegexp = require( 'escape-string-regexp' ),
+        Future = require( 'fibers/future' );
 
     User.Search.publish( function (query, wantLDAP) {
         Policy.canSearchUsers.check( this );
@@ -137,14 +148,7 @@ if (Meteor.isServer) {
             } );
         } ) );
         if (wantLDAP) {
-            futures.push( Future.task( function findInLDAP() {
-                if (!Devsupport.isOnline()) {
-                    return Devsupport.fakeData.ldapUsers( self, query );
-                }
-                getSyncUserByName( query ).forEach( function (result) {
-                    addOrChange( result.sciper, {ldapFullName: result.displayName} );
-                } );
-            } ) );
+            futures.push( Future.task( findInLDAP ) );
         }
         try {
             Future.wait( futures );
