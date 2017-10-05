@@ -1,6 +1,6 @@
 const shared = require("../lib/shared");
 
-const CustomerAccs = new Meteor.Collection("customer_accounts");
+export const CustomerAccs = new Meteor.Collection("customer_accounts");
 
 CustomerAccs.name = "CustomerAccs";
 

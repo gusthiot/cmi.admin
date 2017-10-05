@@ -1,4 +1,5 @@
 const shared = require("../lib/shared");
+import { CustomersCats } from '../customers_categories/customers_categories.js';
 
 const Customers = new Meteor.Collection("customers");
 

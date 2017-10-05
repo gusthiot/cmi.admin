@@ -1,4 +1,6 @@
 const shared = require("../lib/shared");
+import { Consumers } from '../consumers/consumers.js';
+import { CustomerAccs } from '../customer_accounts/customer_accounts.js';
 
 const Rights = new Meteor.Collection("rights");
 
