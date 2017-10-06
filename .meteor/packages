@@ -39,6 +39,7 @@ mizzao:jquery-ui
 planettraining:material-design-icons-font
 kevohagan:sweetalert
 dynamic-import
+monbro:iron-router-breadcrumb
 
 # Controller and layout building blocks
 reactive-var

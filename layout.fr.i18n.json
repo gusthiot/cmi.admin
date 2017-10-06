@@ -1,0 +1,15 @@
+{
+  "Layout": {
+    "title": {
+      "Home": "Page d'accueil",
+      "User": "Utilisateur",
+      "Edit": "Edition",
+      "Custacc": "Comptes Client",
+      "Accocat": "Catégories Comptes",
+      "Customers": "Clients",
+      "Custcat": "Catégories Utilisateurs",
+      "Consumers": "Utilisateurs",
+      "Rights": "Droits"
+    }
+  }
+}

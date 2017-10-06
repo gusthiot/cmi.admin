@@ -80,6 +80,7 @@ mobile-status-bar@1.0.14
 modules@0.10.0
 modules-runtime@0.8.0
 momentjs:moment@2.18.1
+monbro:iron-router-breadcrumb@1.0.10
 mongo@1.2.2
 mongo-dev-server@1.0.1
 mongo-id@1.0.6

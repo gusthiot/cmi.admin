@@ -20,3 +20,10 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .side-nav {
     width: 310px !important;
 }
+
+.bdcr {
+    margin-left: 300px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16pt;
+}

@@ -30,6 +30,7 @@
             </nav>
         </div>
     </header>
+    {{> bdcr}}
     {{! All templates whose name end with Modal are rendered here. }}
     {{! This prevents inheriting the z-index of whatever other elements the modals happen to be children of }}
     {{#each allModalTemplates}}
@@ -66,4 +67,14 @@
 
 <template name="Homepage">
     <h2>CMi AdminBase</h2>
+</template>
+
+<template name="bdcr">
+    <div class="bdcr">
+        {{#each Breadcrumb}}
+            {{#if showLink}}
+                <a href="{{url}}">  > {{translate title}}</a>
+            {{/if}}
+        {{/each}}
+    </div>
 </template>

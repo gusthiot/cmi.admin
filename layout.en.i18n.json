@@ -1,0 +1,15 @@
+{
+  "Layout": {
+    "title": {
+      "Home": "Homepage",
+      "User": "User",
+      "Edit": "Edit",
+      "Custacc": "Customer Accounts",
+      "Accocat": "Accounts Categories",
+      "Customers": "Customers",
+      "Custcat": "Customers Categories",
+      "Consumers": "Consumers",
+      "Rights": "Rights"
+    }
+  }
+}
