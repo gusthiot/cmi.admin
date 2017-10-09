@@ -1,13 +1,13 @@
 const shared = require("../lib/shared");
-import { Consumers } from '../consumers/consumers.js';
 import { CustomerAccs } from '../customer_accounts/customer_accounts.js';
+import { AccountsCats } from '../accounts_categories/accounts_categories.js';
 
-const Rights = new Meteor.Collection("rights");
+export const Rights = new Meteor.Collection("rights");
 
 Rights.name = "Rights";
 
 Rights.schema = new SimpleSchema({
-    consumerId: {
+    userId: {
         type: String
     },
     accountId: {
@@ -22,7 +22,7 @@ Rights.schema = new SimpleSchema({
 });
 
 Rights.columns =
-    ["consumerId", "accountId", "startTime", "endTime"];
+    ["userId", "accountId", "startTime", "endTime"];
 
 Rights.allow({
     insert: function () {
@@ -141,10 +141,10 @@ if (Meteor.isClient) {
         helpers: {
             translateKey: function (what) {
                 if(what) {
-                    if (Template.currentData().value === "consumerId")
-                        return userId(what);
+                    if (Template.currentData().value === "userId")
+                        return getUserId(what);
                     if (Template.currentData().value === "accountId")
-                        return accountId(what);
+                        return getAccountId(what);
                 }
                 return what;
             }
@@ -154,14 +154,14 @@ if (Meteor.isClient) {
         }
     });
 
-    Template.Rights$cell$consumerId.helpers({
+    Template.Rights$cell$userId.helpers({
         helpers: {
-            translateKey: function (customerId) {
-                return userId(customerId);
+            translateKey: function (userId) {
+                return getUserId(userId);
             }
         },
-        consumers: function () {
-            let users = Consumers.find({});
+        users: function () {
+            let users = Meteor.users.find({});
             if(!users)
                 return [];
             let results = [];
@@ -188,7 +188,7 @@ if (Meteor.isClient) {
         }
     });
 
-    function accountId(custAccId) {
+    function getAccountId(custAccId) {
         if(custAccId) {
             let one = CustomerAccs.findOne({_id: custAccId});
             if(one)
@@ -199,21 +199,21 @@ if (Meteor.isClient) {
         return custAccId;
     }
 
-    function userId(consumerId) {
-        if(consumerId) {
-            let one = Consumers.findOne({_id: consumerId});
+    function getUserId(userId) {
+        if(userId) {
+            let one = Meteor.users.findOne({_id: userId});
             if(one)
                 return one.userId;
             else
-                console.log("no user for : " + consumerId);
+                console.log("no user for : " + userId);
         }
-        return consumerId;
+        return userId;
     }
 
     Template.Rights$cell$accountId.helpers({
         helpers: {
             translateKey: function (custAccId) {
-                return accountId(custAccId);
+                return getAccountId(custAccId);
             }
         },
         accounts: function () {
@@ -302,7 +302,7 @@ if (Meteor.isClient) {
                 startTime : templ.$('#start_time').val(),
                 endTime: templ.$('#end_time').val(),
                 accountId: templ.$('#account').val(),
-                consumerId: templ.$('#consumer').val()
+                userId: templ.$('#user').val()
             };
             if(checkValues(values)) {
                 Rights.insert(values);
@@ -313,8 +313,8 @@ if (Meteor.isClient) {
     });
 
     Template.Rights$modalAdd.helpers({
-        consumers: function () {
-            return Consumers.find({});
+        users: function () {
+            return Meteor.users.find({});
         },
         accounts: function () {
             return CustomerAccs.find({});
@@ -333,8 +333,8 @@ if (Meteor.isClient) {
         });
     });
 
-    Template.Rights$consumer.onRendered(function(){
-        $('#consumer').material_select();
+    Template.Rights$user.onRendered(function(){
+        $('#user').material_select();
     });
 
     Template.Rights$account.onRendered(function(){
@@ -344,7 +344,7 @@ if (Meteor.isClient) {
     Template.Rights$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            shared.confirmRemove(userId(this.consumerId) + " - " + accountId(this.accountId), this._id, Rights);
+            shared.confirmRemove(getUserId(this.userId) + " - " + getAccountId(this.accountId), this._id, Rights);
         }
     });
 }

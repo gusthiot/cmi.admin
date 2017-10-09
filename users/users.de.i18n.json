@@ -1,5 +1,6 @@
 {
-  "User": {
+  "Users": {
+    "title"         : "Users",
     "search": {
       "search-here": "Benützer suchen...",
       "nosearchresults": "Keine Ergebnisse",

@@ -1,4 +1,5 @@
-  /**
+import { Customers } from './customers/customers.js';
+/**
  * Mapping between URLs and templates.
  *
  * In Meteor, both the client and the server know this mapping; one doesn't
@@ -48,19 +49,20 @@ if (Meteor.isClient) {
     });
 }
 
-Router.route('/user', {
-    title: 'user',
-    name: 'user',
+Router.route('/users', {
+    title: 'users',
+    name: 'users',
     parent: 'home',
     action: function () {
-        renderUserSearchBoxInNavBar(this);
+        this.render("Users$Edit");
+        //renderUserSearchBoxInNavBar(this);
     }
 });
 
-Router.route('/user/:sciper/edit', {
+Router.route('/users/:sciper/edit', {
     title: 'edit',
     name: 'edit',
-    parent: 'user',
+    parent: 'users',
     action: function () {
         renderUserSearchBoxInNavBar(this);
         let user = User.bySciper(this.params.sciper);
@@ -114,20 +116,11 @@ Router.route('/customers', {
 });
 
 Router.route('/customers_categories', {
-    title: 'Customers Categories',
+    title: 'custcat',
     name: 'custcat',
     parent: 'home',
     action: function () {
         this.render("CustomersCats$Edit");
-    }
-});
-
-Router.route('/consumers', {
-    title: 'consumers',
-    name: 'consumers',
-    parent: 'home',
-    action: function () {
-        this.render("Consumers$Edit");
     }
 });
 

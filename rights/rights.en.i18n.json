@@ -2,7 +2,7 @@
   "Rights": {
     "title"         : "Rights",
     "column": {
-      "consumerId"  : "User",
+      "userId"      : "User",
       "accountId"   : "Account Id",
       "startTime"   : "Start Time",
       "endTime"     : "End Time"

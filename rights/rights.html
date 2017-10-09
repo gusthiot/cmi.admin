@@ -7,8 +7,8 @@
     {{> Widget$Select vmTag="columnHead" value=type values=values editable=1 helpers=helpers}}
 </template>
 
-<template name="Rights$cell$consumerId">
-    {{> Widget$Select vmTag="consumerId" value=consumerId values=consumers editable=isEditing helpers=helpers}}
+<template name="Rights$cell$userId">
+    {{> Widget$Select vmTag="userId" value=userId values=users editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Rights$cell$accountId">
@@ -47,10 +47,10 @@
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="select-wrapper col s6">
-                            <label for="consumer">{{translate 'consumerId'}}</label>
-                            <select class="form-control validate" id="consumer">
-                                {{#each consumers}}
-                                    {{> Rights$consumer}}
+                            <label for="user">{{translate 'userId'}}</label>
+                            <select class="form-control validate" id="user">
+                                {{#each users}}
+                                    {{> Rights$user}}
                                 {{/each}}
                             </select>
                         </div>
@@ -95,7 +95,7 @@
     </div>
 </template>
 
-<template name="Rights$consumer">
+<template name="Rights$user">
     <option value="{{_id}}">{{userId}}</option>
 </template>
 

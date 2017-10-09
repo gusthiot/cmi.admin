@@ -1,4 +1,5 @@
 const shared = require("../lib/shared");
+import { Customers } from '../customers/customers.js';
 
 export const CustomersCats = new Meteor.Collection("customers_categories");
 
@@ -230,14 +231,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Clients‘", 5000);
             }
             else {
-                let count = Prices.find({natureId: this._id}).count();
-                if (count > 0) {
-                    Materialize.toast("Suppression impossible, article utilisé " + count
-                        + " fois dans la base de données ‘Tarifs‘", 5000);
-                }
-                else {
-                    shared.confirmRemove(this.entitled, this._id, CustomersCats);
-                }
+                shared.confirmRemove(this.entitled, this._id, CustomersCats);
             }
         }
     });

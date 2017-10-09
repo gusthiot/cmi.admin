@@ -1,7 +1,8 @@
 const shared = require("../lib/shared");
 import { CustomersCats } from '../customers_categories/customers_categories.js';
+import { CustomerAccs } from '../customer_accounts/customer_accounts.js';
 
-const Customers = new Meteor.Collection("customers");
+export const Customers = new Meteor.Collection("customers");
 
 Customers.name = "Customers";
 
@@ -351,7 +352,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Comptes‘", 5000);
             }
             else {
-                shared.confirmRemove(this._id, this._id, Customers);
+                shared.confirmRemove(this.codeCMi, this._id, Customers);
             }
         }
     });

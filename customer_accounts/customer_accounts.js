@@ -1,4 +1,7 @@
 const shared = require("../lib/shared");
+import { Customers } from '../customers/customers.js';
+import { Rights } from '../rights/rights.js';
+import { AccountsCats } from '../accounts_categories/accounts_categories.js';
 
 export const CustomerAccs = new Meteor.Collection("customer_accounts");
 
@@ -494,7 +497,7 @@ if (Meteor.isClient) {
                     + " fois dans la base de données ‘Droits‘", 5000);
             }
             else {
-                shared.confirmRemove(this._id, this._id, CustomerAccs);
+                shared.confirmRemove(this.accountId, this._id, CustomerAccs);
             }
         }
     });

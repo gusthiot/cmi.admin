@@ -12,10 +12,10 @@ Meteor.startup(function () {
     canSearchUsers: Policy.anyLoggedInUser,
     canBecomeAnotherUser: Role.SuperAdministrator,
     canReadUserBasicDetails: Role.SuperAdministrator,  // TODO: overkill
-    editUser: Policy.Builder.UpdateSchema(User.collection, [
-      Policy.Builder(Role.SuperAdministrator).then(User.collection.simpleSchema()),
+    editUser: Policy.Builder.UpdateSchema(Users.collection, [
+      Policy.Builder(Role.SuperAdministrator).then(Users.collection.schema),
       Policy.Builder(Policy.anyLoggedInUser).when(onOneself)
-        .then(User.collection.simpleSchema().pick(["password"]))
+        .then(Users.collection.schema.pick(["password"]))
     ])
   });
 });

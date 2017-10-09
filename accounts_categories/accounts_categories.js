@@ -1,6 +1,7 @@
 const shared = require("../lib/shared");
+import { CustomerAccs } from '../customer_accounts/customer_accounts.js';
 
-const AccountsCats = new Meteor.Collection("accounts_categories");
+export const AccountsCats = new Meteor.Collection("accounts_categories");
 
 AccountsCats.name = "AccountsCats";
 

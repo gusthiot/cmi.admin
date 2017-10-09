@@ -1,6 +1,11 @@
 {
-  "Consumers": {
+  "Users": {
     "title"         : "Utilisateurs",
+    "search": {
+      "search-here": "Rechercher un utilisateur...",
+      "nosearchresults": "Pas de résultat",
+      "ldap": "Rechercher des utilisateurs hors CMi..."
+    },
     "column": {
       "sciper"      : "Sciper",
       "firstname"   : "Prénom",
@@ -17,6 +22,8 @@
     },
     "modal": {
       "add"         : "Ajouter Utilisateur"
-    }
+    },
+    "EditFormSelf": "Votre compte",
+    "EditForm": "Modifier l'utilisateur %s"
   }
 }
