@@ -3,6 +3,7 @@
  */
 
 import I18N from "../i18n/i18n.js";
+const policies = require("../policies/policies");
 
 const shared = require("../lib/shared");
 import { Rights } from '../rights/rights.js';
@@ -57,8 +58,7 @@ Users.collection.schema = new SimpleSchema({
         type: String
     },
     userId: {
-        type: SimpleSchema.Integer,
-        min: 1
+        type: String
     },
     login: {
         type: String
@@ -68,6 +68,9 @@ Users.collection.schema = new SimpleSchema({
     },
     right: {
         type: Boolean
+    },
+    levelId: {
+        type: String
     },
     creation: {
         type: String
@@ -94,7 +97,7 @@ Users.collection.schema = new SimpleSchema({
     }
 });
 Users.collection.columns =
-    ["_id", "firstname", "lastname", "phone", "email", "userId", "login", "password", "right", "creation", "changes",
+    ["_id", "firstname", "lastname", "phone", "email", "userId", "login", "password", "right", "levelId", "creation", "changes",
         "closing"];
 
 Users.collection.allow({
@@ -111,18 +114,19 @@ Users.collection.allow({
     }
 
 });
-
+/*
 Meteor.startup( function () {
     // As per http://stackoverflow.com/a/21853298/435004:
     // this merges gently with the default publish in accounts_server.js !
+
     Policy.canReadOwnFullName.publish( null, function () {
-        return Meteor.users.find( {_id: this.userId}, {fields: {_id: true, fullName: true}} );
+        return Meteor.users.find( {_id: this.userId} );
     } );
     Policy.canReadUserBasicDetails.publish( null, function () {
-        return Meteor.users.find( {}, {fields: {_id: true, fullName: true}} );
+        return Meteor.users.find( {} );
     } );
 } );
-
+*/
 /**
  * Users searches
  *
@@ -132,9 +136,35 @@ Meteor.startup( function () {
 Users.Search = new Search( "userSearch" );
 
 if (Meteor.isServer) {
+    if (Users.collection.find({}).count() === 0) {
+        Users.collection.insert({_id: "138027", fullName: "Christophe Gusthiot", firstname: "Christophe", lastname: "Gusthiot", userId: "user0", login: "cgusthiot", levelId: "0"});
+        Users.collection.insert({_id: "133333", fullName: "Philippe Langlet", firstname: "Philippe", lastname: "Langlet", userId: "user1", login: "planglet", levelId: "0"});
+        Users.collection.insert({_id: "243371", fullName: "Dominique Quatravaux", firstname: "Dominique", lastname: "Quatravaux", userId: "user2", login: "dquatravaux", levelId: "0"});
+
+
+        Users.collection.insert({_id: "203491", fullName: "Joffrey Pernollet", firstname: "Joffrey", lastname: "Pernollet", userId: "user01236", login: "jpernollet", levelId: "2"});
+        Users.collection.insert({_id: "251551", fullName: "Remy Juttin", firstname: "Remy", lastname: "Juttin", userId: "user01904", login: "rjuttin", levelId: "3"});
+
+        Users.collection.insert({_id: "251843", fullName: "Julien Fluck", firstname: "Julien", lastname: "Fluck", userId: "user02099", login: "jfluck", levelId: "4"});
+        Users.collection.insert({_id: "276161", fullName: "Audrey Berset", firstname: "Audrey", lastname: "Berset", userId: "user02554", login: "aberset", levelId: "4"});
+    }
 
     Meteor.publish(Users.collection.name, function () {
-        return Users.collection.find({});
+        if (Meteor.user() && Meteor.user().levelId) {
+            if(policies.canViewUsers()) {
+                console.log("all");
+                return Users.collection.find({});
+            }
+            else {
+                if(policies.canViewHimself()) {
+                    console.log("one");
+                    return Users.collection.find({_id: Meteor.userId()});
+                }
+            }
+        }
+        console.log("none");
+        return Users.collection.find({_id: "-1"});
+
     });
 
     let ldapContext;
@@ -196,7 +226,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(Users.collection, false);
+    return shared.makeTable(Users.collection);
 }
 let theTable = makeTable();
 
@@ -217,7 +247,19 @@ if (Meteor.isClient) {
         }
     };
 
-    Template.Users$Edit.helpers({makeTable: theTable});
+    Template.Users$Edit.helpers({
+        makeTable: theTable,
+        selector: function() {
+            let ids = [];
+            Users.collection.find({}, {fields: {_id: true}}).fetch().forEach( function(res) {
+               ids.push(res._id);
+            });
+            console.log(ids);
+
+            return {_id : { $in: ids}} ;
+
+        }
+    });
 
     Session.set('editingRow', 'undefined');
     Session.set('saving', 'undefined');
@@ -294,6 +336,16 @@ if (Meteor.isClient) {
     Template.Users$columnHead.helpers({
         helpers: {
             translateKey: function (what) {
+                if(what) {
+                    if (Template.currentData().value === "levelId") {
+                        let one = policies.Levels.findOne({_id: what});
+                        if(one) {
+                            return one.name;
+                        }
+                        else
+                            console.log("no level for : " + what);
+                    }
+                }
                 return what;
             }
         },
@@ -324,6 +376,32 @@ if (Meteor.isClient) {
         'click .save': function (event) {
             event.preventDefault();
             Session.set('saving', 'yes');
+        }
+    });
+
+    Template.Users$cell$levelId.helpers({
+        helpers: {
+            translateKey: function (levelId) {
+                if(levelId) {
+                    let one = policies.Levels.findOne({_id: levelId});
+                    if(one)
+                        return one.name;
+                    else
+                        console.log("no level for : " + levelId);
+
+                }
+                return levelId;
+            }
+        },
+        levels: function () {
+            let levs = policies.Levels.find({});
+            if(!levs)
+                return [];
+            let results = [];
+            levs.forEach(function(lev) {
+                results.push(lev._id);
+            });
+            return results;
         }
     });
 
@@ -407,6 +485,7 @@ if (Meteor.isClient) {
                 login: templ.$('#login').val(),
                 password: templ.$('#password').val(),
                 right: $(templ.find('input:radio[name=right]:checked')).val(),
+                levelId: templ.$('#level').val(),
                 creation: templ.$('#creation').val(),
                 changes: templ.$('#changes').val(),
                 closing: templ.$('#closing').val()
@@ -422,12 +501,19 @@ if (Meteor.isClient) {
     });
 
     Template.Users$modalAdd.helpers({
+        levels: function () {
+            return policies.Levels.find({});
+        },
         translate: function (what) {
             return TAPi18n.__("Users.column." + what);
         },
         modalAdd: function () {
             return TAPi18n.__("Users.modal.add");
         }
+    });
+
+    Template.Users$level.onRendered(function(){
+        $('#level').material_select();
     });
 
     Template.Users$cell$remove.events({

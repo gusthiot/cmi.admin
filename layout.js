@@ -1,4 +1,5 @@
 import { Customers } from './customers/customers.js';
+const policies = require("./policies/policies");
 /**
  * Mapping between URLs and templates.
  *
@@ -53,9 +54,27 @@ Router.route('/users', {
     title: 'users',
     name: 'users',
     parent: 'home',
+    onBeforeAction: function () {
+        if(!Meteor.user() || !Meteor.user().levelId) {
+            console.log("not complete");
+            Router.go('/users');
+        }
+        this.next();
+
+    },
     action: function () {
-        this.render("Users$Edit");
-        //renderUserSearchBoxInNavBar(this);
+        if(Meteor.user() && Meteor.user().levelId) {
+            console.log(Meteor.user());
+            if(policies.canViewHimself()) {
+                console.log("allowed");
+                this.render("Users$Edit");
+            }
+            else {
+                console.log("not allowed");
+                Router.go('/');
+            }
+            //renderUserSearchBoxInNavBar(this);
+        }
     }
 });
 
@@ -173,6 +192,16 @@ if (Meteor.isClient) {
                     return [];
                 }
             });
+        }
+    });
+
+    Template.nav$Menu.helpers({
+        canSeeUsers: function () {
+            if(Meteor.user() && Meteor.user().levelId) {
+                return policies.canViewHimself();
+            }
+            console.log("no user");
+            return false;
         }
     });
 

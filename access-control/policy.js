@@ -8,7 +8,7 @@ function onOneself(subject, object) {
 
 Meteor.startup(function () {
   Policy.edict({
-    canReadOwnFullName: Policy.anyLoggedInUser,
+    canReadOwnFullName: Role.Customer,
     canSearchUsers: Policy.anyLoggedInUser,
     canBecomeAnotherUser: Role.SuperAdministrator,
     canReadUserBasicDetails: Role.SuperAdministrator,  // TODO: overkill
@@ -33,12 +33,12 @@ Role.SuperAdministrator = new Role("SuperAdministrator");
 Role.SuperAdministrator.isAssignedToUser = function(user) {
   return (user._id === "243371"       // Dominique Quatravaux
   || user._id === "138027"  // Christophe Gusthiot
-  || user._id === "133333"  // Philippe Langlet
-          || user._id === "275977");  // Mauricio Oporto
+  || user._id === "133333");  // Philippe Langlet
 };
 
 Role.Customer = new Role("Customer");   // TODO: Should be one such role per
                                         // customer account
 Role.Customer.isAssignedToUser = function(user) {
-  return true;
+    return (user._id === "203491"       // Joffrey Pernollet
+        || user._id === "251551");  // Remy Juttin
 };

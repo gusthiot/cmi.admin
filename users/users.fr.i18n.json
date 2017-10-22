@@ -16,6 +16,7 @@
       "login"       : "Login",
       "password"    : "Mot de passe",
       "right"       : "Droit",
+      "levelId"     : "Accès",
       "creation"    : "Création",
       "changes"     : "Changements",
       "closing"     : "Fermeture"

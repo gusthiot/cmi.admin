@@ -45,7 +45,9 @@
         </a>
     </li>
     <li><ul id="navmenu-dropdown" class="dropdown-content">
-        <li><a href="/users">{{_ "Users.title"}}</a></li>
+        {{#if canSeeUsers}}
+            <li><a href="/users">{{_ "Users.title"}}</a></li>
+        {{/if}}
         <li><a href="/accounts_categories">{{_ "AccountsCats.title"}}</a></li>
         <li><a href="/customers">{{_ "Customers.title"}}</a></li>
         <li><a href="/customers_categories">{{_ "CustomersCats.title"}}</a></li>

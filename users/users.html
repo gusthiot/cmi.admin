@@ -81,7 +81,7 @@
 </template>
 
 <template name="Users$Edit">
-    {{> tabular table=makeTable class="responsive-table striped"}}
+    {{> tabular table=makeTable selector=selector class="responsive-table striped"}}
 </template>
 
 <template name="Users$columnHead">
@@ -123,6 +123,10 @@
 
 <template name="Users$cell$right">
     {{> Widget$Select vmTag="right" value=right values=rights editable=isEditing}}
+</template>
+
+<template name="Users$cell$levelId">
+    {{> Widget$Select vmTag="levelId" value=levelId values=levels editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Users$cell$creation">
@@ -211,6 +215,16 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="level">{{translate 'levelId'}}</label>
+                            <select class="form-control validate" id="level">
+                                {{#each levels}}
+                                    {{> Users$level}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="input-field col s6">
                             <input id="creation" class="validate">
                             <label for="creation">{{translate 'creation'}}</label>
@@ -244,6 +258,10 @@
             </div>
         </div>
     </div>
+</template>
+
+<template name="Users$level">
+    <option value="{{_id}}">{{name}}</option>
 </template>
 
 <template name="Users$Pagination">

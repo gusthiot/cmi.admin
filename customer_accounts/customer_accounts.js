@@ -69,7 +69,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(CustomerAccs, false);
+    return shared.makeTable(CustomerAccs);
 }
 let theTable = makeTable();
 
@@ -78,6 +78,7 @@ if (Meteor.isClient) {
     require("../lib/client/find-templates");
 
     Meteor.subscribe(CustomerAccs.name);
+    Meteor.subscribe(Customers.name);
 
     Template.CustomerAccs$Edit.find = function (that) {
         if (that === undefined) {

@@ -70,7 +70,7 @@ if (Meteor.isServer) {
 }
 
 function makeTable() {
-    return shared.makeTable(AccountsCats, false);
+    return shared.makeTable(AccountsCats);
 }
 let theTable = makeTable();
 
@@ -258,7 +258,7 @@ if (Meteor.isClient) {
         if(values.entitled === "") {
             Materialize.toast("Intitulé vide !", 5000);
         }
-        else if(values.accountCode === "" || /[^a-zA-Z0-9.]/.test(values.accountCode)) {
+        else if(values.accountCode === "" || /[^a-zA-Z0-9.+]/.test(values.accountCode)) {
             Materialize.toast("Code type compte invalide !", 5000);
         }
         else if(values.dateVar === "VAR" && values.monthsMax === "") {
