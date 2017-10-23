@@ -50,30 +50,24 @@ if (Meteor.isClient) {
     });
 }
 
+
 Router.route('/users', {
     title: 'users',
     name: 'users',
     parent: 'home',
-    onBeforeAction: function () {
-        if(!Meteor.user() || !Meteor.user().levelId) {
-            console.log("not complete");
-            Router.go('/users');
-        }
-        this.next();
-
+    loadingTemplate: 'Loading',
+    waitOn: function () {
+        return Meteor.subscribe("Users");
     },
     action: function () {
         if(Meteor.user() && Meteor.user().levelId) {
-            console.log(Meteor.user());
-            if(policies.canViewHimself()) {
-                console.log("allowed");
-                this.render("Users$Edit");
-            }
-            else {
-                console.log("not allowed");
-                Router.go('/');
-            }
+            console.log("allowed");
+            this.render("Users$Edit");
             //renderUserSearchBoxInNavBar(this);
+        }
+        else {
+            console.log("not allowed");
+            Router.go('/');
         }
     }
 });
@@ -200,7 +194,6 @@ if (Meteor.isClient) {
             if(Meteor.user() && Meteor.user().levelId) {
                 return policies.canViewHimself();
             }
-            console.log("no user");
             return false;
         }
     });
