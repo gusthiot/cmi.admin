@@ -78,7 +78,6 @@ if (Meteor.isClient) {
     require("../lib/client/find-templates");
 
     Meteor.subscribe(CustomerAccs.name);
-    Meteor.subscribe(Customers.name);
 
     Template.CustomerAccs$Edit.find = function (that) {
         if (that === undefined) {

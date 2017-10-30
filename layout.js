@@ -60,7 +60,7 @@ Router.route('/users', {
         return Meteor.subscribe("Users");
     },
     action: function () {
-        if(Meteor.user() && Meteor.user().levelId) {
+        if(Meteor.user() && Meteor.user().levelId && policies.canViewHimself()) {
             console.log("allowed");
             this.render("Users$Edit");
             //renderUserSearchBoxInNavBar(this);
@@ -95,6 +95,10 @@ Router.route('/customer_accounts/:cmi', {
     title: 'custacc',
     name: 'custacc',
     parent: 'customers',
+    loadingTemplate: 'Loading',
+    waitOn: function () {
+        return Meteor.subscribe("Customers") && Meteor.subscribe("AccountsCats");
+    },
     action: function () {
         let one = Customers.findOne({codeCMi: this.params.cmi});
         if(one) {
@@ -123,6 +127,10 @@ Router.route('/customers', {
     title: 'customers',
     name: 'customers',
     parent: 'home',
+    loadingTemplate: 'Loading',
+    waitOn: function () {
+        return Meteor.subscribe("CustomersCats");
+    },
     action: function () {
         this.render("Customers$Edit");
     }
@@ -141,6 +149,10 @@ Router.route('/rights', {
     title: 'rights',
     name: 'rights',
     parent: 'home',
+    loadingTemplate: 'Loading',
+    waitOn: function () {
+        return Meteor.subscribe("Users") && Meteor.subscribe("CustomerAccs");
+    },
     action: function () {
         this.render("Rights$Edit");
     }

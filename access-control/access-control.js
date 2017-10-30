@@ -63,11 +63,24 @@ if (Meteor.isClient) {
         }
     });
     Template.AccessControl$BecomeModal.helpers({canBecome: canBecome});
-
+/*
     Template.User$Pick.events({
         'user:selected #AccessControlBecomeThisUser': function (event, that, id) {
+            console.log("become become : " + id);
             Become.become(id, signalServerError("Become"));
             event.preventDefault();
+        }
+    });
+*/
+    Template.AccessControl$BecomeModal.events({
+        'click .modal-done': function (event, templ) {
+            if(templ.$('a.user')[0]) {
+                let id = templ.$('a.user')[0].dataset.value;
+                Become.become(id, signalServerError("Become"));
+            }
+            else {
+                console.log("no correct selected");
+            }
         }
     });
 

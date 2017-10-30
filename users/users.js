@@ -254,8 +254,6 @@ if (Meteor.isClient) {
             Users.collection.find({}, {fields: {_id: true}}).fetch().forEach( function(res) {
                ids.push(res._id);
             });
-            console.log(ids);
-
             return {_id : { $in: ids}} ;
 
         }
@@ -266,42 +264,44 @@ if (Meteor.isClient) {
 
     Template.Users$Edit.events({
         'click tr': function (event) {
-            if(Session.get('saving') === "undefined") {
-                let dataTable = $(event.currentTarget).closest('table').DataTable();
-                if(dataTable && dataTable !== "undefined") {
-                    let row = dataTable.row(event.currentTarget).data();
-                    if(row && row !== "undefined") {
-                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
-                            Session.set('editingRow', row);
+            if(policies.canEditUsers()) {
+                if (Session.get('saving') === "undefined") {
+                    let dataTable = $(event.currentTarget).closest('table').DataTable();
+                    if (dataTable && dataTable !== "undefined") {
+                        let row = dataTable.row(event.currentTarget).data();
+                        if (row && row !== "undefined") {
+                            if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                                Session.set('editingRow', row);
+                        }
+                        else
+                            Session.set('editingRow', 'undefined');
                     }
                     else
                         Session.set('editingRow', 'undefined');
                 }
-                else
-                    Session.set('editingRow', 'undefined');
-            }
-            else {
-                event.preventDefault();
-                let values = shared.getChildrenValues($(event.currentTarget).children(), Users.collection.columns);
-                if(checkValues(values, 'update')) {
-                    let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
-                    if(updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
-                        updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
-                    if(Object.keys(updatingValues).length > 0) {
-                        Users.collection.update(Session.get('editingRow')._id,
-                            {$set: updatingValues},
-                            function (error) {
-                                if (error)
-                                    Materialize.toast(error, 5000);
-                                else
-                                    Materialize.toast("Mise à jour effectuée", 5000);
-                            });
+                else {
+                    event.preventDefault();
+                    let values = shared.getChildrenValues($(event.currentTarget).children(), Users.collection.columns);
+                    if (checkValues(values, 'update')) {
+                        let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                        if (updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
+                            updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
+                        if (Object.keys(updatingValues).length > 0) {
+                            Users.collection.update(Session.get('editingRow')._id,
+                                {$set: updatingValues},
+                                function (error) {
+                                    if (error)
+                                        Materialize.toast(error, 5000);
+                                    else
+                                        Materialize.toast("Mise à jour effectuée", 5000);
+                                });
+                        }
+                        else
+                            Materialize.toast("Pas de changement", 5000);
+                        Session.set('editingRow', 'undefined');
                     }
-                    else
-                        Materialize.toast("Pas de changement", 5000);
-                    Session.set('editingRow', 'undefined');
+                    Session.set('saving', 'undefined');
                 }
-                Session.set('saving', 'undefined');
             }
         }
     });
@@ -567,7 +567,7 @@ Template.User$Edit.events( {
  * User$Pick: widget to pick a user
  *
  * @template_param id       DOM ID to assign
- * @template_param withLDAP True iff the widget should allow searching in LDAP
+ * @template_param withLDAP True if the widget should allow searching in LDAP
  *
  * @event user:selected User selected a search result. Callback receives (event,
  *                      target, _id) parameters, where _id is the SCIPER of the
@@ -643,7 +643,7 @@ Template.User$Pick.events( {
         event.preventDefault();
     },
     "click a.user": function (event, that) {
-        that.$( "div" ).trigger( "user:selected", [$( event.target ).attr( "data-value" )] );
+    //    that.$( "div" ).trigger( "user:selected", [$( event.target ).attr( "data-value" )] );
         that.$( "input.usersearch" ).val( $( event.target ).text() );
         event.preventDefault();
     },
