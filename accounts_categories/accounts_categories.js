@@ -80,22 +80,22 @@ if (Meteor.isClient) {
 
     Meteor.subscribe(AccountsCats.name);
 
-    Template.AccountsCats$Edit.find = function (that) {
+    Template.AccountsCats$table.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template." + AccountsCats.name + "$Edit");
+            return Template.instance().findParent("Template." + AccountsCats.name + "$table");
         }
     };
 
-    Template.AccountsCats$Edit.helpers({makeTable: theTable});
+    Template.AccountsCats$table.helpers({makeTable: theTable});
 
     Session.set('editingRow', 'undefined');
     Session.set('dateVar', 'undefined');
     Session.set('saving', 'undefined');
 
-    Template.AccountsCats$Edit.events({
+    Template.AccountsCats$table.events({
         'click tr': function (event) {
             if(Session.get('saving') === "undefined") {
                 let dataTable = $(event.currentTarget).closest('table').DataTable();

@@ -1,9 +1,13 @@
 <template name="AccountsCats$Edit">
+    {{> AccountsCats$table}}
+</template>
+
+<template name="AccountsCats$table">
     {{> tabular table=makeTable class="responsive-table striped"}}
 </template>
 
 <template name="AccountsCats$columnHead">
-    {{ translate type}}
+    {{translate type}}
     {{> Widget$Select vmTag="columnHead" value=type values=values editable=1}}
 </template>
 
@@ -63,13 +67,13 @@
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="entitled" class="validate">
+                            <input id="entitled" type="text" class="validate">
                             <label for="entitled">{{translate 'entitled'}} *</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="account_code" class="validate">
+                            <input id="account_code" type="text" class="validate">
                             <label for="account_code">{{translate 'accountCode'}} *</label>
                         </div>
                     </div>
@@ -84,7 +88,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="months_max" class="validate" disabled>
+                            <input id="months_max" type="text" class="validate" disabled>
                             <label for="months_max">{{translate 'monthsMax'}}</label>
                         </div>
                     </div>

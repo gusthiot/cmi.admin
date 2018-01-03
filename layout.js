@@ -57,7 +57,7 @@ Router.route('/users', {
     parent: 'home',
     loadingTemplate: 'Loading',
     waitOn: function () {
-        return Meteor.subscribe("Users");
+        return Meteor.subscribe("Users") && Meteor.subscribe("CustomerAccs");
     },
     action: function () {
         if(Meteor.user() && Meteor.user().levelId && policies.canViewHimself()) {
@@ -114,6 +114,23 @@ Router.route('/customer_accounts/:cmi', {
     }
 });
 
+Router.route('/rights/:user', {
+    title: 'rights',
+    name: 'rights',
+    parent: 'users',
+    loadingTemplate: 'Loading',
+    waitOn: function () {
+        return Meteor.subscribe("Users") && Meteor.subscribe("CustomerAccs");
+    },
+    action: function () {
+        this.render("Rights$Edit", {
+            data: function () {
+                return this.params.user;
+            }
+        });
+    }
+});
+
 Router.route('/accounts_categories', {
     title: 'accocat',
     name: 'accocat',
@@ -142,19 +159,6 @@ Router.route('/customers_categories', {
     parent: 'home',
     action: function () {
         this.render("CustomersCats$Edit");
-    }
-});
-
-Router.route('/rights', {
-    title: 'rights',
-    name: 'rights',
-    parent: 'home',
-    loadingTemplate: 'Loading',
-    waitOn: function () {
-        return Meteor.subscribe("Users") && Meteor.subscribe("CustomerAccs");
-    },
-    action: function () {
-        this.render("Rights$Edit");
     }
 });
 

@@ -81,6 +81,13 @@
 </template>
 
 <template name="Users$Edit">
+    {{> Users$table}}
+    <!--{{#if onEdit}}-->
+        <!--{{> Users$editOne}}-->
+    <!--{{/if}}-->
+</template>
+
+<template name="Users$table">
     {{> tabular table=makeTable selector=selector class="responsive-table striped"}}
 </template>
 
@@ -151,6 +158,104 @@
     <a class="btn-floating waves-effect waves-light cancelItem"><i class="material-icons">cancel</i></a>
 </template>
 
+<template name="Users$editOne">
+    <div class="row">
+        <div class="col">
+            {{> Users$form row=row}}
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                            <i class="material-icons">done</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            {{> Rights$table}}
+        </div>
+    </div>
+</template>
+
+<template name="Users$form">
+    <div class="row">
+        <form class="col s6 offset-s3">
+            <div class="row">
+                <div class="col s6">
+                    <label for="_id">{{translate 'sciper'}} *</label>
+                    {{> Widget$InputText vmTag="_id" value=row._id editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="firstname">{{translate 'firstname'}} *</label>
+                    {{> Widget$InputText vmTag="firstname" value=row.firstname editable=true}}
+                </div>
+                <div class="col s6">
+                    <label for="lastname">{{translate 'lastname'}} *</label>
+                    {{> Widget$InputText vmTag="lastname" value=row.lastname editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="phone">{{translate 'phone'}}</label>
+                    {{> Widget$InputText vmTag="phone" value=row.phone editable=true}}
+                </div>
+                <div class="col s6">
+                    <label for="email">{{translate 'email'}} *</label>
+                    {{> Widget$InputText vmTag="email" value=row.email editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="userId">{{translate 'userId'}} *</label>
+                    {{> Widget$InputText vmTag="userId" value=row.userId editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="login">{{translate 'login'}} *</label>
+                    {{> Widget$InputText vmTag="login" value=row.login editable=true}}
+                </div>
+                <div class="col s6">
+                    <label for="password">{{translate 'password'}}</label>
+                    {{> Widget$InputText vmTag="password" value=row.password editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="select-wrapper col s6">
+                    <label for="right">{{translate 'right'}}</label>
+                    {{> Widget$Select vmTag="right" value=row.right values=rights editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="select-wrapper col s6">
+                    <label for="levelId">{{translate 'levelId'}}</label>
+                    {{> Widget$Select vmTag="levelId" value=row.levelId values=levels editable=true helpers=helpers}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="creation">{{translate 'creation'}}</label>
+                    {{> Widget$InputText vmTag="creation" value=row.creation editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="changes">{{translate 'changes'}}</label>
+                    {{> Widget$InputText vmTag="changes" value=row.changes editable=true}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="closing">{{translate 'closing'}}</label>
+                    {{> Widget$InputText vmTag="closing" value=row.closing editable=true}}
+                </div>
+            </div>
+        </form>
+    </div>
+</template>
+
 <template name="Users$addButton">
     <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modalAdd"><i
             class="material-icons">add</i></a>
@@ -161,89 +266,7 @@
     <div id="modalAdd" class="modal bottom-sheet">
         <div class="modal-content center">
             <h4>{{modalAdd}}</h4>
-            <div class="row">
-                <form class="col s6 offset-s3">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="sciper" class="validate">
-                            <label for="sciper">{{translate 'sciper'}} *</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="firstname" class="validate">
-                            <label for="firstname">{{translate 'firstname'}} *</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="lastname" class="validate">
-                            <label for="lastname">{{translate 'lastname'}} *</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="phone" class="validate">
-                            <label for="phone">{{translate 'phone'}}</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="email" class="validate">
-                            <label for="email">{{translate 'email'}} *</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="user_id" class="validate">
-                            <label for="user_id">{{translate 'userId'}} *</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="login" class="validate">
-                            <label for="login">{{translate 'login'}} *</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="password" class="validate">
-                            <label for="password">{{translate 'password'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <label>{{translate 'right'}} : </label>
-                            <input id="active" type="radio" class="validate" name="right" value="Actif">
-                            <label for="active">Actif</label>
-                            <input id="passive" type="radio" class="validate" name="right" checked value="Passif">
-                            <label for="passive">Passif</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="select-wrapper col s6">
-                            <label for="level">{{translate 'levelId'}}</label>
-                            <select class="form-control validate" id="level">
-                                {{#each levels}}
-                                    {{> Users$level}}
-                                {{/each}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="creation" class="validate">
-                            <label for="creation">{{translate 'creation'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="changes" class="validate">
-                            <label for="changes">{{translate 'changes'}}</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input id="closing" class="validate">
-                            <label for="closing">{{translate 'closing'}}</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            {{> Users$form row=row}}
         </div>
         <div class="modal-footer">
             <div class="row">
@@ -260,17 +283,13 @@
     </div>
 </template>
 
-<template name="Users$level">
-    <option value="{{_id}}">{{name}}</option>
-</template>
-
 <template name="Users$Pagination">
     {{> Users$addButton}}
     {{#if notnull pages}}
         {{#if notfirst page}}
             <button class="previous btn-large waves-effect waves-light">Previous</button>
         {{/if}}
-        <span class="letSize">{{page}} of {{pages}}</span>
+        <span class="letSize">Page {{page}} of {{pages}}</span>
         {{#if notlast page pages}}
             <button class="nexts btn-large waves-effect waves-light">Next</button>
         {{/if}}

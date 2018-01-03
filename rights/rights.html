@@ -1,5 +1,26 @@
 <template name="Rights$Edit">
-    {{> tabular table=makeTable class="responsive-table striped"}}
+    <div class="row">
+        <div class="col">
+            {{> Users$form row=row}}
+            <div class="row">
+                <div class="col s6 center">
+                    <div class="row">
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green update-done">
+                            <i class="material-icons">done</i></a>
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red update-close">
+                            <i class="material-icons">cancel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            {{> Rights$table}}
+        </div>
+    </div>
+</template>
+
+<template name="Rights$table">
+    {{> tabular table=makeTable selector=selector class="responsive-table striped"}}
 </template>
 
 <template name="Rights$columnHead">
@@ -9,6 +30,10 @@
 
 <template name="Rights$cell$userId">
     {{> Widget$Select vmTag="userId" value=userId values=users editable=isEditing helpers=helpers}}
+</template>
+
+<template name="Rights$cell$customerId">
+    {{> Widget$Select vmTag="customerId" value=customerId values=customers editable=isEditing helpers=helpers}}
 </template>
 
 <template name="Rights$cell$accountId">
@@ -48,9 +73,19 @@
                     <div class="row">
                         <div class="select-wrapper col s6">
                             <label for="user">{{translate 'userId'}}</label>
-                            <select class="form-control validate" id="user">
+                            <select class="form-control validate" id="user" disabled>
                                 {{#each users}}
                                     {{> Rights$user}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-wrapper col s6">
+                            <label for="customer">{{translate 'customerId'}}</label>
+                            <select class="form-control validate" id="customer">
+                                {{#each customers}}
+                                    {{> Rights$customer}}
                                 {{/each}}
                             </select>
                         </div>
@@ -84,9 +119,9 @@
             <div class="row">
                 <div class="col s6 center">
                     <div class="row">
-                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red">
+                        <a class="modal-action modal-close btn-floating btn-large waves-effect waves-light red rights-close">
                             <i class="material-icons">cancel</i></a>
-                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green">
+                        <a class="modal-action modal-done modal-close btn-floating btn-large waves-effect waves-light green rights-done">
                             <i class="material-icons">done</i></a>
                     </div>
                 </div>
@@ -97,6 +132,10 @@
 
 <template name="Rights$user">
     <option value="{{_id}}">{{userId}}</option>
+</template>
+
+<template name="Rights$customer">
+    <option value="{{_id}}">{{codeCMi}}</option>
 </template>
 
 <template name="Rights$account">

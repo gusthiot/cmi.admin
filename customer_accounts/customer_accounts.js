@@ -79,18 +79,18 @@ if (Meteor.isClient) {
 
     Meteor.subscribe(CustomerAccs.name);
 
-    Template.CustomerAccs$Edit.find = function (that) {
+    Template.CustomerAccs$table.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template." + CustomerAccs.name + "$Edit");
+            return Template.instance().findParent("Template." + CustomerAccs.name + "$table");
         }
     };
 
     let code = "undefined";
 
-    Template.CustomerAccs$Edit.helpers({
+    Template.CustomerAccs$table.helpers({
         makeTable: theTable,
         selector: function() {
             if(code && code !== "undefined")
@@ -107,7 +107,7 @@ if (Meteor.isClient) {
         code = this.data;
     });
 
-    Template.CustomerAccs$Edit.events({
+    Template.CustomerAccs$table.events({
         'click tr': function (event) {
             if(Session.get('saving') === "undefined") {
                 let dataTable = $(event.currentTarget).closest('table').DataTable();

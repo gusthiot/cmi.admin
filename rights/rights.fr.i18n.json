@@ -3,6 +3,7 @@
     "title"         : "Droits",
     "column": {
       "userId"      : "Utilisateur",
+      "customerId"  : "Code Client",
       "accountId"   : "Id Compte",
       "startTime"   : "Date Début",
       "endTime"     : "Date Fin"

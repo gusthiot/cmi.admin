@@ -3,12 +3,15 @@
  */
 
 import I18N from "../i18n/i18n.js";
+//import {Customers} from "../customers/customers";
 const policies = require("../policies/policies");
 
 const shared = require("../lib/shared");
-import { Rights } from '../rights/rights.js';
+//import { Rights } from '../rights/rights.js';
 
-var debug = require( "debug" )( "users/users.js" );
+const rights = require("../rights/rights");
+
+let debug = require( "debug" )( "users/users.js" );
 
 /**
  * @constructor
@@ -26,7 +29,7 @@ function updateUser(that, change) {
 }
 
 Users.prototype.lang = function (opt_set) {
-    var currentValue = this.profile ? this.profile.lang : undefined;
+    let currentValue = this.profile ? this.profile.lang : undefined;
     if (opt_set) {
         if (currentValue !== opt_set) {
             updateUser( this, {"profile.lang": opt_set} );
@@ -84,6 +87,9 @@ Users.collection.schema = new SimpleSchema({
     fullName: {
         type: String
     },
+    rights: {
+        type: Object
+    },
     services: {
         type: Object,
         blackbox: true
@@ -112,8 +118,9 @@ Users.collection.allow({
     update: function () {
         return true;
     }
-
 });
+
+
 /*
 Meteor.startup( function () {
     // As per http://stackoverflow.com/a/21853298/435004:
@@ -192,7 +199,7 @@ if (Meteor.isServer) {
             return;
         }
 
-        var found = {};
+        let found = {};
 
         function addOrChange(id, data) {
             if (id in found) {
@@ -203,7 +210,7 @@ if (Meteor.isServer) {
             }
         }
 
-        var futures = [];
+        let futures = [];
         futures.push( Future.task( function findInMongo() {
             Users.collection.find( {fullName: new RegExp( escapeStringRegexp( query ) )} )
                 .fetch().forEach( function (result) {
@@ -230,6 +237,45 @@ function makeTable() {
 }
 let theTable = makeTable();
 
+export function getCurrentUserId() {
+    return Session.get('editingRow')._id;
+}
+
+export function getRow() {
+    return Session.get('editingRow');
+}
+
+export function getUserData(sciper) {
+    return Users.bySciper(sciper);
+}
+
+export function getUsersColumns() {
+    return Users.collection.columns;
+}
+
+export function userUpdate(user, request, ifOk) {
+    Users.collection.update(user, request, ifOk);
+}
+
+// export function getRights() {
+//     let values = [];
+//     let entries = Users.collection.find({}).fetch();
+//     entries.forEach(function(entry) {
+//         let rights = entry.rights;
+//         if(rights !== undefined){
+//             rights.forEach(function (right) {
+//                 let value = {"userId": entry._id};
+//                 value["customerId"] = right.customerId;
+//                 value["accountId"] = right.accountId;
+//                 value["startTime"] = right.startTime;
+//                 value["endTime"] = right.endTime;
+//                 values.push(value);
+//             });
+//         }
+//     });
+//     return values;
+// }
+
 if (!Meteor.isClient) return;
 
 if (Meteor.isClient) {
@@ -238,16 +284,16 @@ if (Meteor.isClient) {
 
     Meteor.subscribe(Users.collection.name);
 
-    Template.Users$Edit.find = function (that) {
+    Template.Users$table.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template." + Users.collection.name + "$Edit");
+            return Template.instance().findParent("Template." + Users.collection.name + "$table");
         }
     };
 
-    Template.Users$Edit.helpers({
+    Template.Users$table.helpers({
         makeTable: theTable,
         selector: function() {
             let ids = [];
@@ -255,53 +301,62 @@ if (Meteor.isClient) {
                ids.push(res._id);
             });
             return {_id : { $in: ids}} ;
+        }
+    });
 
+    Template.Users$Edit.helpers({
+        onEdit: function() {
+            return Session.get('editingRow') !== "undefined";
         }
     });
 
     Session.set('editingRow', 'undefined');
-    Session.set('saving', 'undefined');
+    // Session.set('saving', 'undefined');
 
-    Template.Users$Edit.events({
+    Template.Users$table.events({
         'click tr': function (event) {
             if(policies.canEditUsers()) {
-                if (Session.get('saving') === "undefined") {
+                // if (Session.get('saving') === "undefined") {
                     let dataTable = $(event.currentTarget).closest('table').DataTable();
                     if (dataTable && dataTable !== "undefined") {
                         let row = dataTable.row(event.currentTarget).data();
                         if (row && row !== "undefined") {
-                            if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                            if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id) {
                                 Session.set('editingRow', row);
+                                Router.go('/rights/' + row._id);
+                            }
+                            else
+                                Session.set('editingRow', 'undefined');
                         }
                         else
                             Session.set('editingRow', 'undefined');
                     }
                     else
                         Session.set('editingRow', 'undefined');
-                }
-                else {
-                    event.preventDefault();
-                    let values = shared.getChildrenValues($(event.currentTarget).children(), Users.collection.columns);
-                    if (checkValues(values, 'update')) {
-                        let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
-                        if (updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
-                            updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
-                        if (Object.keys(updatingValues).length > 0) {
-                            Users.collection.update(Session.get('editingRow')._id,
-                                {$set: updatingValues},
-                                function (error) {
-                                    if (error)
-                                        Materialize.toast(error, 5000);
-                                    else
-                                        Materialize.toast("Mise à jour effectuée", 5000);
-                                });
-                        }
-                        else
-                            Materialize.toast("Pas de changement", 5000);
-                        Session.set('editingRow', 'undefined');
-                    }
-                    Session.set('saving', 'undefined');
-                }
+                // }
+                // else {
+                //     event.preventDefault();
+                //     let values = shared.getChildrenValues($(event.currentTarget).children(), Users.collection.columns);
+                //     if (checkValues(values, 'update')) {
+                //         let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                //         if (updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
+                //             updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
+                //         if (Object.keys(updatingValues).length > 0) {
+                //             Users.collection.update(Session.get('editingRow')._id,
+                //                 {$set: updatingValues},
+                //                 function (error) {
+                //                     if (error)
+                //                         Materialize.toast(error, 5000);
+                //                     else
+                //                         Materialize.toast("Mise à jour effectuée", 5000);
+                //                 });
+                //         }
+                //         else
+                //             Materialize.toast("Pas de changement", 5000);
+                //         Session.set('editingRow', 'undefined');
+                //     }
+                //     Session.set('saving', 'undefined');
+                // }
             }
         }
     });
@@ -314,9 +369,9 @@ if (Meteor.isClient) {
         if (!tmpl) return;
         tmpl.helpers({
             isEditing: function () {
-                if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id)
-                    return 1;
-                else
+                // if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id)
+                //     return 1;
+                // else
                     return 0;
             }
         });
@@ -357,27 +412,27 @@ if (Meteor.isClient) {
         }
     });
 
-    Template.Users$cell$right.helpers({
-        rights: function () {
-            return ["Actif", "Passif"];
-        }
-    });
+    // Template.Users$cell$right.helpers({
+    //     rights: function () {
+    //         return ["Actif", "Passif"];
+    //     }
+    // });
 
     Template.Users$cell$save.helpers({
         selected: function () {
-            if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
-                return 1;
-            }
+            // if(Session.get('editingRow') !== 'undefined' && Session.get('editingRow')._id === Template.currentData()._id) {
+            //     return 1;
+            // }
             return 0;
         }
     });
 
-    Template.Users$cell$save.events({
-        'click .save': function (event) {
-            event.preventDefault();
-            Session.set('saving', 'yes');
-        }
-    });
+    // Template.Users$cell$save.events({
+    //     'click .save': function (event) {
+    //         event.preventDefault();
+    //         Session.set('saving', 'yes');
+    //     }
+    // });
 
     Template.Users$cell$levelId.helpers({
         helpers: {
@@ -392,17 +447,17 @@ if (Meteor.isClient) {
                 }
                 return levelId;
             }
-        },
-        levels: function () {
-            let levs = policies.Levels.find({});
-            if(!levs)
-                return [];
-            let results = [];
-            levs.forEach(function(lev) {
-                results.push(lev._id);
-            });
-            return results;
         }
+        // levels: function () {
+        //     let levs = policies.Levels.find({});
+        //     if(!levs)
+        //         return [];
+        //     let results = [];
+        //     levs.forEach(function(lev) {
+        //         results.push(lev._id);
+        //     });
+        //     return results;
+        // }
     });
 
     Template.Users$Pagination.events({
@@ -430,14 +485,14 @@ if (Meteor.isClient) {
         this.$('.modal-trigger').assertSizeEquals(1).leanModal();
     });
 
-    function checkValues(values, mode) {
+    export function checkValues(values, row, mode) {
         if(values._id !== "" && !shared.isPositiveInteger(values._id)) {
             Materialize.toast("Sciper invalide !", 5000);
         }
         else if(mode === "insert" && Users.collection.find({_id: values._id}).count() > 0) {
             Materialize.toast("Ce Sciper est déjà utilisé !", 5000);
         }
-        else if(mode === "update" && values._id !== Session.get('editingRow')._id)  {
+        else if(mode === "update" && values._id !== row._id)  {
             Materialize.toast("Vous ne pouvez pas changer le sciper, vous devez créer un nouvel utilisateur quitte à effacer celui-ci !", 5000);
         }
         else if(values.firstname === "") {
@@ -452,14 +507,14 @@ if (Meteor.isClient) {
         else if(values.userId === "") {
             Materialize.toast("User Id invalide !", 5000);
         }
-        else if((mode === "insert" || (mode === "update") && values.userId !== Session.get('editingRow').userId) &&
+        else if((mode === "insert" || (mode === "update") && values.userId !== row.userId) &&
             (Users.collection.find({userId: values.userId}).count() > 0)) {
             Materialize.toast("Ce User Id est déjà utilisé !", 5000);
         }
         else if(values.login === "") {
             Materialize.toast("Login invalide !", 5000);
         }
-        else if((mode === "insert" || (mode === "update") && values.login !== Session.get('editingRow').login) &&
+        else if((mode === "insert" || (mode === "update") && values.login !== row.login) &&
             (Users.collection.find({login: values.login}).count() > 0)) {
             Materialize.toast("Ce Login est déjà utilisé !", 5000);
         }
@@ -476,21 +531,21 @@ if (Meteor.isClient) {
         'click .modal-done': function (event, templ) {
             event.preventDefault();
             let values = {
-                _id: templ.$('#sciper').val(),
+                _id: templ.$('#_id').val(),
                 firstname: templ.$('#firstname').val(),
                 lastname: templ.$('#lastname').val(),
                 phone: templ.$('#phone').val(),
                 email: templ.$('#email').val(),
-                userId: templ.$('#user_id').val(),
+                userId: templ.$('#userId').val(),
                 login: templ.$('#login').val(),
                 password: templ.$('#password').val(),
-                right: $(templ.find('input:radio[name=right]:checked')).val(),
-                levelId: templ.$('#level').val(),
+                right: templ.$('#right').val(),
+                levelId: templ.$('#levelId').val(),
                 creation: templ.$('#creation').val(),
                 changes: templ.$('#changes').val(),
                 closing: templ.$('#closing').val()
             };
-            if(checkValues(values, 'insert')) {
+            if(checkValues(values, null, 'insert')) {
                 values['fullName'] = values['firstname'] + " " + values['lastname'];
                 console.log(values);
                 Users.collection.insert(values);
@@ -501,34 +556,130 @@ if (Meteor.isClient) {
     });
 
     Template.Users$modalAdd.helpers({
-        levels: function () {
-            return policies.Levels.find({});
-        },
-        translate: function (what) {
-            return TAPi18n.__("Users.column." + what);
-        },
         modalAdd: function () {
             return TAPi18n.__("Users.modal.add");
+        },
+        row: function () {
+            let values = {};
+            Users.collection.columns.forEach(function(key) {
+                if(key === "levelId")
+                values[key] = "0";
+                else
+                    values[key] = "";
+            });
+            return values;
         }
     });
-
-    Template.Users$level.onRendered(function(){
-        $('#level').material_select();
-    });
+    //
+    // Template.Users$form.onRendered(function(){
+    //     $('#level').material_select();
+    // });
 
     Template.Users$cell$remove.events({
         'click .cancelItem': function (event) {
             event.preventDefault();
-            let count = Rights.find({userId: this._id}).count();
-            if (count > 0) {
-                Materialize.toast("Suppression impossible, article utilisé " + count
-                    + " fois dans la base de données ‘Droits‘", 5000);
-            }
-            else {
-                shared.confirmRemove(this._id, this._id, Users.collection);
+            // let count = Rights.find({userId: this._id}).count();
+            // if (count > 0) {
+            //     Materialize.toast("Suppression impossible, article utilisé " + count
+            //         + " fois dans la base de données ‘Droits‘", 5000);
+            // }
+            // else {
+            //    shared.confirmRemoveUser(this._id, this._id, Users.collection);
+            // }
+            const id = this._id;
+            sweetAlert({
+                    text: "Supprimer \"" + id + "\" ?",
+                    title: "",
+                    showCancelButton: true,
+                    confirmButtonColor: "#14dd4b",
+                    cancelButtonText: "Non",
+                    confirmButtonText: "Oui",
+                    closeOnConfirm: true
+                },
+                function(){
+                    Users.collection.remove({_id: id});
+                    rights.removeFromUser(id);
+                });
+        }
+    });
+
+    Template.Users$editOne.helpers({
+        row: function () {
+            let values = {};
+            let row = Session.get('editingRow');
+            console.log(row);
+            Users.collection.columns.forEach(function(key) {
+                if(Object.keys(row).indexOf(key) !== -1)
+                    values[key] = row[key];
+                else
+                    values[key] = "";
+            });
+            return values;
+        }
+    });
+
+    Template.Users$editOne.events({
+        'click .modal-done': function (event, templ) {
+            let values = shared.getFormChildrenValues(templ.$('form')[0], Users.collection.columns);
+            console.log(values);
+            if (checkValues(values, Session.get('editingRow'), 'update')) {
+                let updatingValues = shared.updatingValues(values, Session.get('editingRow'));
+                if (updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
+                    updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
+                if (Object.keys(updatingValues).length > 0) {
+                    Users.collection.update(Session.get('editingRow')._id,
+                        {$set: updatingValues},
+                        function (error) {
+                            if (error)
+                                Materialize.toast(error, 5000);
+                            else
+                                Materialize.toast("Mise à jour effectuée", 5000);
+                        });
+                }
+                else
+                    Materialize.toast("Pas de changement", 5000);
             }
         }
     });
+
+    Template.Users$form.helpers({
+        translate: function (what) {
+            return TAPi18n.__("Users.column." + what);
+        },
+        levels: function () {
+            let levs = policies.Levels.find({});
+            if(!levs)
+                return [];
+            let results = [];
+            levs.forEach(function(lev) {
+                results.push(lev._id);
+            });
+            return results;
+        },
+        rights: function () {
+          return ["Actif", "Passif"];
+        },
+        isActive: function (right) {
+            console.log(right);
+        },
+        helpers: {
+            translateKey: function (levelId) {
+                if(levelId) {
+                    let one = policies.Levels.findOne({_id: levelId});
+                    if(one)
+                        return one.name;
+                    else
+                        console.log("no level for : " + levelId);
+
+                }
+                return levelId;
+            }
+        }
+    });
+
+    //TODO : end of what I use
+
+
     // Since this method doesn't exist in the server, it is secure by
     // construction; it cannot possibly return information that the client doesn't
     // already have access to.
@@ -574,7 +725,7 @@ Template.User$Edit.events( {
  *                      selected user
  */
 Template.User$Pick.onCreated( function () {
-    var self = this;
+    let self = this;
     debug( "User$Pick onCreated: starting" );
     Users.template = this; // To access from the browser console
     self.search = Users.Search.open();
@@ -582,7 +733,7 @@ Template.User$Pick.onCreated( function () {
     self.wantLDAP = new ReactiveVar( false );
     self.query = new ReactiveVar( undefined );
     Tracker.autorun( function () {
-        var query = self.query.get(),
+        let query = self.query.get(),
             wantLDAP = self.wantLDAP.get();
         debug( "Updating search :<" + query + "> (wantLDAP=" + wantLDAP + ")" );
         if (query) self.search.search( query, wantLDAP );
@@ -604,7 +755,6 @@ function openDropdown(that) {
     }
 }
 
-// TODO: implementation of viewmodel for user User$pick searching input
 Template.User$Pick.viewmodel( {
     wantLDAP: function () {
         return that().wantLDAP.get();

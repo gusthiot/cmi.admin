@@ -15,7 +15,7 @@
 </template>
 
 <template name="Widget$Select$editable">
-    <select title="{{widget.vmTag}}" class="browser-default">
+    <select title="{{widget.vmTag}}" id="{{widget.vmTag}}" class="browser-default">
         <option {{attributesOfEmptyOption}}></option>
         {{#each choice in widget.values}}
             {{#if choice}}
@@ -30,7 +30,7 @@
 </template>
 
 <template name="Widget$InputText$editable">
-    <input title="{{widget.vmTag}}" value="{{widget.value}}">
+    <input title="{{widget.vmTag}}" id="{{widget.vmTag}}" value="{{widget.value}}">
 </template>
 
 
@@ -61,7 +61,7 @@
 </template>
 
 <template name="Widget$Date$editable">
-    <input title="{{widget.vmTag}}" class="datepicker validate">
+    <input title="{{widget.vmTag}}" id="{{widget.vmTag}}" class="datepicker validate">
 </template>
 
 <template name="Widget$Time$readonly">
@@ -72,7 +72,7 @@
     <div class="row">
         <h6>Heure:</h6>
         <div class="form-group">
-            <input title="{{widget.vmTag}}" class="timepicker time_element" value="{{toTimepickerInputValue widget.value}}"/>
+            <input title="{{widget.vmTag}}" id="{{widget.vmTag}}" class="timepicker time_element" value="{{toTimepickerInputValue widget.value}}"/>
         </div>
     </div>
 </template>

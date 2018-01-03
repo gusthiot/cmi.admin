@@ -1,4 +1,8 @@
 <template name="CustomerAccs$Edit">
+    {{> CustomerAccs$table}}
+</template>
+
+<template name="CustomerAccs$table">
     {{> tabular table=makeTable selector=selector class="responsive-table striped"}}
 </template>
 
@@ -83,19 +87,19 @@
                 <form class="col s6 offset-s3">
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="account_id" class="validate">
+                            <input id="account_id" type="text" class="validate">
                             <label for="account_id">{{translate 'accountId'}} *</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="number" class="validate">
+                            <input id="number" type="text" class="validate">
                             <label for="number">{{translate 'number'}} *</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="entitled" class="validate">
+                            <input id="entitled" type="text" class="validate">
                             <label for="entitled">{{translate 'entitled'}}</label>
                         </div>
                     </div>
@@ -121,7 +125,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="start_time" class="datepicker validate">
+                            <input id="start_time" type="text" class="datepicker validate">
                             <label for="start_time" class="active">{{translate 'startTime'}} *</label>
                         </div>
                     </div>
@@ -142,19 +146,19 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="creation" class="validate">
+                            <input id="creation" type="text" class="validate">
                             <label for="creation">{{translate 'creation'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="changes" class="validate">
+                            <input id="changes" type="text" class="validate">
                             <label for="changes">{{translate 'changes'}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="closing" class="validate">
+                            <input id="closing" type="text" class="validate">
                             <label for="closing">{{translate 'closing'}}</label>
                         </div>
                     </div>

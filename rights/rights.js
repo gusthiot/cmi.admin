@@ -1,13 +1,18 @@
 const shared = require("../lib/shared");
 import { CustomerAccs } from '../customer_accounts/customer_accounts.js';
+import { Customers } from '../customers/customers.js';
 import { AccountsCats } from '../accounts_categories/accounts_categories.js';
+const users = require("../users/users");
 
-export const Rights = new Meteor.Collection("rights");
+const Rights = new Meteor.Collection("rights");
 
 Rights.name = "Rights";
 
 Rights.schema = new SimpleSchema({
     userId: {
+        type: String
+    },
+    customerId: {
         type: String
     },
     accountId: {
@@ -22,7 +27,7 @@ Rights.schema = new SimpleSchema({
 });
 
 Rights.columns =
-    ["userId", "accountId", "startTime", "endTime"];
+    ["userId", "customerId", "accountId", "startTime", "endTime"];
 
 Rights.allow({
     insert: function () {
@@ -40,9 +45,19 @@ Rights.allow({
 });
 
 if (Meteor.isServer) {
+    // Rights.remove({});
+    // user.getRights().forEach(function (rights) {
+    //     Rights.insert(rights);
+    // });
     Meteor.publish(Rights.name, function () {
         return Rights.find({});
     });
+}
+
+export function removeFromUser(id) {
+    Rights.find({userId: id}).forEach(function (doc) {
+    Rights.remove({_id: doc._id});
+});
 }
 
 function makeTable() {
@@ -56,35 +71,104 @@ if (Meteor.isClient) {
 
     Meteor.subscribe(Rights.name);
 
-    Template.Rights$Edit.find = function (that) {
+    Template.Rights$table.find = function (that) {
         if (that === undefined) {
             that = Template.instance();
         }
         if (that instanceof Blaze.TemplateInstance) {
-            return Template.instance().findParent("Template." + Rights.name + "$Edit");
+            return Template.instance().findParent("Template." + Rights.name + "$table");
         }
     };
 
-    Template.Rights$Edit.helpers({makeTable: theTable});
+    let user = "undefined";
+
+    Template.Rights$table.helpers({
+        makeTable: theTable,
+        selector: function() {
+            if(user && user !== "undefined")
+                return {userId: user};
+            else
+                return {};
+            //
+            // let userId = user.getCurrentUserId();
+            // if (userId !== "undefined")
+            //     return {userId: userId};
+            // else
+            //     return {};
+        }
+    });
 
     Session.set('editingRow', 'undefined');
     Session.set('saving', 'undefined');
+    Session.set('customerId', 'undefined');
+
+    Template.Rights$Edit.onCreated(function(){
+        user = this.data;
+    });
+
+    Template.Rights$Edit.helpers({
+        row: function () {
+            let values = {};
+            let row = users.getUserData(user);
+            console.log(row);
+            users.getUsersColumns().forEach(function(key) {
+                if(Object.keys(row).indexOf(key) !== -1)
+                    values[key] = row[key];
+                else
+                    values[key] = "";
+            });
+            return values;
+        }
+    });
 
     Template.Rights$Edit.events({
+        'click .update-done': function (event, templ) {
+            let values = shared.getFormChildrenValues(templ.$('form')[0], users.getUsersColumns());
+            console.log(values);
+            if (users.checkValues(values, users.getUserData(user), 'update')) {
+                let updatingValues = shared.updatingValues(values, users.getUserData(user));
+                if (updatingValues.hasOwnProperty('firstname') || updatingValues.hasOwnProperty('lastname'))
+                    updatingValues['fullName'] = values['firstname'] + " " + values['lastname'];
+                if (Object.keys(updatingValues).length > 0) {
+                    users.userUpdate(user,
+                        {$set: updatingValues},
+                        function (error) {
+                            if (error)
+                                Materialize.toast(error, 5000);
+                            else
+                                Materialize.toast("Mise à jour effectuée", 5000);
+                        });
+                }
+                else
+                    Materialize.toast("Pas de changement", 5000);
+            }
+        },
+        'click .update-close': function () {
+            Router.go('/users');
+        }
+    });
+
+    Template.Rights$table.events({
         'click tr': function (event, tmpl) {
             if(Session.get('saving') === "undefined") {
                 let dataTable = $(event.currentTarget).closest('table').DataTable();
                 if (dataTable && dataTable !== "undefined") {
                     let row = dataTable.row(event.currentTarget).data();
                     if (row && row !== "undefined") {
-                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id)
+                        if (Session.get('editingRow') === "undefined" || Session.get('editingRow')._id !== row._id) {
                             Session.set('editingRow', row);
+                            Session.set('customerId', row.customerId);
+                        }
                     }
-                    else
+                    else {
                         Session.set('editingRow', 'undefined');
+                        Session.set('customerId', 'undefined');
+                    }
                 }
-                else
+                else {
                     Session.set('editingRow', 'undefined');
+                    Session.set('customerId', 'undefined');
+                }
             }
             else {
                 event.preventDefault();
@@ -145,6 +229,8 @@ if (Meteor.isClient) {
                         return getUserId(what);
                     if (Template.currentData().value === "accountId")
                         return getAccountId(what);
+                    if (Template.currentData().value === "customerId")
+                        return getCustomerId(what);
                 }
                 return what;
             }
@@ -169,6 +255,15 @@ if (Meteor.isClient) {
                 results.push(user._id);
             });
             return results;
+        }
+    });
+
+    Template.Rights$cell$customerId.events({
+        "change select": function(evt) {
+            let newId = $(evt.target).val();
+            if (newId !== Session.get('customerId')) {
+                Session.set('customerId', newId);
+            }
         }
     });
 
@@ -210,6 +305,35 @@ if (Meteor.isClient) {
         return userId;
     }
 
+    function getCustomerId(customerId) {
+        if(customerId) {
+            let one = Customers.findOne({_id: customerId});
+            if(one)
+                return one.codeCMi;
+            else
+                console.log("no customer for : " + customerId);
+        }
+        return customerId;
+    }
+
+    Template.Rights$cell$customerId.helpers({
+        helpers: {
+            translateKey: function (customerId) {
+                return getCustomerId(customerId);
+            }
+        },
+        customers: function () {
+            let custs = Customers.find({});
+            if(!custs)
+                return [];
+            let results = [];
+            custs.forEach(function(cust) {
+                results.push(cust._id);
+            });
+            return results;
+        }
+    });
+
     Template.Rights$cell$accountId.helpers({
         helpers: {
             translateKey: function (custAccId) {
@@ -217,7 +341,7 @@ if (Meteor.isClient) {
             }
         },
         accounts: function () {
-            let accs = CustomerAccs.find({});
+            let accs = CustomerAccs.find({customerId: Session.get('customerId')});
             if(!accs)
                 return [];
             let results = [];
@@ -295,12 +419,15 @@ if (Meteor.isClient) {
         return false;
     }
 
+    Session.set('customer', 'undefined');
+
     Template.Rights$modalAdd.events({
-        'click .modal-done': function (event, templ) {
+        'click .rights-done': function (event, templ) {
             event.preventDefault();
             let values = {
                 startTime : templ.$('#start_time').val(),
                 endTime: templ.$('#end_time').val(),
+                customerId: templ.$('#customer').val(),
                 accountId: templ.$('#account').val(),
                 userId: templ.$('#user').val()
             };
@@ -309,15 +436,31 @@ if (Meteor.isClient) {
                 Materialize.toast("Insertion effectuée", 5000);
                 templ.find("form").reset();
             }
+        },
+        "change #customer": function(evt) {
+            let newCust = $(evt.target).val();
+            if (newCust !== Session.get("customer")) {
+                Session.set('customer', newCust);
+            }
         }
     });
 
     Template.Rights$modalAdd.helpers({
         users: function () {
-            return Meteor.users.find({});
+            if (user && user !== "undefined")
+                return Meteor.users.find({_id: user});
+            else
+                return Meteor.users.find({});
+        },
+        customers: function () {
+            return Customers.find({});
         },
         accounts: function () {
-            return CustomerAccs.find({});
+            let cust = Session.get("customer");
+            if (cust && cust !== "undefined")
+                return CustomerAccs.find({customerId: cust});
+            else
+                return CustomerAccs.find({});
         },
         translate: function (what) {
             return TAPi18n.__("Rights.column." + what);
@@ -335,6 +478,13 @@ if (Meteor.isClient) {
 
     Template.Rights$user.onRendered(function(){
         $('#user').material_select();
+    });
+
+    Template.Rights$customer.onRendered(function(){
+        let customer = $('#customer');
+        customer.material_select();
+        if(Session.get('customer') === "undefined")
+            Session.set('customer', customer.val());
     });
 
     Template.Rights$account.onRendered(function(){

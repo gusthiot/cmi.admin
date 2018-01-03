@@ -3,6 +3,7 @@
     "title"         : "Rights",
     "column": {
       "userId"      : "User",
+      "customerId"    : "Client Code",
       "accountId"   : "Account Id",
       "startTime"   : "Start Time",
       "endTime"     : "End Time"
